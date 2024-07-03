@@ -3,7 +3,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './themes/theme';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/landinPage';
-import Publications from './pages/publications';
 
 function App() {
   return (
@@ -11,8 +10,7 @@ function App() {
       <CssBaseline />
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <Navbar />
-        {/* <LandingPage /> */}
-        <Publications />
+        <LandingPage />
       </div>
     </ThemeProvider>
   );

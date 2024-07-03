@@ -27,6 +27,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           minWidth: 'auto',
+          color: '#4E169D',
           backgroundColor: 'rgba(250, 250, 250, 0.2)',
         },
       },
