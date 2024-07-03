@@ -14,10 +14,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoEcos from "../../public/images/marca ecosistema-07.png";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [menuIcon, setMenuIcon] = useState(true); // true for MenuIcon, false for CloseIcon
+  const [menuIcon, setMenuIcon] = useState(true);
 
   const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -28,7 +29,7 @@ const Navbar = () => {
       return;
     }
     setDrawerOpen(!drawerOpen);
-    setMenuIcon(!menuIcon); // Toggle menu icon state
+    setMenuIcon(!menuIcon);
   };
 
   return (
@@ -83,6 +84,8 @@ const Navbar = () => {
                 justifyContent: "center",
                 color: "#FFFFFF",
               }}
+              component={Link}
+              to="/iniciar-sesion"
             >
               <AccountCircleOutlinedIcon style={{ color: "#000000" }} />
               <Typography variant="body2" style={{ color: "black" }}>
@@ -106,13 +109,21 @@ const Navbar = () => {
         }}
       >
         <List style={{ height: "100%" }}>
-          {["Inicio", "Proveedores", "Publicaciones", "Iniciá sesión"].map(
-            (text) => (
-              <ListItem button key={text}>
-                <ListItemText primary={text} style={{ color: "#FFFFFF" }} />
-              </ListItem>
-            )
-          )}
+          {[
+            { text: "Inicio", path: "/" },
+            { text: "Proveedores", path: "/proveedores" },
+            { text: "Publicaciones", path: "/publicaciones" },
+            { text: "Iniciá sesión", path: "/iniciar-sesion" },
+          ].map((item) => (
+            <ListItem
+              key={item.text}
+              component={Link}
+              to={item.path}
+              onClick={toggleDrawer}
+            >
+              <ListItemText primary={item.text} style={{ color: "#FFFFFF" }} />
+            </ListItem>
+          ))}
         </List>
       </Drawer>
     </>
