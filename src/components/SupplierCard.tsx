@@ -16,12 +16,19 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import example from "../../public/images/Card bienestar imagen 1.jpg";
+import image1 from "../../public/images/Card bienestar imagen 1.jpg";
+import image2 from "../../public/images/Card bienestar imagen 2.jpg";
+import image3 from "../../public/images/Card bienestar imagen 3.jpg";
 import { useState } from "react";
+import Carrusel from "./Carrusel";
+import { useLocation } from "react-router-dom";
 
 export default function SupplierCard() {
   const [details, setDetails] = useState<boolean>(false);
+  // const location: string = useLocation().pathname;
   const location: string = "/proveedores";
+
+  console.log(location);
 
   //Ingresar medios de contacto aca mediante onClick que tenga un handler con Link
   const contactsMethod = [
@@ -33,7 +40,7 @@ export default function SupplierCard() {
 
   const product = {
     category: "Categoria",
-    image: example,
+    image: [{ imgPath: image1 }, { imgPath: image2 }, { imgPath: image3 }],
     title: "Titulo",
     subcategory: "Subcategoria",
     description:
@@ -80,7 +87,7 @@ export default function SupplierCard() {
           padding: `${
             location === "/"
               ? `${details ? "0px 16px" : "8px 8px 0px"}`
-              : "16px 16px 2px"
+              : "16px 0px 2px"
           }`,
           borderRadius: `${details ? "16px" : "8px"}`,
           overflow: "visible",
@@ -89,6 +96,9 @@ export default function SupplierCard() {
             location === "/" ? `${details ? "#eaeaea" : "#fafafa"}` : "#eaeaea"
           }`,
           zIndex: 2,
+          cursor: `${
+            location === "/" ? (details ? "default" : "pointer") : "default"
+          }`,
         }}
         onClick={handleOpenDetail}
       >
@@ -153,32 +163,36 @@ export default function SupplierCard() {
                 {product.category}
               </Typography>
             </Box>
-            <CardMedia
-              component="img"
-              alt={product.title}
-              image={product.image}
-              sx={{
-                width: "100%",
-                height:
-                  location === "/" ? (details ? "128px" : "136px") : "128px",
-                borderRadius:
-                  location === "/"
-                    ? details
-                      ? "16px 0 16px 16px"
-                      : "8px"
-                    : "16px 0 16px 16px",
-                objectFit: "cover",
-              }}
-            />
+            {location === "/" ? (
+              <CardMedia
+                component="img"
+                alt={product.title}
+                image={product.image[0].imgPath}
+                sx={{
+                  width: "100%",
+                  height:
+                    location === "/" ? (details ? "128px" : "136px") : "128px",
+                  borderRadius:
+                    location === "/"
+                      ? details
+                        ? "16px 0 16px 16px"
+                        : "8px"
+                      : "16px 0 16px 16px",
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              <Carrusel images={product.image} />
+            )}
           </Grid>
           <Grid
             item
             sx={{
-              marginTop: location === "/" ? (details ? 3 : 1) : 3,
+              marginTop: location === "/" ? (details ? 3 : 1) : 1,
               height: details ? "auto" : "90px",
             }}
           >
-            <CardContent sx={{ padding: 0 }}>
+            <CardContent sx={{ padding: location === "/" ? 0 : "0px 16px" }}>
               <Grid
                 container
                 spacing={location === "/" ? (details ? 1 : 1.5) : 0.5}
@@ -191,6 +205,7 @@ export default function SupplierCard() {
                       fontWeight: "bold",
                       margin: 0,
                       padding: "2px 0",
+                      textAlign: "start",
                     }}
                   >
                     {product.title}
@@ -212,7 +227,7 @@ export default function SupplierCard() {
                     {product.subcategory}
                   </Typography>
                 </Grid>
-                <Grid item xs={12} container alignItems="center" spacing={1}>
+                <Grid item xs={12} container spacing={0.5}>
                   <Grid item>
                     <RoomOutlinedIcon sx={{ color: "#4e169d" }} />
                   </Grid>
@@ -233,7 +248,7 @@ export default function SupplierCard() {
                 {details && (
                   <Grid item xs={12}>
                     <Typography
-                      sx={{ marginTop: 3, fontSize: 16, textAlign: "center" }}
+                      sx={{ marginTop: 2, fontSize: 16, textAlign: "center" }}
                     >
                       {product.description}
                     </Typography>
