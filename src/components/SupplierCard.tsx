@@ -5,24 +5,41 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Grid,
   Typography,
 } from "@mui/material";
 import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
 import CloseIcon from "@mui/icons-material/Close";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import example from "../../public/images/Card bienestar imagen 1.jpg";
+import image1 from "/public/images/Card bienestar imagen 1.jpg";
+import image2 from "/public/images/Card bienestar imagen 2.jpg";
+import image3 from "/images/Card bienestar imagen 3.jpg";
 import { useState } from "react";
+import Carrusel from "./Carrusel";
+import { useLocation } from "react-router-dom";
 
 export default function SupplierCard() {
   const [details, setDetails] = useState<boolean>(false);
+  const location: string = useLocation().pathname;
 
+  //Ingresar medios de contacto aca mediante onClick que tenga un handler con Link
+  const contactsMethod = [
+    { icon: WhatsAppIcon, label: "WhatsApp" },
+    { icon: InstagramIcon, label: "Instagram" },
+    { icon: FacebookRoundedIcon, label: "Facebook" },
+    { icon: EmailOutlinedIcon, label: "Mail" },
+  ];
+
+  //Creado para pruebas, despues entrara mediante props
   const product = {
     category: "Categoria",
-    image: example,
-    title: "Titulo",
+    image: [{ imgPath: image1 }, { imgPath: image2 }, { imgPath: image3 }],
+    name: "Titulo",
     subcategory: "Subcategoria",
     description:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
@@ -30,9 +47,21 @@ export default function SupplierCard() {
     province: "Provincia",
     country: "Pais",
   };
+
+  const handleDetailLP = () => {
+    if (location === "/")
+      if (!details) {
+        setDetails(true);
+      }
+  };
+
+  const handleCloseDetail = () => {
+    setDetails(!details);
+  };
+
   return (
     <Box sx={{ position: "relative" }}>
-      {details && (
+      {details && location === "/" && (
         <Box
           sx={{
             position: "fixed",
@@ -47,223 +76,244 @@ export default function SupplierCard() {
       )}
       <Card
         sx={{
-          padding: "8px",
-          backgroundColor: `${details ? "#eaeaea" : "#fafafa"}`,
-          borderRadius: `${details ? "16px" : "8px"}`,
-          width: `${details ? "100%" : "152px"}`,
-          // width: `${details ? "328px" : "152px"}`,
-          // height: `${details ? "584px" : "248px"}`,
-          display: "flex",
-          flexDirection: "column",
           position: "relative",
+          height: `${
+            location === "/" ? `${details ? "auto" : "244px"}` : "auto"
+          }`,
+          width: `${
+            location === "/" ? `${details ? "100%" : "152px"}` : "100%"
+          }`,
+          padding: `${
+            location === "/"
+              ? `${details ? "0px 16px" : "8px 8px 0px"}`
+              : "16px 0px 2px"
+          }`,
+          margin: `${location === "/" ? `${details ? "0 auto" : "0"}` : "0"}`,
+          borderRadius: `${
+            location === "/" ? `${details ? "16px" : "8px"}` : "16px"
+          }`,
           overflow: "visible",
-          cursor: `${details ? "default" : "pointer"}`,
-          marginBottom: "50px",
+          boxSizing: "border-box",
+          backgroundColor: `${
+            location === "/" ? `${details ? "#eaeaea" : "#fafafa"}` : "#eaeaea"
+          }`,
           zIndex: 2,
+          cursor: `${
+            location === "/" ? (details ? "default" : "pointer") : "default"
+          }`,
         }}
-        onClick={() => {
-          if (!details) {
-            setDetails(true);
-          }
-        }}
+        onClick={handleDetailLP}
       >
-        <Box
-          sx={{
-            display: `${details ? "flex" : "block"}`,
-            flexDirection: "column",
-            alignItems: "flex-end",
-            paddingBottom: `${details ? "16px" : "8px"}`,
-          }}
-        >
-          {details && (
-            <CardActions sx={{ padding: 0, margin: 0 }}>
-              <Button
-                sx={{
-                  padding: 0,
-                  margin: 0,
-                  minWidth: "auto",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  setDetails(false);
-                }}
-              >
-                <CloseIcon
-                  sx={{
-                    color: "#222222",
-                    paddingBottom: "8px",
-                  }}
-                />
-              </Button>
-            </CardActions>
-          )}
-          <Box
-            sx={{
-              position: `${details ? "static" : "absolute"}`,
-              top: "-5px",
-              right: 0,
-              width: "96px",
-              height: "24px",
-              display: "flex",
-              justifyContent: "center",
-              backgroundColor: "#fafafa",
-              border: "1px solid #00a364",
-              borderRadius: `${details ? "4px 4px 0px 0px" : "4px"}`,
-              color: "#6433a8",
-              padding: "2px 8px",
-              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            <Typography
-              variant="subtitle1"
-              component="span"
-              sx={{ fontSize: 13 }}
-            >
-              {product.category}
-            </Typography>
-          </Box>
-          <CardMedia
-            component="img"
-            alt={product.title}
-            image={product.image}
-            sx={{
-              width: "100%",
-              height: `${details ? "128px" : "136px"}`,
-              borderRadius: `${details ? "16px 0 16px 16px" : "8px"}`,
-              objectFit: "cover",
-            }}
-          />
-        </Box>
-        <CardContent sx={{ padding: 0 }}>
-          <Box
+        <Grid container direction="column">
+          <Grid
+            item
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: `${details ? "5px" : "32px"}`,
-              // justifyContent: "space-between",
-              // alignContent: "space-between",
-              height: "88px",
-              flexGrow: 1,
+              alignItems: "flex-end",
             }}
           >
-            <Box>
-              <Typography
-                variant="h5"
-                sx={{ fontSize: 16, margin: 0, padding: "2px 0" }}
-              >
-                {product.title}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  fontSize: 13,
-                  color: "#4e169d",
-                  margin: 0,
-                  padding: "2px 0",
-                }}
-              >
-                {product.subcategory}
-              </Typography>
-            </Box>
+            {details && location === "/" && (
+              <CardActions sx={{ padding: "7px 0" }}>
+                <Button
+                  onClick={handleCloseDetail}
+                  sx={{
+                    padding: 0,
+                    margin: 0,
+                    cursor: "pointer",
+                  }}
+                >
+                  <CloseIcon sx={{ color: "#222222" }} />
+                </Button>
+              </CardActions>
+            )}
             <Box
               sx={{
+                position:
+                  location === "/"
+                    ? details
+                      ? "static"
+                      : "absolute"
+                    : "static",
+                top: "-4px",
+                right: 0,
+                width: "96px",
+                height: "24px",
                 display: "flex",
+                justifyContent: "center",
                 alignItems: "center",
-                gap: "4px",
-                // marginTop: "35px",
+                backgroundColor: "#fafafa",
+                border: "1px solid #00a364",
+                borderRadius:
+                  location === "/"
+                    ? details
+                      ? "4px 4px 0px 0px"
+                      : "4px"
+                    : "4px 4px 0px 0px",
+                color: "#6433a8",
+                padding: "2px 8px",
+                marginRight: location === "/" ? 0 : 2,
+                boxSizing: "border-box",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.5)",
               }}
             >
-              <RoomOutlinedIcon
-                sx={{
-                  color: "#4e169d",
-                }}
-              />
               <Typography
-                variant="subtitle2"
+                variant="subtitle1"
                 component="span"
                 sx={{ fontSize: 13 }}
               >
-                {details
-                  ? `${product.city},${product.province},${product.country}`
-                  : product.city}
+                {product.category}
               </Typography>
             </Box>
-          </Box>
-          {details && (
-            <Box>
-              <Typography sx={{ fontSize: 16, textAlign: "center" }}>
-                {product.description}
-              </Typography>
-              <Box sx={{ marginTop: "24px" }}>
-                <Typography component="span" sx={{ fontWeight: "bold" }}>
-                  Contactanos
-                </Typography>
-                <Box
+            {location === "/" ? (
+              <CardMedia
+                component="img"
+                alt={product.name}
+                image={product.image[0].imgPath}
+                sx={{
+                  width: "100%",
+                  height:
+                    location === "/" ? (details ? "128px" : "136px") : "128px",
+                  borderRadius:
+                    location === "/"
+                      ? details
+                        ? "16px 0 16px 16px"
+                        : "8px"
+                      : "16px 0 16px 16px",
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              <Carrusel images={product.image} />
+            )}
+          </Grid>
+          <Grid
+            item
+            sx={{
+              marginTop: location === "/" ? (details ? 3 : 1) : 1,
+              height: details ? "auto" : "90px",
+            }}
+          >
+            <CardContent sx={{ padding: location === "/" ? 0 : "0px 16px" }}>
+              <Grid
+                container
+                spacing={location === "/" ? (details ? 1 : 1.5) : 0.5}
+              >
+                <Grid item xs={12}>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      fontSize: 16,
+                      fontWeight: "bold",
+                      margin: 0,
+                      padding: "2px 0",
+                      textAlign: "start",
+                    }}
+                  >
+                    {product.name}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: 13,
+                      fontWeight: "bold",
+                      color: `${
+                        location === "/"
+                          ? `${details ? "#4e169d" : "#222222"}`
+                          : "#4e169d"
+                      }`,
+                      margin: 0,
+                      padding: "2px 0",
+                    }}
+                  >
+                    {product.subcategory}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} container spacing={0.5}>
+                  <Grid item>
+                    <RoomOutlinedIcon sx={{ color: "#4e169d" }} />
+                  </Grid>
+                  <Grid item>
+                    <Typography
+                      variant="subtitle2"
+                      component="span"
+                      sx={{ fontSize: 13 }}
+                    >
+                      {location === "/"
+                        ? details
+                          ? `${product.city},${product.province},${product.country}`
+                          : product.city
+                        : `${product.city},${product.province},${product.country}`}
+                    </Typography>
+                  </Grid>
+                </Grid>
+                {details && (
+                  <Grid item xs={12}>
+                    <Typography
+                      sx={{ marginTop: 2, fontSize: 16, textAlign: "center" }}
+                    >
+                      {product.description}
+                    </Typography>
+                    <Typography sx={{ marginTop: 3, fontWeight: "bold" }}>
+                      Contáctanos
+                    </Typography>
+                    <Grid
+                      container
+                      spacing={1}
+                      justifyContent="space-around"
+                      sx={{ marginTop: 0 }}
+                    >
+                      {contactsMethod.map((contact, index) => (
+                        <Grid
+                          item
+                          alignItems="center"
+                          sx={{ display: "flex", flexDirection: "column" }}
+                          key={index}
+                        >
+                          <contact.icon
+                            sx={{ color: "#4e169d", fontSize: "32px" }}
+                          />
+                          <Typography
+                            component="span"
+                            sx={{ fontSize: "13px" }}
+                          >
+                            {contact.label}
+                          </Typography>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Grid>
+                )}
+              </Grid>
+            </CardContent>
+          </Grid>
+          {location === "/proveedores" && (
+            <Grid item>
+              <CardActions sx={{ padding: 0, margin: 0 }}>
+                <Button
+                  onClick={handleCloseDetail}
                   sx={{
+                    width: "100%",
                     display: "flex",
-                    justifyContent: "space-around",
-                    marginTop: "10px",
+                    justifyContent: "center",
+                    padding: 0,
+                    margin: 0,
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <WhatsAppIcon sx={{ color: "#4e169d", fontSize: "32px" }} />
-                    <Typography component="span" sx={{ fontSize: "13px" }}>
-                      Whatsapp
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <InstagramIcon
-                      sx={{ color: "#4e169d", fontSize: "32px" }}
+                  {details ? (
+                    <ExpandLessIcon
+                      sx={{ color: "#4e169d", fontSize: "36px" }}
                     />
-                    <Typography component="span" sx={{ fontSize: "13px" }}>
-                      Instagram
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <FacebookRoundedIcon
-                      sx={{ color: "#4e169d", fontSize: "32px" }}
+                  ) : (
+                    <ExpandMoreIcon
+                      sx={{ color: "#4e169d", fontSize: "36px" }}
                     />
-                    <Typography component="span" sx={{ fontSize: "13px" }}>
-                      Facebook
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <EmailOutlinedIcon
-                      sx={{ color: "#4e169d", fontSize: "32px" }}
-                    />
-                    <Typography component="span" sx={{ fontSize: "13px" }}>
-                      Mail
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
+                  )}
+                </Button>
+              </CardActions>
+            </Grid>
           )}
-        </CardContent>
+        </Grid>
       </Card>
     </Box>
   );
