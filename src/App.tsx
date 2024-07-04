@@ -1,28 +1,26 @@
-import Navbar from "./components/Navbar";
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import theme from './themes/theme';
+import Navbar from './components/Navbar';
+import LandingPage from './pages/landinPage';
 
 function App() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <Navbar />
-      <div
-        style={{
-          flexGrow: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          textAlign: "center",
-          padding: "0 16px",
-        }}
-      >
-        <h1 style={{ marginBottom: "16px" }}>Hola equipo,</h1>
-        <h3 style={{ marginBottom: "8px" }}>
-          Este es la estructura Front-End de nuestro proyecto ECOS (Quinto
-          Impacto),
-        </h3>
-        <h1>¡¡ BUEN TRABAJO !!</h1>
-      </div>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/proveedores" element={<LandingPage />} />
+            <Route path="/publicaciones" element={<LandingPage />} />
+            <Route path="/iniciar-sesion" element={<LandingPage />} />
+          </Routes>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 
