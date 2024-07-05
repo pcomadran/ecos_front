@@ -5,6 +5,7 @@ import theme from "./themes/theme";
 import Navbar from "./components/Navbar";
 import LandingPage from "./pages/landinPage";
 import LoginPage from "./pages/loginPage";
+import Publications from './pages/publications';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/proveedores" element={<LandingPage />} />
-            <Route path="/publicaciones" element={<LandingPage />} />
+            <Route path="/publicaciones" element={<Publications />} />
             <Route path="/Login" element={<LoginPage />} />
           </Routes>
         </div>
