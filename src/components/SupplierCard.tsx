@@ -25,10 +25,7 @@ import { useLocation } from "react-router-dom";
 
 export default function SupplierCard() {
   const [details, setDetails] = useState<boolean>(false);
-  // const location: string = useLocation().pathname;
-  const location: string = "/proveedores";
-
-  console.log(location);
+  const location: string = useLocation().pathname;
 
   //Ingresar medios de contacto aca mediante onClick que tenga un handler con Link
   const contactsMethod = [
@@ -38,10 +35,11 @@ export default function SupplierCard() {
     { icon: EmailOutlinedIcon, label: "Mail" },
   ];
 
+  //Creado para pruebas, despues entrara mediante props
   const product = {
     category: "Categoria",
     image: [{ imgPath: image1 }, { imgPath: image2 }, { imgPath: image3 }],
-    title: "Titulo",
+    name: "Titulo",
     subcategory: "Subcategoria",
     description:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
@@ -166,7 +164,7 @@ export default function SupplierCard() {
             {location === "/" ? (
               <CardMedia
                 component="img"
-                alt={product.title}
+                alt={product.name}
                 image={product.image[0].imgPath}
                 sx={{
                   width: "100%",
@@ -208,7 +206,7 @@ export default function SupplierCard() {
                       textAlign: "start",
                     }}
                   >
-                    {product.title}
+                    {product.name}
                   </Typography>
                   <Typography
                     variant="body2"
