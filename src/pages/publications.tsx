@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import BackgroundImage from "../../public/images/Imagen publicaciones.png";
+import ImgMediaCard from "../components/ImgMediaCard";
 
 const Publications = () => {
   return (
@@ -86,6 +87,23 @@ const Publications = () => {
           </Grid>
         </Container>
       </div>
+      <Box
+        sx={{
+          mr: 2,
+          ml: 2,
+          mb: 5,
+          mt: 5,
+          padding: "15px",
+        }}
+      >
+        <Grid container spacing={2} sx={{ mt: 3 }}>
+            {[1, 2, 3, 4, 5].map((item, index) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                <ImgMediaCard />
+              </Grid>
+            ))}
+          </Grid>
+      </Box>      
     </div>
   );
 };
