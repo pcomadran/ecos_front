@@ -14,11 +14,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoEcos from "../../public/images/marca ecosistema-07.png";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [menuIcon, setMenuIcon] = useState(true);
+  const navigate = useNavigate();
 
   const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -30,6 +31,12 @@ const Navbar = () => {
     }
     setDrawerOpen(!drawerOpen);
     setMenuIcon(!menuIcon);
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setDrawerOpen(false);
+    setMenuIcon(true);
   };
 
   return (
@@ -84,8 +91,7 @@ const Navbar = () => {
                 justifyContent: "center",
                 color: "#FFFFFF",
               }}
-              component={Link}
-              to="/iniciar-sesion"
+              onClick={() => handleNavigation('/login')}
             >
               <AccountCircleOutlinedIcon style={{ color: "#000000" }} />
               <Typography variant="body2" style={{ color: "black" }}>
@@ -113,13 +119,12 @@ const Navbar = () => {
             { text: "Inicio", path: "/" },
             { text: "Proveedores", path: "/proveedores" },
             { text: "Publicaciones", path: "/publicaciones" },
-            { text: "Iniciá sesión", path: "/iniciar-sesion" },
+            { text: "Iniciá sesión", path: "/login" },
           ].map((item) => (
             <ListItem
+              button
               key={item.text}
-              component={Link}
-              to={item.path}
-              onClick={toggleDrawer}
+              onClick={() => handleNavigation(item.path)}
             >
               <ListItemText primary={item.text} style={{ color: "#FFFFFF" }} />
             </ListItem>
