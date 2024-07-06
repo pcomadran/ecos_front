@@ -74,14 +74,15 @@ const Publications = () => {
           />
           <Grid container justifyContent="center">
             <Grid item xs={12} sm={12} sx={{ mt: 3 }}>
-              <Typography variant="h5" gutterBottom sx={{textAlign: "left",}}>
+              <Typography variant="h5" gutterBottom sx={{ textAlign: "left" }}>
                 PUBLICACIONES
               </Typography>
               <Typography variant="h4" align="left" gutterBottom>
                 Historias de impacto
               </Typography>
               <Typography variant="h6" align="left" sx={{ width: "80%" }}>
-                Encontrá inspiración y explorá las noticias y tendencias que están dando forma a un mundo más verde
+                Encontrá inspiración y explorá las noticias y tendencias que
+                están dando forma a un mundo más verde
               </Typography>
             </Grid>
           </Grid>
@@ -97,13 +98,13 @@ const Publications = () => {
         }}
       >
         <Grid container spacing={2} sx={{ mt: 3 }}>
-            {[1, 2, 3, 4, 5].map((item, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                <ImgMediaCard />
-              </Grid>
-            ))}
-          </Grid>
-      </Box>      
+          {[1, 2, 3, 4, 5].map((index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <ImgMediaCard />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </div>
   );
 };
