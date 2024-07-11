@@ -7,6 +7,7 @@ import LandingPage from "./pages/landinPage";
 import LoginPage from "./pages/loginPage";
 import Publications from "./pages/publicationsPage";
 import RegisterPage from "./pages/registerPage";
+import SupplierPage from "./pages/supplierPage";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/proveedores" element={<LandingPage />} />
+            <Route path="/proveedores" element={<SupplierPage />} />
             <Route path="/publicaciones" element={<Publications />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />{" "}
