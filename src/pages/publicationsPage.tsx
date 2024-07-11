@@ -15,11 +15,14 @@ const PublicationsPage = () => {
     <div>
       <div
         style={{
+          marginTop: "56px",
           position: "relative",
-          minHeight: "100vh",
+          width: "100%",
+          height: "auto",
           backgroundImage: `url(${BackgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          aspectRatio: "360 / 488",
         }}
       >
         <div
@@ -29,7 +32,7 @@ const PublicationsPage = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: "rgba(34, 34, 34, 0.7)",
           }}
         />
         <Container
@@ -43,7 +46,7 @@ const PublicationsPage = () => {
             alignItems: "center",
             textAlign: "center",
             color: "#fff",
-            paddingTop: "80px",
+            paddingTop: "24px",
           }}
         >
           {/* Campo de búsqueda */}
@@ -52,7 +55,7 @@ const PublicationsPage = () => {
             placeholder="Buscar Proveedores"
             fullWidth
             style={{
-              marginBottom: "20px",
+              marginBottom: "16px",
               backgroundColor: "#fafafa",
               borderRadius: "50px",
               maxWidth: "500px",
@@ -74,14 +77,41 @@ const PublicationsPage = () => {
           />
           <Grid container justifyContent="center">
             <Grid item xs={12} sm={12} sx={{ mt: 3 }}>
-              <Typography variant="h5" gutterBottom sx={{textAlign: "left",}}>
+              <Typography
+                gutterBottom
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  lineHeight: "24px",
+                  textAlign: "left",
+                }}
+              >
                 PUBLICACIONES
               </Typography>
-              <Typography variant="h4" align="left" gutterBottom>
+              <Typography
+                maxWidth={"240px"}
+                gutterBottom
+                sx={{
+                  fontSize: "28px",
+                  fontWeight: 500,
+                  lineHeight: "30px",
+                  textAlign: "left",
+                }}
+              >
                 Historias de impacto
               </Typography>
-              <Typography variant="h6" align="left" sx={{ width: "80%" }}>
-                Encontrá inspiración y explorá las noticias y tendencias que están dando forma a un mundo más verde
+              <Typography
+                maxWidth={"240px"}
+                sx={{
+                  pt: "5px",
+                  fontSize: "24px",
+                  fontWeight: 400,
+                  lineHeight: "30px",
+                  textAlign: "left",
+                }}
+              >
+                Encontrá inspiración y explorá las noticias y tendencias que
+                están dando forma a un mundo más verde
               </Typography>
             </Grid>
           </Grid>
@@ -89,35 +119,55 @@ const PublicationsPage = () => {
       </div>
       <Box
         sx={{
-          mr: 2,
-          ml: 2,
-          mb: 5,
-          mt: 5,
+          pr: 2,
+          pl: 2,
+          pb: 5,
+          pt: 5,
           padding: "15px",
+          position: "relative",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: "100%",
+            height: "100%",
+            background: "#00a360",
+            clipPath:
+              'path("M361 183C189.669 191.629 104.632 167.382 0 0V550C0 550 361 706 361 550V183Z")',
+            zIndex: 0,
+          },
         }}
       >
-        <Grid container spacing={2} sx={{ mt: 3 }}>
-            {[1, 2, 3, 4, 5].map((index) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                <Publication
-                  title="¿Qué es el Upcycling?"
-                  imageUrls={[ 
-                    'https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60',
-                    'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60',
-                    'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250',
-                    'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60',
-                  ]}
-                  date="17/04/2023"
-                  text={`El upcycling transforma residuos en productos de mayor valor, reduciendo la basura y fomentando la creatividad. Es una práctica que beneficia al medio ambiente y a la economía local.
+        <Grid
+          container
+          spacing={2}
+          sx={{ mt: 3, position: "relative", zIndex: 1 }}
+        >
+          {[1, 2, 3].map((index) => (
+            <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
+              <Publication
+                title="¿Qué es el Upcycling?"
+                imageUrls={[
+                  "/images/Publicacion upcycling imagen 1.png",
+                  "/images/Publicacion upcycling 2.png",
+                  "/images/Publicacion upcycling imagen 3.png",
+                ]}
+                date="17/04/2023"
+                text={`El upcycling, también conocido como supra-reciclaje o reutilización creativa, es un enfoque innovador y sostenible para la gestión de residuos y la conservación de recursos. A diferencia del reciclaje convencional, que implica descomponer materiales para crear nuevos productos, el upcycling busca transformar objetos o materiales desechados en productos de mayor valor, sin degradar su calidad.
 
-                        Utilizar materiales reciclados para crear algo nuevo no solo disminuye la cantidad de residuos, sino que también incentiva el diseño innovador. El upcycling es clave en la moda sostenible.
+                        Este proceso implica la reimaginación y reinvención de elementos que normalmente se considerarían basura, dándoles una segunda vida y reduciendo la cantidad de desechos enviados a vertederos. El upcycling fomenta la creatividad y la innovación, ya que requiere repensar cómo se pueden utilizar los materiales existentes de nuevas formas.
 
-                        Además de su impacto positivo en el ambiente, el upcycling crea oportunidades de empleo en sectores creativos. Con cada producto creado, se promueve un futuro más verde y responsable.`}
-                />
-              </Grid>
-            ))}
-          </Grid>
-      </Box>      
+                        El upcycling se ha convertido en una poderosa herramienta para abordar los desafíos medioambientales y sociales que enfrenta nuestro planeta. Algunos ejemplos de upcycling incluyen la creación de muebles a partir de palets de madera, la confección de ropa a partir de telas recicladas o la transformación de objetos cotidianos en piezas de arte. Esto no solo reduce la cantidad de residuos, sino que también fomenta la economía circular, donde los productos y materiales se reutilizan y reciclan continuamente en lugar de desecharse.
+
+                        El upcycling no solo beneficia al medio ambiente al reducir la cantidad de residuos, sino que también puede generar oportunidades económicas y sociales. Muchos emprendedores y artistas han encontrado en el upcycling una forma de crear productos únicos y sostenibles que atraen a consumidores conscientes de su impacto en el medio ambiente.
+
+                        En resumen, el upcycling es una práctica innovadora que transforma desechos en tesoros, promoviendo la sostenibilidad, la creatividad y la reducción de residuos. Al adoptar el upcycling en nuestras vidas y comunidades, podemos contribuir a un mundo más limpio y respetuoso con los recursos naturales. ¡Únete al movimiento del upcycling y ayúdanos a crear un futuro más sostenible!`}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </div>
   );
 };
