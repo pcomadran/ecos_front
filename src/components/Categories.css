@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
 }
 
 .Red-title {
@@ -32,8 +32,6 @@
   border-radius: 20px;
   display: flex;
   align-items: center;
-  padding: 5px;
-  margin: 5px;
   width: 152px; 
   height: 64px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -56,7 +54,7 @@
   height: 40px;
   border-radius: 50%;
   border: 2px solid black; 
-  margin-right: 5px; 
+  margin-right: 10px; 
 }
 
 .category-name {
@@ -78,7 +76,7 @@
   content: '';
   height: 3px;
   width: 60%; 
-  background-color: #6b46c1;
+  background-color: #4E169D;
   border-radius: 2px;
   transition: width 0.3s;
   align-self: left;
@@ -103,6 +101,9 @@
   transition: background-color 0.3s;
 }
 
+.view-more-button{
+  font-size: 15px;
+}
 .view-more-button:hover {
   background-color: #53399a;
 }
