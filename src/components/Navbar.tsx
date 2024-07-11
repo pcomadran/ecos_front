@@ -110,11 +110,12 @@ const Navbar = () => {
           style: {
             width: 250,
             marginTop: 64,
-            backgroundColor: "#6b46c1",
+            backgroundColor: "#4E169D",
+            color: "#FFFFFF",
           },
         }}
       >
-        <List style={{ height: "100%" }}>
+        <List style={{ height: "100%", fontFamily: 'Cairo, sans-serif' }}>
           {[
             { text: "Inicio", path: "/" },
             { text: "Proveedores", path: "/proveedores" },
@@ -126,9 +127,17 @@ const Navbar = () => {
               key={item.text}
               onClick={() => handleNavigation(item.path)}
             >
-              <ListItemText primary={item.text} style={{ color: "#FFFFFF" }} />
+              <ListItemText primary={item.text} style={{ color: "#FFFFFF", fontWeight: 'bold' }} />
             </ListItem>
           ))}
+          <ListItem>
+            <Typography variant="body1" style={{ color: "#FFFFFF", marginTop: '16px', fontWeight: 'semibold' }}>
+              ¿Querés formar parte de la Red de impacto ECO como Proveedor?
+            </Typography>
+          </ListItem>
+          <ListItem button onClick={() => handleNavigation("/register")}>
+            <ListItemText primary="Registrate" style={{ color: "#FFFFFF", fontWeight: 'bold' }} />
+          </ListItem>
         </List>
       </Drawer>
     </>
