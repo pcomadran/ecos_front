@@ -8,9 +8,9 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import BackgroundImage from "../../public/images/Imagen publicaciones.png";
-import ImgMediaCard from "../components/ImgMediaCard";
+import Publication from "../components/Publication";
 
-const Publications = () => {
+const PublicationsPage = () => {
   return (
     <div>
       <div
@@ -97,9 +97,23 @@ const Publications = () => {
         }}
       >
         <Grid container spacing={2} sx={{ mt: 3 }}>
-            {[1, 2, 3, 4, 5].map((item, index) => (
+            {[1, 2, 3, 4, 5].map((index) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                <ImgMediaCard />
+                <Publication
+                  title="¿Qué es el Upcycling?"
+                  imageUrls={[ 
+                    'https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60',
+                    'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60',
+                    'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250',
+                    'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60',
+                  ]}
+                  date="17/04/2023"
+                  text={`El upcycling transforma residuos en productos de mayor valor, reduciendo la basura y fomentando la creatividad. Es una práctica que beneficia al medio ambiente y a la economía local.
+
+                        Utilizar materiales reciclados para crear algo nuevo no solo disminuye la cantidad de residuos, sino que también incentiva el diseño innovador. El upcycling es clave en la moda sostenible.
+
+                        Además de su impacto positivo en el ambiente, el upcycling crea oportunidades de empleo en sectores creativos. Con cada producto creado, se promueve un futuro más verde y responsable.`}
+                />
               </Grid>
             ))}
           </Grid>
@@ -108,4 +122,4 @@ const Publications = () => {
   );
 };
 
-export default Publications;
+export default PublicationsPage;
