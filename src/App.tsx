@@ -5,12 +5,8 @@ import theme from "./themes/theme";
 import Navbar from "./components/Navbar";
 import LandingPage from "./pages/landinPage";
 import LoginPage from "./pages/loginPage";
-<<<<<<< HEAD
-import Publications from './pages/publications';
+import Publications from './pages/publicationsPage';
 import RegisterPage from './pages/registerPage';
-=======
-import PublicationsPage from "./pages/publicationsPage";
->>>>>>> 0aa08aced25128544f3c3e4634218cb428849247
 
 function App() {
   return (
@@ -24,14 +20,9 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/proveedores" element={<LandingPage />} />
-<<<<<<< HEAD
             <Route path="/publicaciones" element={<Publications />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-=======
-            <Route path="/publicaciones" element={<PublicationsPage />} />
-            <Route path="/Login" element={<LoginPage />} />
->>>>>>> 0aa08aced25128544f3c3e4634218cb428849247
+            <Route path="/register" element={<RegisterPage />} /> {/* Nueva ruta */}
           </Routes>
         </div>
       </Router>
