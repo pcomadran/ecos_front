@@ -8,7 +8,8 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import BackgroundImage from "../../public/images/Imagen landing.png";
-import CategoriesPage from '../pages/CategoriesPage';
+import CategoriesPage from "../pages/CategoriesPage";
+import SupplierLanding from "../components/supplierLanding";
 
 const LandingPage = () => {
   return (
@@ -116,7 +117,7 @@ const LandingPage = () => {
           integral de su modelo de negocio.
         </Typography>
       </Box>
-
+      <SupplierLanding />
       <CategoriesPage />
     </div>
   );
