@@ -20,10 +20,11 @@
 }
 
 .categories-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
   gap: 20px;
-  justify-content: center;
+  justify-items: center;
+  width: 100%; 
 }
 
 .category-card {
@@ -67,9 +68,9 @@
 }
 
 .category-name {
-  font-size: 15px; /* Ajuste del tamaño de la fuente */
+  font-size: 15px;
   margin-bottom: 0;
-  text-align: center; /* Alinea el texto al centro */
+  text-align: center; 
 }
 
 
