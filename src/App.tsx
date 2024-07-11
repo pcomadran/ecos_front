@@ -5,7 +5,8 @@ import theme from "./themes/theme";
 import Navbar from "./components/Navbar";
 import LandingPage from "./pages/landinPage";
 import LoginPage from "./pages/loginPage";
-import PublicationsPage from "./pages/publicationsPage";
+import Publications from './pages/publicationsPage';
+import RegisterPage from './pages/registerPage';
 
 function App() {
   return (
@@ -19,8 +20,9 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/proveedores" element={<LandingPage />} />
-            <Route path="/publicaciones" element={<PublicationsPage />} />
-            <Route path="/Login" element={<LoginPage />} />
+            <Route path="/publicaciones" element={<Publications />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} /> {/* Nueva ruta */}
           </Routes>
         </div>
       </Router>
