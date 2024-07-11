@@ -6,7 +6,6 @@ import Navbar from "./components/Navbar";
 import LandingPage from "./pages/landinPage";
 import LoginPage from "./pages/loginPage";
 import Publications from './pages/publications';
-import CategoriesPage from './pages/CategoriesPage';
 
 function App() {
   return (
@@ -22,7 +21,6 @@ function App() {
             <Route path="/proveedores" element={<LandingPage />} />
             <Route path="/publicaciones" element={<Publications />} />
             <Route path="/Login" element={<LoginPage />} />
-            <Route path="/categories" element={<CategoriesPage />} />
           </Routes>
         </div>
       </Router>
