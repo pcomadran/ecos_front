@@ -23,7 +23,7 @@ import { useState } from "react";
 import Carrusel from "./Carrusel";
 import { useLocation } from "react-router-dom";
 
-export default function SupplierCard() {
+export default function SupplierCard({ product }) {
   const [details, setDetails] = useState<boolean>(false);
   const location: string = useLocation().pathname;
 
@@ -36,17 +36,17 @@ export default function SupplierCard() {
   ];
 
   //Creado para pruebas, despues entrara mediante props
-  const product = {
-    category: "Categoria",
-    image: [{ imgPath: image1 }, { imgPath: image2 }, { imgPath: image3 }],
-    name: "Titulo",
-    subcategory: "Subcategoria",
-    description:
-      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-    city: "Ciudad",
-    province: "Provincia",
-    country: "Pais",
-  };
+  // const product = {
+  //   category: "Categoria",
+  //   image: [image1, image2, image3],
+  //   name: "Titulo",
+  //   subcategory: "Subcategoria",
+  //   description:
+  //     "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
+  //   city: "Ciudad",
+  //   province: "Provincia",
+  //   country: "Pais",
+  // };
 
   const handleDetailLP = () => {
     if (location === "/")
@@ -60,7 +60,17 @@ export default function SupplierCard() {
   };
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box
+      sx={{
+        position:
+          location === "/" ? (details ? "absolute" : "relative") : "relative",
+        top: location === "/" ? (details ? "0" : "auto") : "auto",
+        left: location === "/" ? (details ? "0" : "auto") : "auto",
+        width: "100%",
+        margin: details ? "0 auto" : "0",
+        zIndex: details ? 2 : 0,
+      }}
+    >
       {details && location === "/" && (
         <Box
           sx={{
@@ -111,6 +121,7 @@ export default function SupplierCard() {
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-end",
+              width: "101%",
             }}
           >
             {details && location === "/" && (
@@ -169,7 +180,7 @@ export default function SupplierCard() {
               <CardMedia
                 component="img"
                 alt={product.name}
-                image={product.image[0].imgPath}
+                image={product.image}
                 sx={{
                   width: "100%",
                   height:
@@ -184,7 +195,16 @@ export default function SupplierCard() {
                 }}
               />
             ) : (
-              <Carrusel images={product.image} />
+              <Box
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <Carrusel
+                  imageUrls={product.image}
+                  borderRadius={"16px 0 16px 16px"}
+                />
+              </Box>
             )}
           </Grid>
           <Grid
