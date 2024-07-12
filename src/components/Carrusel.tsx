@@ -57,7 +57,7 @@ const Carrusel: React.FC<CarruselProps> = ({
           position: "relative",
           borderRadius: borderRadius,
           overflow: "hidden",
-          width: "90%",
+          width: "304px",
           margin: "0 auto",
           "& .slick-slide": {
             borderRadius: borderRadius,
@@ -72,10 +72,9 @@ const Carrusel: React.FC<CarruselProps> = ({
                 component="img"
                 sx={{
                   height: "128px",
-                  width: "304px",
                   display: "block",
                   overflow: "hidden",
-                  // width: "100%",
+                  width: "100%",
                   objectFit: "cover",
                   borderRadius: borderRadius,
                 }}
@@ -85,42 +84,54 @@ const Carrusel: React.FC<CarruselProps> = ({
             </div>
           ))}
         </Slider>
-        <Button
-          size="small"
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: 8,
-            transform: "translateY(-50%)",
-            minWidth: "auto",
-            backgroundColor: "rgba(250, 250, 250, 0.2)",
-          }}
-          onClick={handleBack}
-          disabled={activeStep === 0}
-        >
-          <KeyboardArrowLeft />
-        </Button>
-        <Button
-          size="small"
-          sx={{
-            position: "absolute",
-            top: "50%",
-            right: 8,
-            transform: "translateY(-50%)",
-            minWidth: "auto",
-            backgroundColor: "rgba(250, 250, 250, 0.2)",
-          }}
-          onClick={handleNext}
-          disabled={activeStep === maxSteps - 1}
-        >
-          <KeyboardArrowRight />
-        </Button>
+        {activeStep !== 0 && (
+          <Button
+            size="small"
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: 2,
+              transform: "translateY(-50%)",
+              minWidth: "auto",
+              padding: 0,
+              backgroundColor: "transparent",
+              color: "#4E169D",
+              "&:hover": {
+                backgroundColor: "transparent",
+              },
+            }}
+            onClick={handleBack}
+          >
+            <KeyboardArrowLeft />
+          </Button>
+        )}
+        {activeStep !== maxSteps - 1 && (
+          <Button
+            size="small"
+            sx={{
+              position: "absolute",
+              top: "50%",
+              right: 2,
+              transform: "translateY(-50%)",
+              minWidth: "auto",
+              padding: 0,
+              backgroundColor: "transparent",
+              color: "#4E169D",
+              "&:hover": {
+                backgroundColor: "transparent",
+              },
+            }}
+            onClick={handleNext}
+          >
+            <KeyboardArrowRight />
+          </Button>
+        )}
       </Box>
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
-          marginTop: 2,
+          marginTop: 1,
         }}
       >
         {imageUrls.map((_, index) => (

@@ -10,6 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import BackgroundImage from "../../public/images/Imagen landing.png";
 import CategoriesPage from "../pages/CategoriesPage";
 import SupplierLanding from "../components/supplierLanding";
+import PublicationsLanding from "../components/PublicationsLanding";
 
 const LandingPage = () => {
   return (
@@ -119,6 +120,7 @@ const LandingPage = () => {
       </Box>
       <SupplierLanding />
       <CategoriesPage />
+      <PublicationsLanding />
     </div>
   );
 };

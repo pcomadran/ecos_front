@@ -80,8 +80,14 @@ const Publication: React.FC<PublicationProps> = ({
       </CardContent>
       <CardActions sx={{ justifyContent: "center" }}>
         <Button
-          size="small"
-          sx={{ color: "#4E169D" }}
+          // size="small"
+          sx={{
+            fontSize: "16px",
+            fontWeight: 500,
+            lineHeight: "20px",
+            color: "#4E169D",
+            textTransform: "none",
+          }}
           onClick={handleToggleText}
         >
           {showFullText ? "Ver menos" : "Ver más"}
