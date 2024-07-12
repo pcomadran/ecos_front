@@ -198,6 +198,7 @@ export default function SupplierCard({ product }) {
               <Box
                 sx={{
                   width: "100%",
+                  paddingRight: "8px",
                 }}
               >
                 <Carrusel
