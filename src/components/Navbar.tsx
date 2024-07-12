@@ -108,14 +108,14 @@ const Navbar = () => {
         onClose={toggleDrawer}
         PaperProps={{
           style: {
-            width: 250,
+            width: 242,
             marginTop: 64,
             backgroundColor: "#4E169D",
             color: "#FFFFFF",
           },
         }}
       >
-        <List style={{ height: "100%", fontFamily: 'Cairo, sans-serif' }}>
+        <List style={{ height: "100%", fontFamily: 'Cairo, sans-serif', gap: '16px' }}>
           {[
             { text: "Inicio", path: "/" },
             { text: "Proveedores", path: "/proveedores" },
@@ -131,12 +131,39 @@ const Navbar = () => {
             </ListItem>
           ))}
           <ListItem>
-            <Typography variant="body1" style={{ color: "#FFFFFF", marginTop: '16px', fontWeight: 'semibold' }}>
+            <Typography
+              variant="body1"
+              style={{
+                color: "#FAFAFA",
+                width: "242px",
+                height: "66px",
+                fontFamily: "Nunito, sans-serif",
+                fontWeight: 400,
+                fontStyle: "italic",
+                fontSize: "18px",
+                lineHeight: "22px",
+                textAlign: "center",
+              }}
+            >
               ¿Querés formar parte de la Red de impacto ECO como Proveedor?
             </Typography>
           </ListItem>
           <ListItem button onClick={() => handleNavigation("/register")}>
-            <ListItemText primary="Registrate" style={{ color: "#FFFFFF", fontWeight: 'bold' }} />
+            <Typography
+              variant="body1"
+              style={{
+                color: "#FAFAFA",
+                width: "242px",
+                height: "24px",
+                fontFamily: "Nunito, sans-serif",
+                fontWeight: 700,
+                fontSize: "18px",
+                lineHeight: "20px",
+                textAlign: "center",
+              }}
+            >
+              Registrate
+            </Typography>
           </ListItem>
         </List>
       </Drawer>
