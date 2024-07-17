@@ -16,14 +16,16 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import image1 from "/public/images/Card bienestar imagen 1.jpg";
-import image2 from "/public/images/Card bienestar imagen 2.jpg";
-import image3 from "/images/Card bienestar imagen 3.jpg";
 import { useState } from "react";
 import Carrusel from "./Carrusel";
 import { useLocation } from "react-router-dom";
+import { Supplier } from "../types/typesSupplier";
 
-export default function SupplierCard({ product }) {
+interface SupplierProps {
+  product: Supplier;
+}
+
+export default function SupplierCard({ product }: SupplierProps) {
   const [details, setDetails] = useState<boolean>(false);
   const location: string = useLocation().pathname;
 
@@ -35,27 +37,14 @@ export default function SupplierCard({ product }) {
     { icon: EmailOutlinedIcon, label: "Mail" },
   ];
 
-  //Creado para pruebas, despues entrara mediante props
-  // const product = {
-  //   category: "Categoria",
-  //   image: [image1, image2, image3],
-  //   name: "Titulo",
-  //   subcategory: "Subcategoria",
-  //   description:
-  //     "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-  //   city: "Ciudad",
-  //   province: "Provincia",
-  //   country: "Pais",
-  // };
-
-  const handleDetailLP = () => {
+  const handleDetailLP = (): void => {
     if (location === "/")
       if (!details) {
         setDetails(true);
       }
   };
 
-  const handleCloseDetail = () => {
+  const handleCloseDetail = (): void => {
     setDetails(!details);
   };
 
@@ -180,7 +169,7 @@ export default function SupplierCard({ product }) {
               <CardMedia
                 component="img"
                 alt={product.name}
-                image={product.image}
+                image={product.imageUrls[0]}
                 sx={{
                   width: "100%",
                   height:
@@ -197,12 +186,12 @@ export default function SupplierCard({ product }) {
             ) : (
               <Box
                 sx={{
-                  width: "100%",
+                  width: "99%",
                   paddingRight: "8px",
                 }}
               >
                 <Carrusel
-                  imageUrls={product.image}
+                  imageUrls={product.imageUrls}
                   borderRadius={"16px 0 16px 16px"}
                 />
               </Box>
@@ -247,7 +236,7 @@ export default function SupplierCard({ product }) {
                       padding: "2px 0",
                     }}
                   >
-                    {product.subcategory}
+                    {product.short_description}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} container spacing={0.5}>
@@ -273,7 +262,7 @@ export default function SupplierCard({ product }) {
                     <Typography
                       sx={{ marginTop: 2, fontSize: 16, textAlign: "center" }}
                     >
-                      {product.description}
+                      {product.large_description}
                     </Typography>
                     <Typography sx={{ marginTop: 3, fontWeight: "bold" }}>
                       Contáctanos

@@ -1,17 +1,18 @@
-import { Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import image1 from "/images/Card bienestar imagen 1.jpg";
 import image2 from "/images/Miniatura gastronomía.png";
 import image3 from "/images/Miniatura cultivo.png";
 import image4 from "/images/Miniatura indumentaria.png";
 import SupplierCard from "../components/SupplierCard";
+import { Supplier } from "../types/typesSupplier";
 
-const suppliers = [
+const products: Supplier[] = [
   {
     category: "Bienestar",
-    image: image1,
+    imageUrls: [image1],
     name: "Lavanda",
-    subcategory: "Cosmética Natural",
-    description:
+    short_description: "Cosmética Natural",
+    large_description:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
     province: "Mendoza",
@@ -19,10 +20,10 @@ const suppliers = [
   },
   {
     category: "Gastronomía",
-    image: image2,
+    imageUrls: [image2],
     name: "Avocado",
-    subcategory: "Cocina natural",
-    description:
+    short_description: "Cocina natural",
+    large_description:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
     province: "Mendoza",
@@ -30,10 +31,10 @@ const suppliers = [
   },
   {
     category: "Cultivos",
-    image: image3,
+    imageUrls: [image3],
     name: "Tomato",
-    subcategory: "Huertas y compost",
-    description:
+    short_description: "Huertas y compost",
+    large_description:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
     province: "Mendoza",
@@ -41,10 +42,10 @@ const suppliers = [
   },
   {
     category: "Indumentaria",
-    image: image4,
+    imageUrls: [image4],
     name: "Velka",
-    subcategory: "Upcyling",
-    description:
+    short_description: "Upcyling",
+    large_description:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
     province: "Mendoza",
@@ -52,34 +53,57 @@ const suppliers = [
   },
 ];
 
-export default function SupplierLanding() {
+interface SupplierLandingProps {
+  suppliers?: Supplier[];
+}
+
+export default function SupplierLanding({
+  suppliers = products,
+}: SupplierLandingProps) {
   return (
-    <Grid
-      container
-      rowSpacing={4}
-      justifyContent="space-between"
-      sx={{
-        padding: "10px 15px",
-        position: "relative",
-        background: "#00a364",
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          top: 0,
-          right: 0,
-          width: "100%",
-          height: "100%",
-          background: "#fafafa",
-          clipPath: 'path("M -5,0 C 0,0 100,250 400,190 L 400,0 Z")',
-          zIndex: 0,
-        },
-      }}
-    >
-      {suppliers.map((supplier, index) => (
-        <Grid item key={index}>
-          <SupplierCard product={supplier} />
-        </Grid>
-      ))}
-    </Grid>
+    <Box>
+      <Box
+        sx={{
+          marginBottom: "15px",
+          paddingLeft: "15px",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <Typography sx={{ fontSize: "16px", fontWeight: "600" }}>
+          Recomendaciones para vos
+        </Typography>
+        <Typography sx={{ fontSize: "22px", fontWeight: "700" }}>
+          Proveedores ECO
+        </Typography>
+      </Box>
+      <Grid
+        container
+        rowSpacing={4}
+        justifyContent="space-between"
+        sx={{
+          padding: "10px 15px",
+          position: "relative",
+          background: "#00a364",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: "100%",
+            height: "100%",
+            background: "#ffffff",
+            clipPath: 'path("M -5,0 C 0,0 100,250 400,190 L 1000,-1000")',
+            zIndex: 0,
+          },
+        }}
+      >
+        {suppliers.slice(0, 4).map((supplier, index) => (
+          <Grid item key={index}>
+            <SupplierCard product={supplier} />
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 }
