@@ -169,7 +169,7 @@ export default function SupplierCard({ product }: SupplierProps) {
               <CardMedia
                 component="img"
                 alt={product.name}
-                image={product.imageUrls[0]}
+                image={product.imageURLs[0]}
                 sx={{
                   width: "100%",
                   height:
@@ -191,7 +191,7 @@ export default function SupplierCard({ product }: SupplierProps) {
                 }}
               >
                 <Carrusel
-                  imageUrls={product.imageUrls}
+                  imageUrls={product.imageURLs}
                   borderRadius={"16px 0 16px 16px"}
                 />
               </Box>

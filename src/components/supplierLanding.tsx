@@ -9,7 +9,7 @@ import { Supplier } from "../types/typesSupplier";
 const products: Supplier[] = [
   {
     category: "Bienestar",
-    imageUrls: [image1],
+    imageURLs: [image1],
     name: "Lavanda",
     short_description: "Cosmética Natural",
     large_description:
@@ -20,7 +20,7 @@ const products: Supplier[] = [
   },
   {
     category: "Gastronomía",
-    imageUrls: [image2],
+    imageURLs: [image2],
     name: "Avocado",
     short_description: "Cocina natural",
     large_description:
@@ -31,7 +31,7 @@ const products: Supplier[] = [
   },
   {
     category: "Cultivos",
-    imageUrls: [image3],
+    imageURLs: [image3],
     name: "Tomato",
     short_description: "Huertas y compost",
     large_description:
@@ -42,7 +42,7 @@ const products: Supplier[] = [
   },
   {
     category: "Indumentaria",
-    imageUrls: [image4],
+    imageURLs: [image4],
     name: "Velka",
     short_description: "Upcyling",
     large_description:

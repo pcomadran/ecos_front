@@ -43,7 +43,7 @@ const categories = [
 const suppliers: Supplier[] = [
   {
     category: "Bienestar",
-    imageUrls: [image1, image2, image3],
+    imageURLs: [image1, image2, image3],
     name: "Lavanda",
     short_description: "Cosmética Natural",
     large_description:
@@ -54,7 +54,7 @@ const suppliers: Supplier[] = [
   },
   {
     category: "Bienestar",
-    imageUrls: [image1, image2, image3],
+    imageURLs: [image1, image2, image3],
     name: "Lavanda",
     short_description: "Cosmética Natural",
     large_description:
@@ -65,7 +65,7 @@ const suppliers: Supplier[] = [
   },
   {
     category: "Bienestar",
-    imageUrls: [image1, image2, image3],
+    imageURLs: [image1, image2, image3],
     name: "Lavanda",
     short_description: "Cosmética Natural",
     large_description:

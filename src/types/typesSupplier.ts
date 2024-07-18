@@ -18,7 +18,7 @@ export type Supplier = {
   city: string;
   province?: string;
   country?: string;
-  imageUrls: string[];
+  imageURLs: string[];
   status?: status;
   deleted?: boolean;
   feedback?: string;
