@@ -297,7 +297,7 @@ export default function SupplierCard({ product }: SupplierProps) {
               </Grid>
             </CardContent>
           </Grid>
-          {location === "/proveedores" && (
+          {location !== "/" && (
             <Grid item>
               <CardActions sx={{ padding: 0, margin: 0 }}>
                 <Button
