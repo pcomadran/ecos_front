@@ -77,7 +77,7 @@ const LandingPage = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: "rgba(34, 34, 34, 0.7)",
           }}
         />
         <Container
