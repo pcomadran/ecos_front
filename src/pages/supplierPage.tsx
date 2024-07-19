@@ -24,6 +24,7 @@ import image2 from "/images/Card bienestar imagen 2.jpg";
 import image3 from "/images/Card bienestar imagen 3.jpg";
 import { useState } from "react";
 import SupplierCard from "../components/SupplierCard";
+import { Supplier } from "../types/typesSupplier";
 
 const categories = [
   { icon: Bienestar, label: "Bienestar" },
@@ -39,13 +40,13 @@ const categories = [
   { icon: Transporte, label: "Transporte" },
 ];
 
-const suppliers = [
+const suppliers: Supplier[] = [
   {
     category: "Bienestar",
-    image: [image1, image2, image3],
+    imageURLs: [image1, image2, image3],
     name: "Lavanda",
-    subcategory: "Cosmética Natural",
-    description:
+    short_description: "Cosmética Natural",
+    large_description:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
     province: "Mendoza",
@@ -53,10 +54,10 @@ const suppliers = [
   },
   {
     category: "Bienestar",
-    image: [image1, image2, image3],
+    imageURLs: [image1, image2, image3],
     name: "Lavanda",
-    subcategory: "Cosmética Natural",
-    description:
+    short_description: "Cosmética Natural",
+    large_description:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
     province: "Mendoza",
@@ -64,10 +65,10 @@ const suppliers = [
   },
   {
     category: "Bienestar",
-    image: [image1, image2, image3],
+    imageURLs: [image1, image2, image3],
     name: "Lavanda",
-    subcategory: "Cosmética Natural",
-    description:
+    short_description: "Cosmética Natural",
+    large_description:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
     province: "Mendoza",
@@ -76,11 +77,11 @@ const suppliers = [
 ];
 
 export default function SupplierPage() {
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [filteredSuppliers, setFilteredSuppliers] = useState([]);
-  const [showCategories, setShowCategories] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [filteredSuppliers, setFilteredSuppliers] = useState<Supplier[]>([]);
+  const [showCategories, setShowCategories] = useState<boolean>(true);
 
-  const handleCategory = (category) => {
+  const handleCategory = (category: string) => {
     setSelectedCategory(category);
     setFilteredSuppliers(
       suppliers.filter((supplier) => supplier.category === category)
