@@ -8,6 +8,7 @@ import LoginPage from "./pages/loginPage";
 import Publications from "./pages/publicationsPage";
 import RegisterPage from "./pages/registerPage";
 import SupplierPage from "./pages/supplierPage";
+import CreateProductPage from "./pages/createProductPage";
 
 function App() {
   return (
@@ -23,8 +24,8 @@ function App() {
             <Route path="/proveedores" element={<SupplierPage />} />
             <Route path="/publicaciones" element={<Publications />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />{" "}
-            {/* Nueva ruta */}
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/createProduct" element={<CreateProductPage />} />
           </Routes>
         </div>
       </Router>
