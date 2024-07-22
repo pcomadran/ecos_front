@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
@@ -14,43 +13,13 @@ interface CarruselProps {
 }
 
 const Carrusel: React.FC<CarruselProps> = ({
-  imageUrls,
+  imageUrls = [],
   borderRadius = "16px",
 }) => {
-  const [activeStep, setActiveStep] = useState(0);
-  const [imageStatuses, setImageStatuses] = useState<
-    { loading: boolean; error: boolean }[]
-  >(imageUrls.map(() => ({ loading: true, error: false })));
+  const [activeStep, setActiveStep] = React.useState(0);
   const maxSteps = imageUrls.length;
 
-  const sliderRef = useRef<Slider>(null);
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      const statuses = await Promise.all(
-        imageUrls.map(async (url) => {
-          try {
-            await loadImage(url);
-            return { loading: false, error: false };
-          } catch (error) {
-            return { loading: false, error: true };
-          }
-        })
-      );
-      setImageStatuses(statuses);
-    };
-
-    fetchImages();
-  }, [imageUrls]);
-
-  const loadImage = (url: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.src = url;
-      img.onload = () => resolve();
-      img.onerror = () => reject();
-    });
-  };
+  const sliderRef = React.useRef<Slider>(null);
 
   const handleNext = () => {
     sliderRef.current?.slickNext();
@@ -73,6 +42,10 @@ const Carrusel: React.FC<CarruselProps> = ({
     beforeChange: (_: number, next: number) => handleStepChange(next),
     arrows: false,
   };
+
+  if (maxSteps === 0) {
+    return null;
+  }
 
   return (
     <Box
@@ -99,50 +72,19 @@ const Carrusel: React.FC<CarruselProps> = ({
         <Slider ref={sliderRef} {...settings}>
           {imageUrls.map((url, index) => (
             <div key={index}>
-              {imageStatuses[index].loading ? (
-                <Box
-                  sx={{
-                    height: "128px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                    backgroundColor: "grey.200",
-                    borderRadius: borderRadius,
-                  }}
-                >
-                  <CircularProgress sx={{ color: "#4E169D" }} />
-                </Box>
-              ) : imageStatuses[index].error ? (
-                <Box
-                  sx={{
-                    height: "128px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                    backgroundColor: "grey",
-                    borderRadius: borderRadius,
-                    color: "white",
-                  }}
-                >
-                  Oops, algo no salió bien!
-                </Box>
-              ) : (
-                <Box
-                  component="img"
-                  sx={{
-                    height: "128px",
-                    display: "block",
-                    overflow: "hidden",
-                    width: "100%",
-                    objectFit: "cover",
-                    borderRadius: borderRadius,
-                  }}
-                  src={url}
-                  alt={`Image ${index + 1}`}
-                />
-              )}
+              <Box
+                component="img"
+                sx={{
+                  height: "128px",
+                  display: "block",
+                  overflow: "hidden",
+                  width: "100%",
+                  objectFit: "cover",
+                  borderRadius: borderRadius,
+                }}
+                src={url}
+                alt={`Image ${index + 1}`}
+              />
             </div>
           ))}
         </Slider>
