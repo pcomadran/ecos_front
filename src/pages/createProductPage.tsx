@@ -12,6 +12,8 @@ import {
   Typography,
 } from "@mui/material";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
@@ -73,14 +75,31 @@ const theme = createTheme({
 export default function CreateProductPage() {
   const [count, setCount] = useState(0);
   const [countD, setCountD] = useState(0);
-  // const [imageUrls, setImageUrls] = useState([]);
+  const [imageURLs, setimageURLs] = useState([]);
   const {
     register,
     setValue,
     handleSubmit,
     watch,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isDirty, isValid },
+  } = useForm({
+    defaultValues: {
+      category: "",
+      name: "",
+      short_description: "",
+      large_description: "",
+      email: "",
+      phoneNumber: 0,
+      facebook: "",
+      instagram: "",
+      city: "",
+      province: "",
+      country: "",
+      imageURLs: [],
+    },
+  });
+
+  console.log(errors);
 
   const handleCount = (event: any) => {
     const word = event.target.value;
@@ -92,20 +111,31 @@ export default function CreateProductPage() {
     setCountD(word.length);
   };
 
-  // const handlePhotos = (event: any) => {
-  //   if (watch("imageUrls").length < 3) {
-  //     const newFiles = Array.from(event.target.files);
-  //     const existingFiles = watch("imageUrls") || [];
-  //     const totalFiles = existingFiles.concat(newFiles);
-  //     setImageUrls(totalFiles);
-  //     setValue("imageUrls", totalFiles);
-  //   }
-  // };
+  const handlePhotos = (event: any) => {
+    if (imageURLs.length < 3) {
+      const newFiles = Array.from(event.target.files);
+      const existingFiles = watch("imageURLs") || [];
+      const totalFiles = existingFiles.concat(newFiles);
+      setimageURLs(totalFiles);
+      setValue("imageURLs", totalFiles);
+    }
+  };
 
-  console.log(watch("imageUrls"));
-  // console.log("cantidad:", watch("imageUrls").length);
+  const handleDelete = (index: number) => {
+    const newImages = imageURLs.splice(index, 1);
+    setimageURLs(newImages);
+    setValue("imageURLs", newImages);
+  };
 
-  // console.log(errors);
+  const handleEdit = (event: any, index: number) => {
+    const file = event.target.files[0];
+    if (file) {
+      const newImages = [...imageURLs];
+      newImages[index] = file;
+      setimageURLs(newImages);
+      setValue("imageURLs", newImages);
+    }
+  };
 
   const isSubmit = (data: any) => console.log(data);
 
@@ -561,64 +591,112 @@ export default function CreateProductPage() {
             </FormHelperText>
           </Box>
         </FormControl>
-        {/* {imageUrls.length > 0 && (
-          <Box>
-            {imageUrls.map((file, index) => (
-              <Box key={index} sx={{ marginTop: "10px" }}>
+        {imageURLs.length > 0 && (
+          <Box sx={{ display: "flex", gap: "10px", margin: "15px 0" }}>
+            {imageURLs.map((file, index) => (
+              <Box key={index} sx={{ position: "relative" }}>
                 <img
                   src={URL.createObjectURL(file)}
                   alt={`preview ${index}`}
                   style={{
-                    width: "100px",
-                    height: "100px",
+                    width: "104px",
+                    height: "80px",
+                    borderRadius: "4px",
                     objectFit: "cover",
                   }}
                 />
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: "4px",
+                    position: "absolute",
+                    top: 0,
+                    right: 5,
+                  }}
+                >
+                  <Button
+                    sx={{
+                      borderRadius: "100px",
+                      width: "24px",
+                      height: "24px",
+                      background: "rgba(34,34,34,0.6)",
+                    }}
+                  >
+                    <EditOutlinedIcon
+                      sx={{ width: "20px", height: "20px", color: "#fafafa" }}
+                    />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(event) => handleEdit(event, index)}
+                      style={{
+                        position: "absolute",
+                        width: "100%",
+                        height: "100%",
+                        opacity: 0,
+                      }}
+                    />
+                  </Button>
+                  <Button
+                    sx={{
+                      borderRadius: "100px",
+                      width: "24px",
+                      height: "24px",
+                      background: "rgba(34,34,34,0.6)",
+                    }}
+                    onClick={() => handleDelete(index)}
+                  >
+                    <DeleteOutlineOutlinedIcon
+                      sx={{ width: "23px", height: "23px", color: "#fafafa" }}
+                    />
+                  </Button>
+                </Box>
               </Box>
             ))}
           </Box>
-        )} */}
-        <FormControl
-          sx={{
-            textAlign: "left",
-            marginLeft: "auto",
-            marginBottom: "20px",
-          }}
-        >
-          <Button
-            variant="contained"
-            component="label"
+        )}
+        {imageURLs.length < 3 && (
+          <FormControl
             sx={{
-              marginTop: "10px",
-              marginBottom: "5px",
-              padding: "10px 16px",
-              borderRadius: "100px",
-              width: "152px",
-              height: "40px",
-              textTransform: "none",
-              color: "#fafafa",
-              fontWeight: "bold",
-              background: "#4E169D",
-              gap: "8px",
+              textAlign: "left",
+              marginLeft: "auto",
+              marginBottom: "20px",
             }}
-            // disabled={watch("imageUrls").length >= 3}
           >
-            <FileUploadOutlinedIcon />
-            Subir Imágen
-            <input
-              type="file"
-              hidden
-              accept="image/*"
-              multiple
-              // onChange={handlePhotos}
-            />
-          </Button>
-          <Typography variant="caption">
-            *Requerida al menos una imagen
-          </Typography>
-          <Typography variant="caption">Hasta 3 imágenes. </Typography>
-          <Typography variant="caption">Máximo 3Mb cada una</Typography>
-        </FormControl>
+            <Button
+              variant="contained"
+              component="label"
+              sx={{
+                marginTop: "10px",
+                marginBottom: "5px",
+                padding: "10px 16px",
+                borderRadius: "100px",
+                width: "152px",
+                height: "40px",
+                textTransform: "none",
+                color: "#fafafa",
+                fontWeight: "bold",
+                background: "#4E169D",
+                gap: "8px",
+              }}
+            >
+              <FileUploadOutlinedIcon />
+              Subir Imágen
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                multiple
+                onChange={handlePhotos}
+              />
+            </Button>
+            <Typography variant="caption">
+              *Requerida al menos una imagen
+            </Typography>
+            <Typography variant="caption">Hasta 3 imágenes. </Typography>
+            <Typography variant="caption">Máximo 3Mb cada una</Typography>
+          </FormControl>
+        )}
         <Button
           type="submit"
           sx={{
@@ -630,7 +708,13 @@ export default function CreateProductPage() {
             fontWeight: "bold",
             fontSize: "16px",
             background: "#4E169D",
+            "&.Mui-disabled": {
+              background: "#505050",
+              color: "#fafafa",
+              fontWeight: "400",
+            },
           }}
+          disabled={!isDirty || !isValid}
         >
           Cargar Producto/Servicio
         </Button>
