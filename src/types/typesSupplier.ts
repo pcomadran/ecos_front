@@ -23,3 +23,18 @@ export type Supplier = {
   deleted?: boolean;
   feedback?: string;
 };
+
+export type SupplierForm = {
+  name: string;
+  shortDescription: string;
+  category: number;
+  email: string;
+  phoneNumber: number;
+  instagram?: string;
+  facebook?: string;
+  country: number;
+  province: number;
+  city: string;
+  longDescription: string;
+  images: File[];
+};
