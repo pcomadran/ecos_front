@@ -13,7 +13,7 @@ interface CarruselProps {
 }
 
 const Carrusel: React.FC<CarruselProps> = ({
-  imageUrls,
+  imageUrls = [],
   borderRadius = "16px",
 }) => {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -42,6 +42,10 @@ const Carrusel: React.FC<CarruselProps> = ({
     beforeChange: (_: number, next: number) => handleStepChange(next),
     arrows: false,
   };
+
+  if (maxSteps === 0) {
+    return null;
+  }
 
   return (
     <Box
