@@ -1,21 +1,49 @@
 import {
   Box,
   Button,
-  createTheme,
   FormControl,
   FormHelperText,
   InputLabel,
   MenuItem,
   OutlinedInput,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import { SupplierForm } from "../types/typesSupplier";
+
+// const getAllCategories = async()=>{
+//   try{
+//     const response = await axios.get("/api/categories");
+//     return response.data;
+//   }catch(error){
+//     return[]
+//   }
+// }
+
+// const getAllCountries = async(){
+//   try{
+//     const response = await axios.get("/api/countries");
+//     return response.data;
+//   }catch(error){
+//     return []
+//   }
+// }
+
+// const getAllProvinces = async(countryId:number){
+//   try {
+//     const response = await axios.get(`/api/provinces/country/${countryId}`)
+//     return response.data
+//   } catch (error) {
+//     return []
+//   }
+// }
 
 const categories = [
   "Bienestar",
@@ -42,64 +70,50 @@ const countries = [
   { name: "Perú" },
 ];
 
-const theme = createTheme({
-  components: {
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          "& fieldset": {
-            borderColor: "#222222",
-          },
-          "&.Mui-focused fieldset": {
-            borderColor: "#222222",
-          },
-        },
-      },
-    },
-    MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          color: "#222222",
-          "&.MuiFormLabel-filled": {
-            color: "#4E169D",
-          },
-          "&.Mui-focused": {
-            color: "#4E169D",
-          },
-        },
-      },
-    },
-  },
-});
-
 export default function CreateProductPage() {
-  const [count, setCount] = useState(0);
-  const [countD, setCountD] = useState(0);
-  const [imageURLs, setimageURLs] = useState([]);
+  const [count, setCount] = useState<number>(0);
+  const [countD, setCountD] = useState<number>(0);
+  const [images, setImages] = useState<File[]>([]);
+  const [success, setSuccess] = useState<boolean | null>(null);
+  const [fileErrors, setFileErrors] = useState<{
+    sizeError?: boolean;
+    countError?: boolean;
+  }>({});
+  // const [categories,setCategories] = useState({});
+  // const [countries,setCountries]= useState({})
+  // const [provinces,setProvinces] = useState({});
   const {
     register,
     setValue,
     handleSubmit,
-    watch,
-    formState: { errors, isDirty, isValid },
-  } = useForm({
+    control,
+    formState: { errors },
+  } = useForm<SupplierForm>({
     defaultValues: {
-      category: "",
+      category: 0,
       name: "",
-      short_description: "",
-      large_description: "",
+      shortDescription: "",
+      longDescription: "",
       email: "",
       phoneNumber: 0,
       facebook: "",
       instagram: "",
       city: "",
-      province: "",
-      country: "",
-      imageURLs: [],
+      province: 0,
+      country: 0,
+      images: [],
     },
   });
 
-  console.log(errors);
+  // useEffect( ()=>{
+  //   const fetchInitialData = async()=>{
+  //     const categoriesData = await getAllCategories();
+  //     const countriesData = await getAllCountries();
+  //     setCategories(categoriesData);
+  //     setCountries(countriesData);
+  //   }
+  //   fetchInitialData();
+  // },[])
 
   const handleCount = (event: any) => {
     const word = event.target.value;
@@ -111,33 +125,80 @@ export default function CreateProductPage() {
     setCountD(word.length);
   };
 
-  const handlePhotos = (event: any) => {
-    if (imageURLs.length < 3) {
-      const newFiles = Array.from(event.target.files);
-      const existingFiles = watch("imageURLs") || [];
-      const totalFiles = existingFiles.concat(newFiles);
-      setimageURLs(totalFiles);
-      setValue("imageURLs", totalFiles);
+  // const handleProvince = async(event:any)=>{
+  //   const value = event.target.value;
+  //   const provincesData = await getAllProvinces(value);
+  //   setProvinces(provincesData);
+  // }
+
+  const handlePhotos = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    let sizeError = false;
+    let countError = false;
+    if (files.length + images.length > 3) {
+      countError = true;
+      files.length = 3 - images.length;
+    }
+
+    files.forEach((file) => {
+      if (file.size > 3 * 1024 * 1024) {
+        sizeError = true;
+      }
+    });
+
+    if (sizeError || countError) {
+      setFileErrors({
+        sizeError,
+        countError,
+      });
+    } else {
+      setFileErrors({});
+      const totalFiles = images.concat(files);
+      setImages(totalFiles);
+      setValue("images", totalFiles, { shouldValidate: true });
     }
   };
 
   const handleDelete = (index: number) => {
-    const newImages = imageURLs.splice(index, 1);
-    setimageURLs(newImages);
-    setValue("imageURLs", newImages);
+    const newImages: File[] = images.filter((_, i) => i !== index);
+    setImages(newImages);
+    setValue("images", newImages);
   };
 
-  const handleEdit = (event: any, index: number) => {
-    const file = event.target.files[0];
+  const handleEdit = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const file = event.target.files ? event.target.files[0] : null;
     if (file) {
-      const newImages = [...imageURLs];
-      newImages[index] = file;
-      setimageURLs(newImages);
-      setValue("imageURLs", newImages);
+      if (file.size > 3 * 1024 * 1024) {
+        setFileErrors({ sizeError: true });
+      } else {
+        const newImages: File[] = [...images];
+        newImages[index] = file;
+        setImages(newImages);
+        setValue("images", newImages);
+      }
     }
   };
 
-  const isSubmit = (data: any) => console.log(data);
+  const handleSuccess = () => {
+    setSuccess(null);
+  };
+
+  const isSubmit = (data: any) => {
+    console.log(data);
+    try {
+      console.log("se logro papi");
+      setSuccess(true);
+    } catch (error) {
+      setSuccess(false);
+    }
+  };
+
+  const onError = () => {
+    setSuccess(false);
+  };
 
   return (
     <Box
@@ -157,7 +218,7 @@ export default function CreateProductPage() {
         Completá el formulario para subir tu Producto/Servicio
       </Typography>
       <form
-        onSubmit={handleSubmit(isSubmit)}
+        onSubmit={handleSubmit(isSubmit, onError)}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -219,13 +280,13 @@ export default function CreateProductPage() {
             },
           }}
           variant="outlined"
-          error={errors.short_description ? true : false}
+          error={errors.shortDescription ? true : false}
         >
           <InputLabel required>
             Breve descripción del Producto/Servicio
           </InputLabel>
           <OutlinedInput
-            {...register("short_description", {
+            {...register("shortDescription", {
               required: true,
               maxLength: 50,
             })}
@@ -565,11 +626,11 @@ export default function CreateProductPage() {
             },
           }}
           variant="outlined"
-          error={errors.large_description ? true : false}
+          error={errors.longDescription ? true : false}
         >
           <InputLabel>Descripción del Producto/Servicio</InputLabel>
           <OutlinedInput
-            {...register("large_description", { maxLength: 3 })}
+            {...register("longDescription", { maxLength: 3 })}
             label="Descripción del Producto/Servicio"
             onChange={handleCountD}
             multiline
@@ -591,9 +652,9 @@ export default function CreateProductPage() {
             </FormHelperText>
           </Box>
         </FormControl>
-        {imageURLs.length > 0 && (
+        {images.length > 0 && (
           <Box sx={{ display: "flex", gap: "10px", margin: "15px 0" }}>
-            {imageURLs.map((file, index) => (
+            {images.map((file, index) => (
               <Box key={index} sx={{ position: "relative" }}>
                 <img
                   src={URL.createObjectURL(file)}
@@ -655,14 +716,41 @@ export default function CreateProductPage() {
             ))}
           </Box>
         )}
-        {imageURLs.length < 3 && (
+        {images.length < 3 && (
           <FormControl
             sx={{
               textAlign: "left",
               marginLeft: "auto",
               marginBottom: "20px",
             }}
+            error={errors.images ? true : false}
           >
+            <Controller
+              name="images"
+              control={control}
+              rules={{
+                required: "Debe subir al menos una imagen",
+                validate: {
+                  minLength: (v) =>
+                    (v && v.length >= 1) || "Debe subir al menos una imagen",
+                  maxLength: (v) =>
+                    (v && v.length <= 3) || "No puede subir más de 3 imágenes",
+                },
+              }}
+              render={({ field }) => (
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => {
+                    handlePhotos(e);
+                    field.onChange(e);
+                  }}
+                  ref={field.ref}
+                />
+              )}
+            />
             <Button
               variant="contained"
               component="label"
@@ -690,11 +778,24 @@ export default function CreateProductPage() {
                 onChange={handlePhotos}
               />
             </Button>
-            <Typography variant="caption">
+            <Typography
+              variant="caption"
+              sx={{ color: errors.images ? "red" : "inherit" }}
+            >
               *Requerida al menos una imagen
             </Typography>
-            <Typography variant="caption">Hasta 3 imágenes. </Typography>
-            <Typography variant="caption">Máximo 3Mb cada una</Typography>
+            <Typography
+              variant="caption"
+              sx={{ color: fileErrors.countError ? "red" : "inherit" }}
+            >
+              Hasta 3 imágenes.{" "}
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{ color: fileErrors.sizeError ? "red" : "inherit" }}
+            >
+              Máximo 3Mb cada una
+            </Typography>
           </FormControl>
         )}
         <Button
@@ -714,11 +815,112 @@ export default function CreateProductPage() {
               fontWeight: "400",
             },
           }}
-          disabled={!isDirty || !isValid}
+          // disabled={!isDirty || !isValid}
         >
           Cargar Producto/Servicio
         </Button>
       </form>
+      {success !== null && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: 1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              position: "relative",
+              zIndex: 2,
+              width: "328px",
+              height: success === true ? "152px" : "208px",
+              borderRadius: "28px",
+              background: "#fafafa",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              alignItems: "center",
+              padding: "16px 16px 0 16px",
+            }}
+          >
+            {success === true ? (
+              <>
+                <CheckCircleOutlineOutlinedIcon
+                  sx={{ color: "#1D9129", width: "40px", height: "40px" }}
+                />
+                <Typography sx={{ fontSize: "18px" }}>
+                  Producto/Servicio cargado con éxito
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    width: "100%",
+                  }}
+                >
+                  <Button
+                    sx={{
+                      textTransform: "none",
+                      color: "#4E169D",
+                      fontSize: "600",
+                    }}
+                    onClick={handleSuccess}
+                  >
+                    Aceptar
+                  </Button>
+                </Box>
+              </>
+            ) : (
+              <>
+                <CancelOutlinedIcon
+                  sx={{ color: "#bc1111", width: "40px", height: "40px" }}
+                />
+                <Typography sx={{ fontSize: "18px" }}>
+                  Lo sentimos, el Producto/Servicio no pudo ser cargado.
+                </Typography>
+                <Typography alignSelf={"flex-start"}>
+                  Por favor, volvé a intentarlo.
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <Button
+                    sx={{
+                      textTransform: "none",
+                      color: "#4E169D",
+                      fontSize: "600",
+                    }}
+                    onClick={handleSuccess}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    sx={{
+                      textTransform: "none",
+                      color: "#4E169D",
+                      fontSize: "600",
+                    }}
+                    onClick={handleSuccess}
+                  >
+                    Intentar nuevamente
+                  </Button>
+                </Box>
+              </>
+            )}
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 }
