@@ -1,4 +1,4 @@
-enum status {
+export enum status {
   REVISION_INICIAL,
   ACEPTADO,
   DENEGADO,
@@ -24,16 +24,22 @@ export type Supplier = {
   feedback?: string;
 };
 
+export type Country = {
+  id: number;
+  name: string;
+  provinces: [];
+};
+
 export type SupplierForm = {
   name: string;
   shortDescription: string;
-  category: number;
+  category: number | null;
   email: string;
-  phoneNumber: number;
+  phoneNumber: number | null;
   instagram?: string;
   facebook?: string;
-  country: number;
-  province: number;
+  country: number | null;
+  province: number | null;
   city: string;
   longDescription: string;
   images: File[];
