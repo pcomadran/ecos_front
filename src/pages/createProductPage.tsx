@@ -16,34 +16,8 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import { SupplierForm } from "../types/typesSupplier";
-
-// const getAllCategories = async()=>{
-//   try{
-//     const response = await axios.get("/api/categories");
-//     return response.data;
-//   }catch(error){
-//     return[]
-//   }
-// }
-
-// const getAllCountries = async(){
-//   try{
-//     const response = await axios.get("/api/countries");
-//     return response.data;
-//   }catch(error){
-//     return []
-//   }
-// }
-
-// const getAllProvinces = async(countryId:number){
-//   try {
-//     const response = await axios.get(`/api/provinces/country/${countryId}`)
-//     return response.data
-//   } catch (error) {
-//     return []
-//   }
-// }
+import { Country, SupplierForm } from "../types/typesSupplier";
+import { getAllCountries, getAllProvinces } from "../servises/callsApi";
 
 const categories = [
   "Bienestar",
@@ -59,17 +33,6 @@ const categories = [
   "Transporte",
 ];
 
-const countries = [
-  { name: "Argentina" },
-  { name: "Bolivia" },
-  { name: "Brazil" },
-  { name: "Chile" },
-  { name: "Colombia" },
-  { name: "Ecuador" },
-  { name: "Paraguay" },
-  { name: "Perú" },
-];
-
 export default function CreateProductPage() {
   const [count, setCount] = useState<number>(0);
   const [countD, setCountD] = useState<number>(0);
@@ -80,8 +43,8 @@ export default function CreateProductPage() {
     countError?: boolean;
   }>({});
   // const [categories,setCategories] = useState({});
-  // const [countries,setCountries]= useState({})
-  // const [provinces,setProvinces] = useState({});
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [provinces, setProvinces] = useState([]);
   const {
     register,
     setValue,
@@ -90,30 +53,30 @@ export default function CreateProductPage() {
     formState: { errors },
   } = useForm<SupplierForm>({
     defaultValues: {
-      category: 0,
+      category: null,
       name: "",
       shortDescription: "",
       longDescription: "",
       email: "",
-      phoneNumber: 0,
+      phoneNumber: null,
       facebook: "",
       instagram: "",
       city: "",
-      province: 0,
-      country: 0,
+      province: null,
+      country: null,
       images: [],
     },
   });
 
-  // useEffect( ()=>{
-  //   const fetchInitialData = async()=>{
-  //     const categoriesData = await getAllCategories();
-  //     const countriesData = await getAllCountries();
-  //     setCategories(categoriesData);
-  //     setCountries(countriesData);
-  //   }
-  //   fetchInitialData();
-  // },[])
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      // const categoriesData = await getAllCategories();
+      const countriesData = await getAllCountries();
+      // setCategories(categoriesData);
+      setCountries(countriesData);
+    };
+    fetchInitialData();
+  }, []);
 
   const handleCount = (event: any) => {
     const word = event.target.value;
@@ -125,11 +88,15 @@ export default function CreateProductPage() {
     setCountD(word.length);
   };
 
-  // const handleProvince = async(event:any)=>{
-  //   const value = event.target.value;
-  //   const provincesData = await getAllProvinces(value);
-  //   setProvinces(provincesData);
-  // }
+  const handleProvinces = async (event: any) => {
+    // const name = event.target.value;
+    // const country = countries.find((country) => country.name === name);
+    const countryId = event.target.value;
+    if (countryId) {
+      const provincesData = await getAllProvinces(countryId);
+      setProvinces(provincesData);
+    }
+  };
 
   const handlePhotos = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
@@ -479,6 +446,7 @@ export default function CreateProductPage() {
           label="País*"
           defaultValue=""
           helperText="Seleccioná un país de la lista"
+          onChange={handleProvinces}
           sx={{
             "& .MuiOutlinedInput-root": {
               "& fieldset": {
@@ -505,35 +473,16 @@ export default function CreateProductPage() {
             },
           }}
         >
-          {countries.map((option, index) => (
-            <MenuItem key={index} value={option.name}>
+          {countries?.map((option) => (
+            <MenuItem key={option.id} value={option.id}>
               {option.name}
             </MenuItem>
           ))}
         </TextField>
-        {/* <FormControl sx={{ width: "100%" }}>
-          <InputLabel>País*</InputLabel>
-          <Select {...register("countries")} fullWidth defaultValue="">
-            {countries.map((option, index) => (
-              <MenuItem key={index} value={option.name}>
-                {option.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl> */}
-        {/* <FormControl sx={{ width: "100%" }}>
-          <InputLabel>Provincia/Estado*</InputLabel>
-          <Select {...register("province")} fullWidth defaultValue="">
-            {countries.map((option, index) => (
-              <MenuItem key={index} value={option.name}>
-                {option.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl> */}
         <TextField
           {...register("province", { required: true })}
           error={errors.province ? true : false}
+          // disabled={provinces.length <= 0}
           select
           label="Provincia/Estado*"
           defaultValue=""
@@ -562,10 +511,13 @@ export default function CreateProductPage() {
             "& .MuiFormHelperText-root": {
               color: "#222222",
             },
+            "& .MuiInputLabel-root.Mui-disabled": {
+              color: "#bdbdbd",
+            },
           }}
         >
-          {countries.map((option, index) => (
-            <MenuItem key={index} value={option.name}>
+          {countries?.map((option, index) => (
+            <MenuItem key={index} value={option.id}>
               {option.name}
             </MenuItem>
           ))}
