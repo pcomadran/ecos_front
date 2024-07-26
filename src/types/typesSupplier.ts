@@ -1,4 +1,4 @@
-enum status {
+export enum status {
   REVISION_INICIAL,
   ACEPTADO,
   DENEGADO,
