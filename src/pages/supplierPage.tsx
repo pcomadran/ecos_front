@@ -22,22 +22,23 @@ import Transporte from "/images/TRANSPORTE.png";
 import image1 from "/images/Card bienestar imagen 1.jpg";
 import image2 from "/images/Card bienestar imagen 2.jpg";
 import image3 from "/images/Card bienestar imagen 3.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SupplierCard from "../components/SupplierCard";
 import { Supplier } from "../types/typesSupplier";
+import { getAllCategories, getAllProducts } from "../servises/callsApi";
 
 const categories = [
-  { icon: Bienestar, label: "Bienestar" },
-  { icon: Capacitaciones, label: "Capacitaciones" },
-  { icon: Construccion, label: "Construcción" },
-  { icon: Cultivos, label: "Cultivos" },
-  { icon: Gastronomia, label: "Gastronomía" },
-  { icon: Indumentaria, label: "Indumentaria" },
-  { icon: Merchandising, label: "Merchandising" },
-  { icon: Muebles, label: "Muebles/Deco" },
-  { icon: Reciclaje, label: "Reciclaje" },
-  { icon: Tecnologia, label: "Tecnología" },
-  { icon: Transporte, label: "Transporte" },
+  { icon: Bienestar, name: "Bienestar" },
+  { icon: Capacitaciones, name: "Capacitaciones" },
+  { icon: Construccion, name: "Construcción" },
+  { icon: Cultivos, name: "Cultivos" },
+  { icon: Gastronomia, name: "Gastronomía" },
+  { icon: Indumentaria, name: "Indumentaria" },
+  { icon: Merchandising, name: "Merchandising" },
+  { icon: Muebles, name: "Muebles/Deco" },
+  { icon: Reciclaje, name: "Reciclaje" },
+  { icon: Tecnologia, name: "Tecnología" },
+  { icon: Transporte, name: "Transporte" },
 ];
 
 const suppliers: Supplier[] = [
@@ -77,9 +78,40 @@ const suppliers: Supplier[] = [
 ];
 
 export default function SupplierPage() {
+  // const [categories, setCategories] = useState([
+  //   { id: 1, icon: Bienestar, name: "" },
+  //   { id: 2, icon: Capacitaciones, name: "" },
+  //   { id: 3, icon: Construccion, name: "" },
+  //   { id: 4, icon: Cultivos, name: "" },
+  //   { id: 5, icon: Gastronomia, name: "" },
+  //   { id: 6, icon: Indumentaria, name: "" },
+  //   { id: 7, icon: Merchandising, name: "" },
+  //   { id: 8, icon: Muebles, name: "" },
+  //   { id: 9, icon: Reciclaje, name: "" },
+  //   { id: 10, icon: Tecnologia, name: "" },
+  //   { id: 11, icon: Transporte, name: "" },
+  // ]);
+  // const [suppliers,setSuppliers]=useState([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [filteredSuppliers, setFilteredSuppliers] = useState<Supplier[]>([]);
   const [showCategories, setShowCategories] = useState<boolean>(true);
+
+  // useEffect(()=>{
+  //   async function fetchData(){
+  // const categoriesApi = await getAllCategories();
+  //  const suppliersApi = await getAllProducts();
+  // const updatedCategories = categories.map((category) => {
+  //   const apiCategory = categoriesApi.find((cat) => cat.id === category.id);
+  //   if (apiCategory) {
+  //     return { ...category, name: apiCategory.name };
+  //   }
+  //   return category;
+  // });
+  // setCategories(updatedCategories);
+  // setSuppliers(suppliersApi)
+  //   }
+  //   fetchData()
+  // },[])
 
   const handleCategory = (category: string) => {
     setSelectedCategory(category);
@@ -223,7 +255,7 @@ export default function SupplierPage() {
                   padding: "0 0 0 22%",
                   cursor: "pointer",
                 }}
-                onClick={() => handleCategory(category.label)}
+                onClick={() => handleCategory(category.name)}
               >
                 <Box
                   sx={{
@@ -243,11 +275,11 @@ export default function SupplierPage() {
                       width: 40,
                     }}
                     src={category.icon}
-                    alt={`${category.label} Image`}
+                    alt={`${category.name} Image`}
                   />
                 </Box>
                 <Typography sx={{ fontWeight: "bold", fontSize: "18px" }}>
-                  {category.label}
+                  {category.name}
                 </Typography>
               </Grid>
             ))}
