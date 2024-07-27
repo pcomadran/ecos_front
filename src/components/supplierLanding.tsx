@@ -1,65 +1,21 @@
 import { Box, Grid, Typography } from "@mui/material";
-import image1 from "/images/Card bienestar imagen 1.jpg";
-import image2 from "/images/Miniatura gastronomía.png";
-import image3 from "/images/Miniatura cultivo.png";
-import image4 from "/images/Miniatura indumentaria.png";
 import SupplierCard from "../components/SupplierCard";
 import { Supplier } from "../types/typesSupplier";
+import { useEffect, useState } from "react";
+import { getAllProducts } from "../servises/callsApi";
 
-const products: Supplier[] = [
-  {
-    category: "Bienestar",
-    imageURLs: [image1],
-    name: "Lavanda",
-    short_description: "Cosmética Natural",
-    large_description:
-      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-    city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
-  },
-  {
-    category: "Gastronomía",
-    imageURLs: [image2],
-    name: "Avocado",
-    short_description: "Cocina natural",
-    large_description:
-      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-    city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
-  },
-  {
-    category: "Cultivos",
-    imageURLs: [image3],
-    name: "Tomato",
-    short_description: "Huertas y compost",
-    large_description:
-      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-    city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
-  },
-  {
-    category: "Indumentaria",
-    imageURLs: [image4],
-    name: "Velka",
-    short_description: "Upcyling",
-    large_description:
-      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-    city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
-  },
-];
+export default function SupplierLanding() {
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
 
-interface SupplierLandingProps {
-  suppliers?: Supplier[];
-}
+  useEffect(() => {
+    async function fetchData() {
+      const suppliersApi = await getAllProducts();
+      setSuppliers(suppliersApi);
+    }
 
-export default function SupplierLanding({
-  suppliers = products,
-}: SupplierLandingProps) {
+    fetchData();
+  }, []);
+
   return (
     <Box>
       <Box
@@ -98,8 +54,8 @@ export default function SupplierLanding({
           },
         }}
       >
-        {suppliers.slice(0, 4).map((supplier, index) => (
-          <Grid item key={index}>
+        {suppliers.slice(0, 4).map((supplier) => (
+          <Grid item key={supplier.id}>
             <SupplierCard product={supplier} />
           </Grid>
         ))}
