@@ -2,7 +2,7 @@ import axios from "../servises/axiosConfig";
 
 export const getAllProducts = async (): Promise<any[]> => {
   try {
-    const response = await axios.get(`/api/products`);
+    const response = await axios.get(`/api/products/all`);
     return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
