@@ -19,104 +19,53 @@ import Muebles from "/images/MUEBLES.png";
 import Reciclaje from "/images/RECICLAJE.png";
 import Tecnologia from "/images/TECNOLOGIA.png";
 import Transporte from "/images/TRANSPORTE.png";
-import image1 from "/images/Card bienestar imagen 1.jpg";
-import image2 from "/images/Card bienestar imagen 2.jpg";
-import image3 from "/images/Card bienestar imagen 3.jpg";
 import { useEffect, useState } from "react";
 import SupplierCard from "../components/SupplierCard";
-import { Supplier } from "../types/typesSupplier";
+import { Category, Supplier } from "../types/typesSupplier";
 import { getAllCategories, getAllProducts } from "../servises/callsApi";
 
-const categories = [
-  { icon: Bienestar, name: "Bienestar" },
-  { icon: Capacitaciones, name: "Capacitaciones" },
-  { icon: Construccion, name: "Construcción" },
-  { icon: Cultivos, name: "Cultivos" },
-  { icon: Gastronomia, name: "Gastronomía" },
-  { icon: Indumentaria, name: "Indumentaria" },
-  { icon: Merchandising, name: "Merchandising" },
-  { icon: Muebles, name: "Muebles/Deco" },
-  { icon: Reciclaje, name: "Reciclaje" },
-  { icon: Tecnologia, name: "Tecnología" },
-  { icon: Transporte, name: "Transporte" },
-];
-
-const suppliers: Supplier[] = [
-  {
-    category: "Bienestar",
-    imageURLs: [image1, image2, image3],
-    name: "Lavanda",
-    short_description: "Cosmética Natural",
-    large_description:
-      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-    city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
-  },
-  {
-    category: "Bienestar",
-    imageURLs: [image1, image2, image3],
-    name: "Lavanda",
-    short_description: "Cosmética Natural",
-    large_description:
-      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-    city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
-  },
-  {
-    category: "Bienestar",
-    imageURLs: [image1, image2, image3],
-    name: "Lavanda",
-    short_description: "Cosmética Natural",
-    large_description:
-      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-    city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
-  },
-];
-
 export default function SupplierPage() {
-  // const [categories, setCategories] = useState([
-  //   { id: 1, icon: Bienestar, name: "" },
-  //   { id: 2, icon: Capacitaciones, name: "" },
-  //   { id: 3, icon: Construccion, name: "" },
-  //   { id: 4, icon: Cultivos, name: "" },
-  //   { id: 5, icon: Gastronomia, name: "" },
-  //   { id: 6, icon: Indumentaria, name: "" },
-  //   { id: 7, icon: Merchandising, name: "" },
-  //   { id: 8, icon: Muebles, name: "" },
-  //   { id: 9, icon: Reciclaje, name: "" },
-  //   { id: 10, icon: Tecnologia, name: "" },
-  //   { id: 11, icon: Transporte, name: "" },
-  // ]);
-  // const [suppliers,setSuppliers]=useState([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [categories, setCategories] = useState<Category[]>([
+    { id: 1, icon: Bienestar, name: "" },
+    { id: 2, icon: Capacitaciones, name: "" },
+    { id: 3, icon: Construccion, name: "" },
+    { id: 4, icon: Cultivos, name: "" },
+    { id: 5, icon: Gastronomia, name: "" },
+    { id: 6, icon: Indumentaria, name: "" },
+    { id: 7, icon: Merchandising, name: "" },
+    { id: 8, icon: Muebles, name: "" },
+    { id: 9, icon: Reciclaje, name: "" },
+    { id: 10, icon: Tecnologia, name: "" },
+    { id: 11, icon: Transporte, name: "" },
+  ]);
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Category>();
   const [filteredSuppliers, setFilteredSuppliers] = useState<Supplier[]>([]);
   const [showCategories, setShowCategories] = useState<boolean>(true);
 
-  // useEffect(()=>{
-  //   async function fetchData(){
-  // const categoriesApi = await getAllCategories();
-  //  const suppliersApi = await getAllProducts();
-  // const updatedCategories = categories.map((category) => {
-  //   const apiCategory = categoriesApi.find((cat) => cat.id === category.id);
-  //   if (apiCategory) {
-  //     return { ...category, name: apiCategory.name };
-  //   }
-  //   return category;
-  // });
-  // setCategories(updatedCategories);
-  // setSuppliers(suppliersApi)
-  //   }
-  //   fetchData()
-  // },[])
+  useEffect(() => {
+    async function fetchData() {
+      const categoriesApi = await getAllCategories();
+      const suppliersApi = await getAllProducts();
+      const updatedCategories = categories.map((category) => {
+        const apiCategory = categoriesApi.find(
+          (cat: Category) => cat.id === category.id
+        );
+        if (apiCategory) {
+          return { ...category, name: apiCategory.name };
+        }
+        return category;
+      });
+      setCategories(updatedCategories);
+      setSuppliers(suppliersApi);
+    }
+    fetchData();
+  }, []);
 
-  const handleCategory = (category: string) => {
+  const handleCategory = (category: Category) => {
     setSelectedCategory(category);
     setFilteredSuppliers(
-      suppliers.filter((supplier) => supplier.category === category)
+      suppliers.filter((supplier) => supplier.category?.id === category.id)
     );
     setShowCategories(false);
   };
@@ -240,10 +189,10 @@ export default function SupplierPage() {
             direction="column"
             sx={{ zIndex: 1, position: "relative" }}
           >
-            {categories.map((category, index) => (
+            {categories.map((category) => (
               <Grid
                 item
-                key={index}
+                key={category.id}
                 alignItems="center"
                 sx={{
                   display: "flex",
@@ -255,7 +204,7 @@ export default function SupplierPage() {
                   padding: "0 0 0 22%",
                   cursor: "pointer",
                 }}
-                onClick={() => handleCategory(category.name)}
+                onClick={() => handleCategory(category)}
               >
                 <Box
                   sx={{
@@ -297,7 +246,7 @@ export default function SupplierPage() {
               <Typography
                 sx={{ color: "#6433a8", fontSize: "20px", fontWeight: "600" }}
               >
-                {selectedCategory}
+                {selectedCategory?.name}
               </Typography>
               <Typography
                 sx={{
@@ -312,8 +261,8 @@ export default function SupplierPage() {
               </Typography>
             </Box>
             <Grid container spacing={2} justifyContent="center">
-              {filteredSuppliers.map((supplier, index) => (
-                <Grid item key={index}>
+              {filteredSuppliers.map((supplier) => (
+                <Grid item key={supplier.id}>
                   <SupplierCard product={supplier} />
                 </Grid>
               ))}
