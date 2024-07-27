@@ -25,17 +25,49 @@ interface SupplierProps {
   product: Supplier;
 }
 
+type Contact = {
+  icon: React.ElementType;
+  label: string;
+  data: string;
+};
+
 export default function SupplierCard({ product }: SupplierProps) {
   const [details, setDetails] = useState<boolean>(false);
   const location: string = useLocation().pathname;
 
-  //Ingresar medios de contacto aca mediante onClick que tenga un handler con Link
-  const contactsMethod = [
-    { icon: WhatsAppIcon, label: "WhatsApp" },
-    { icon: InstagramIcon, label: "Instagram" },
-    { icon: FacebookRoundedIcon, label: "Facebook" },
-    { icon: EmailOutlinedIcon, label: "Mail" },
+  const contactsMethod: Contact[] = [
+    { icon: WhatsAppIcon, label: "WhatsApp", data: product.phoneNumber || "" },
+    { icon: InstagramIcon, label: "Instagram", data: product.instagram || "" },
+    {
+      icon: FacebookRoundedIcon,
+      label: "Facebook",
+      data: product.facebook || "",
+    },
+    { icon: EmailOutlinedIcon, label: "Mail", data: product.email || "" },
   ];
+
+  const handleContact = (contact: Contact): void => {
+    switch (contact.label) {
+      case "WhatsApp": {
+        window.open(`https://wa.me/${contact.data}`, "_blank");
+        break;
+      }
+      case "Instagram": {
+        window.open(`https://www.instagram.com/${contact.data}`, "_blank");
+        break;
+      }
+      case "Facebook": {
+        window.open(`https://www.facebook.com/${contact.data}`, "_blank");
+        break;
+      }
+      case "Mail": {
+        window.location.href = `mailto:${contact.data}`;
+        break;
+      }
+      default:
+        break;
+    }
+  };
 
   const handleDetailLP = (): void => {
     if (location === "/")
@@ -162,14 +194,14 @@ export default function SupplierCard({ product }: SupplierProps) {
                 component="span"
                 sx={{ fontSize: 13 }}
               >
-                {product.category}
+                {product.category?.name}
               </Typography>
             </Box>
             {location === "/" ? (
               <CardMedia
                 component="img"
                 alt={product.name}
-                image={product.imageURLs[0]}
+                image={product.imagesURLs[0]}
                 sx={{
                   width: "100%",
                   height:
@@ -191,7 +223,7 @@ export default function SupplierCard({ product }: SupplierProps) {
                 }}
               >
                 <Carrusel
-                  imageUrls={product.imageURLs}
+                  imageUrls={product.imagesURLs}
                   borderRadius={"16px 0 16px 16px"}
                 />
               </Box>
@@ -208,6 +240,7 @@ export default function SupplierCard({ product }: SupplierProps) {
               <Grid
                 container
                 spacing={location === "/" ? (details ? 1 : 1.5) : 0.5}
+                sx={{ width: "100%" }}
               >
                 <Grid item xs={12}>
                   <Typography
@@ -233,10 +266,11 @@ export default function SupplierCard({ product }: SupplierProps) {
                           : "#4e169d"
                       }`,
                       margin: 0,
-                      padding: "2px 0",
+                      paddingTop: "2px",
+                      overflow: "hidden",
                     }}
                   >
-                    {product.short_description}
+                    {product.shortDescription}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} container spacing={0.5}>
@@ -251,9 +285,9 @@ export default function SupplierCard({ product }: SupplierProps) {
                     >
                       {location === "/"
                         ? details
-                          ? `${product.city},${product.province},${product.country}`
+                          ? `${product.city},${product.province?.name},${product.country?.name}`
                           : product.city
-                        : `${product.city},${product.province},${product.country}`}
+                        : `${product.city},${product.province?.name},${product.country?.name}`}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -262,7 +296,7 @@ export default function SupplierCard({ product }: SupplierProps) {
                     <Typography
                       sx={{ marginTop: 2, fontSize: 16, textAlign: "center" }}
                     >
-                      {product.large_description}
+                      {product.longDescription}
                     </Typography>
                     <Typography sx={{ marginTop: 3, fontWeight: "bold" }}>
                       Contáctanos
@@ -279,6 +313,7 @@ export default function SupplierCard({ product }: SupplierProps) {
                           alignItems="center"
                           sx={{ display: "flex", flexDirection: "column" }}
                           key={index}
+                          onClick={() => handleContact(contact)}
                         >
                           <contact.icon
                             sx={{ color: "#4e169d", fontSize: "32px" }}
