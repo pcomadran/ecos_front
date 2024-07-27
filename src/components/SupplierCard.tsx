@@ -268,6 +268,7 @@ export default function SupplierCard({ product }: SupplierProps) {
                       margin: 0,
                       paddingTop: "2px",
                       overflow: "hidden",
+                      textAlign: "left",
                     }}
                   >
                     {product.shortDescription}
@@ -298,7 +299,13 @@ export default function SupplierCard({ product }: SupplierProps) {
                     >
                       {product.longDescription}
                     </Typography>
-                    <Typography sx={{ marginTop: 3, fontWeight: "bold" }}>
+                    <Typography
+                      sx={{
+                        marginTop: 3,
+                        fontWeight: "bold",
+                        textAlign: "left",
+                      }}
+                    >
                       Contáctanos
                     </Typography>
                     <Grid
