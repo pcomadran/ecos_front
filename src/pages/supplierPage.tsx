@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 import SupplierCard from "../components/SupplierCard";
 import { Category, Supplier } from "../types/typesSupplier";
 import { getAllCategories, getAllProducts } from "../servises/callsApi";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function SupplierPage() {
   const [categories, setCategories] = useState<Category[]>([
@@ -39,9 +40,19 @@ export default function SupplierPage() {
     { id: 11, icon: Transporte, name: "" },
   ]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<Category>();
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const [filteredSuppliers, setFilteredSuppliers] = useState<Supplier[]>([]);
   const [showCategories, setShowCategories] = useState<boolean>(true);
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const categoryId = searchParams.get("categoria");
+
+  const navigate = useNavigate();
+
+  console.log("categoria", categoryId);
 
   useEffect(() => {
     async function fetchData() {
@@ -62,13 +73,38 @@ export default function SupplierPage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (categoryId && categories.length > 0 && suppliers.length > 0) {
+      const category = categories.find(
+        (cat) => cat.id === parseInt(categoryId)
+      );
+      if (category) {
+        setSelectedCategory(category);
+        setFilteredSuppliers(
+          suppliers.filter((supplier) => supplier.category?.id === category.id)
+        );
+        setShowCategories(false);
+      }
+    } else {
+      setSelectedCategory(null);
+      setFilteredSuppliers([]);
+      setShowCategories(true);
+    }
+  }, [categoryId, categories, suppliers]);
+
   const handleCategory = (category: Category) => {
+    navigate(`/proveedores?categoria=${category.id}`);
     setSelectedCategory(category);
     setFilteredSuppliers(
       suppliers.filter((supplier) => supplier.category?.id === category.id)
     );
     setShowCategories(false);
   };
+
+  console.log(filteredSuppliers);
+
+  console.log("categorias: ", categories);
+  console.log("categoria seleccionada: ", selectedCategory);
 
   return (
     <div>
@@ -189,7 +225,7 @@ export default function SupplierPage() {
             direction="column"
             sx={{ zIndex: 1, position: "relative" }}
           >
-            {categories.map((category) => (
+            {categories?.map((category) => (
               <Grid
                 item
                 key={category.id}
@@ -261,7 +297,7 @@ export default function SupplierPage() {
               </Typography>
             </Box>
             <Grid container spacing={2} justifyContent="center">
-              {filteredSuppliers.map((supplier) => (
+              {filteredSuppliers?.map((supplier) => (
                 <Grid item key={supplier.id}>
                   <SupplierCard product={supplier} />
                 </Grid>

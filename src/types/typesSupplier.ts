@@ -10,6 +10,7 @@ export type Category = {
   id: number;
   name: string;
   icon?: string;
+  image?: string;
 };
 
 export type Province = {
