@@ -20,7 +20,7 @@ export type Province = {
 export type Country = {
   id: number;
   name: string;
-  province: Province[];
+  province?: Province[];
 };
 
 export type Supplier = {
@@ -40,4 +40,19 @@ export type Supplier = {
   status?: status;
   deleted?: boolean;
   feedback?: string | null;
+};
+
+export type SupplierForm = {
+  name: string;
+  shortDescription: string;
+  category: number | null;
+  email: string;
+  phoneNumber: number | null;
+  instagram?: string;
+  facebook?: string;
+  country: number | null;
+  province: number | null;
+  city: string;
+  longDescription?: string;
+  images: File[];
 };

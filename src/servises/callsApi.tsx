@@ -30,3 +30,21 @@ export const getAllCategories = async () => {
     return [];
   }
 };
+
+export const getAllCountries = async () => {
+  try {
+    const response = await axios.get("/api/countries");
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const getAllProvinces = async (countryId: number) => {
+  try {
+    const response = await axios.get(`/api/provinces/country/${countryId}`);
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};

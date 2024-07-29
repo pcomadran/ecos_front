@@ -11,6 +11,7 @@ import SupplierPage from "./pages/supplierPage";
 import SearchPage from "./pages/searchPage";
 import SearchBar from "./components/searchBar";
 import ProfilePage from "./pages/profilePage";
+import CreateProductPage from "./pages/createProductPage";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/createProduct" element={<CreateProductPage />} />
           </Routes>
         </div>
       </Router>

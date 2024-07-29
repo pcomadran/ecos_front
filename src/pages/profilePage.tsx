@@ -5,56 +5,56 @@ import image2 from "/images/Card bienestar imagen 2.jpg";
 import image3 from "/images/Card bienestar imagen 3.jpg";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import CircleIcon from "@mui/icons-material/Circle";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SupplierCard from "../components/SupplierCard";
 
 const suppliers: Supplier[] = [
   {
-    category: "Bienestar",
-    imageURLs: [image1, image2, image3],
+    category: { id: 2, name: "Capacitaciones" },
+    imagesURLs: [image1, image2, image3],
     name: "Lavanda",
-    short_description: "Cosmética Natural",
-    large_description:
+    shortDescription: "Cosmética Natural",
+    longDescription:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
+    province: { id: 12, name: "Mendoza" },
+    country: { id: 1, name: "Argentina" },
     status: status.REVISION_INICIAL,
   },
   {
-    category: "Bienestar",
-    imageURLs: [image1, image2, image3],
+    category: { id: 4, name: "Cultivos" },
+    imagesURLs: [image1, image2, image3],
     name: "Lavanda",
-    short_description: "Cosmética Natural",
-    large_description:
+    shortDescription: "Cosmética Natural",
+    longDescription:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
+    province: { id: 12, name: "Mendoza" },
+    country: { id: 1, name: "Argentina" },
     status: status.REQUIERE_CAMBIOS,
   },
   {
-    category: "Bienestar",
-    imageURLs: [image1, image2, image3],
+    category: { id: 6, name: "Indumentaria" },
+    imagesURLs: [image1, image2, image3],
     name: "Lavanda",
-    short_description: "Cosmética Natural",
-    large_description:
+    shortDescription: "Cosmética Natural",
+    longDescription:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
+    province: { id: 12, name: "Mendoza" },
+    country: { id: 1, name: "Argentina" },
     status: status.ACEPTADO,
   },
   {
-    category: "Bienestar",
-    imageURLs: [image1, image2, image3],
+    category: { id: 1, name: "Bienestar" },
+    imagesURLs: [image1, image2, image3],
     name: "Lavanda",
-    short_description: "Cosmética Natural",
-    large_description:
+    shortDescription: "Cosmética Natural",
+    longDescription:
       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
     city: "Godoy Cruz",
-    province: "Mendoza",
-    country: "Argentina",
+    province: { id: 12, name: "Mendoza" },
+    country: { id: 1, name: "Argentina" },
     status: status.DENEGADO,
   },
 ];
@@ -245,7 +245,7 @@ export default function ProfilePage() {
           fontWeight: "700",
         }}
       >
-        {/* <Link
+        <Link
           to="/createProduct"
           style={{
             color: "#fafafa",
@@ -253,9 +253,9 @@ export default function ProfilePage() {
             fontWeight: "700",
             textDecoration: "none",
           }}
-        > */}
-        Cargar Producto/Servicio
-        {/* </Link> */}
+        >
+          Cargar Producto/Servicio
+        </Link>
       </Button>
       <Typography sx={{ fontSize: "22px", fontWeight: "500" }}>
         Mis Productos/Servicios
