@@ -12,26 +12,21 @@ import {
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import { Country, SupplierForm } from "../types/typesSupplier";
-import { getAllCountries, getAllProvinces } from "../servises/callsApi";
-
-const categories = [
-  "Bienestar",
-  "Capacitaciones",
-  "Construcción",
-  "Cultivos",
-  "Gastronomía",
-  "Indumentaria",
-  "Merchandising",
-  "Muebles/Deco",
-  "Reciclaje",
-  "Tecnología",
-  "Transporte",
-];
+import {
+  Category,
+  Country,
+  Province,
+  SupplierForm,
+} from "../types/typesSupplier";
+import {
+  getAllCategories,
+  getAllCountries,
+  getAllProvinces,
+} from "../servises/callsApi";
 
 export default function CreateProductPage() {
   const [count, setCount] = useState<number>(0);
@@ -42,9 +37,9 @@ export default function CreateProductPage() {
     sizeError?: boolean;
     countError?: boolean;
   }>({});
-  // const [categories,setCategories] = useState({});
+  const [categories, setCategories] = useState<Category[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
-  const [provinces, setProvinces] = useState([]);
+  const [provinces, setProvinces] = useState<Province[]>([]);
   const {
     register,
     setValue,
@@ -70,38 +65,40 @@ export default function CreateProductPage() {
 
   useEffect(() => {
     const fetchInitialData = async () => {
-      // const categoriesData = await getAllCategories();
+      const categoriesData = await getAllCategories();
       const countriesData = await getAllCountries();
-      // setCategories(categoriesData);
+      setCategories(categoriesData);
       setCountries(countriesData);
     };
     fetchInitialData();
   }, []);
 
-  const handleCount = (event: any) => {
-    const word = event.target.value;
+  const handleCount = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    const word: string = event.target.value;
     setCount(word.length);
   };
 
-  const handleCountD = (event: any) => {
-    const word = event.target.value;
+  const handleCountD = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ): void => {
+    const word: string = event.target.value;
     setCountD(word.length);
   };
 
-  const handleProvinces = async (event: any) => {
-    // const name = event.target.value;
-    // const country = countries.find((country) => country.name === name);
-    const countryId = event.target.value;
+  const handleProvinces = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
+    const countryId: number | null = parseInt(event.target.value, 10);
     if (countryId) {
       const provincesData = await getAllProvinces(countryId);
       setProvinces(provincesData);
     }
   };
 
-  const handlePhotos = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    let sizeError = false;
-    let countError = false;
+  const handlePhotos = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const files: File[] = Array.from(event.target.files || []);
+    let sizeError: boolean = false;
+    let countError: boolean = false;
     if (files.length + images.length > 3) {
       countError = true;
       files.length = 3 - images.length;
@@ -120,13 +117,13 @@ export default function CreateProductPage() {
       });
     } else {
       setFileErrors({});
-      const totalFiles = images.concat(files);
+      const totalFiles: File[] = images.concat(files);
       setImages(totalFiles);
       setValue("images", totalFiles, { shouldValidate: true });
     }
   };
 
-  const handleDelete = (index: number) => {
+  const handleDelete = (index: number): void => {
     const newImages: File[] = images.filter((_, i) => i !== index);
     setImages(newImages);
     setValue("images", newImages);
@@ -135,8 +132,8 @@ export default function CreateProductPage() {
   const handleEdit = (
     event: React.ChangeEvent<HTMLInputElement>,
     index: number
-  ) => {
-    const file = event.target.files ? event.target.files[0] : null;
+  ): void => {
+    const file: File | null = event.target.files ? event.target.files[0] : null;
     if (file) {
       if (file.size > 3 * 1024 * 1024) {
         setFileErrors({ sizeError: true });
@@ -149,14 +146,13 @@ export default function CreateProductPage() {
     }
   };
 
-  const handleSuccess = () => {
+  const handleSuccess = (): void => {
     setSuccess(null);
   };
 
-  const isSubmit = (data: any) => {
+  const isSubmit: SubmitHandler<SupplierForm> = (data): void => {
     console.log(data);
     try {
-      console.log("se logro papi");
       setSuccess(true);
     } catch (error) {
       setSuccess(false);
@@ -298,8 +294,8 @@ export default function CreateProductPage() {
           }}
         >
           {categories.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
+            <MenuItem key={option.id} value={option.id}>
+              {option.name}
             </MenuItem>
           ))}
         </TextField>
@@ -359,7 +355,7 @@ export default function CreateProductPage() {
             },
           }}
           variant="outlined"
-          error={errors.email ? true : false}
+          error={errors.phoneNumber ? true : false}
         >
           <InputLabel required>Teléfono o Whatsapp</InputLabel>
           <OutlinedInput
@@ -482,7 +478,7 @@ export default function CreateProductPage() {
         <TextField
           {...register("province", { required: true })}
           error={errors.province ? true : false}
-          // disabled={provinces.length <= 0}
+          disabled={provinces.length <= 0}
           select
           label="Provincia/Estado*"
           defaultValue=""
@@ -516,8 +512,8 @@ export default function CreateProductPage() {
             },
           }}
         >
-          {countries?.map((option, index) => (
-            <MenuItem key={index} value={option.id}>
+          {provinces?.map((option) => (
+            <MenuItem key={option.id} value={option.id}>
               {option.name}
             </MenuItem>
           ))}
@@ -597,7 +593,7 @@ export default function CreateProductPage() {
           />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <FormHelperText sx={{ color: "#222222" }}>
-              Máximo 300 caracteres{" "}
+              Máximo 300 caracteres
             </FormHelperText>
             <FormHelperText sx={{ color: "#222222" }}>
               {countD}/300
