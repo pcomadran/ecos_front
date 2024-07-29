@@ -6,22 +6,40 @@ export enum status {
   CAMBIOS_REALIZADOS,
 }
 
-export type Supplier = {
-  category?: string;
+export type Category = {
+  id: number;
   name: string;
-  short_description: string;
-  large_description: string;
+  icon?: string;
+};
+
+export type Province = {
+  id: number;
+  name: string;
+};
+
+export type Country = {
+  id: number;
+  name: string;
+  province: Province[];
+};
+
+export type Supplier = {
+  id?: number;
+  category?: Category;
+  name: string;
+  shortDescription: string;
+  longDescription: string;
   email?: string;
-  phoneNumber?: number;
+  phoneNumber?: string;
   facebook?: string;
   instagram?: string;
   city: string;
-  province?: string;
-  country?: string;
-  imageURLs: string[];
+  province?: Province;
+  country?: Country;
+  imagesURLs: string[];
   status?: status;
   deleted?: boolean;
-  feedback?: string;
+  feedback?: string | null;
 };
 
 export type Country = {
