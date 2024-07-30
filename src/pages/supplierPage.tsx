@@ -2,11 +2,8 @@ import {
   Box,
   Container,
   Grid,
-  InputAdornment,
-  TextField,
   Typography,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import BackgroundImage from "/images/Imagen proveedores.png";
 import Bienestar from "/images/BIENESTAR.png";
 import Capacitaciones from "/images/CAPACITACION.png";
@@ -24,6 +21,7 @@ import SupplierCard from "../components/SupplierCard";
 import { Category, Supplier } from "../types/typesSupplier";
 import { getAllCategories, getAllProducts } from "../servises/callsApi";
 import { useLocation, useNavigate } from "react-router-dom";
+import SearchBar from "../components/searchBar";
 
 export default function SupplierPage() {
   const [categories, setCategories] = useState<Category[]>([
@@ -71,7 +69,7 @@ export default function SupplierPage() {
       setSuppliers(suppliersApi);
     }
     fetchData();
-  }, []);
+  }, [categories]);
 
   useEffect(() => {
     if (categoryId && categories.length > 0 && suppliers.length > 0) {
@@ -141,34 +139,9 @@ export default function SupplierPage() {
             paddingTop: "80px",
           }}
         >
-          {/* Campo de búsqueda */}
-          <TextField
-            variant="outlined"
-            placeholder="Buscar Proveedores"
-            fullWidth
-            style={{
-              marginBottom: "20px",
-              backgroundColor: "#fafafa",
-              borderRadius: "50px",
-              maxWidth: "500px",
-              height: "60px",
-              zIndex: 1,
-            }}
-            InputProps={{
-              style: {
-                padding: "2px 20px",
-                borderRadius: "50px",
-                border: "none",
-              },
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <SearchBar />
           <Grid container textAlign="start">
-            <Grid item xs={12} sm={12} sx={{ mt: 3 }}>
+            <Grid item xs={12} sm={12} sx={{ mt: 13 }}>
               <Typography sx={{ fontSize: "18px", fontWeight: "bold" }}>
                 PROVEEDORES
               </Typography>

@@ -9,7 +9,6 @@ import Publications from "./pages/publicationsPage";
 import RegisterPage from "./pages/registerPage";
 import SupplierPage from "./pages/supplierPage";
 import SearchPage from "./pages/searchPage";
-import SearchBar from "./components/searchBar";
 import ProfilePage from "./pages/profilePage";
 import CreateProductPage from "./pages/createProductPage";
 
@@ -27,7 +26,6 @@ function App() {
           }}
         >
           <Navbar />
-          <SearchBar />
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/proveedores" element={<SupplierPage />} />
