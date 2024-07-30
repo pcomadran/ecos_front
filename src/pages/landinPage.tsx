@@ -3,6 +3,7 @@ import BackgroundImage from "../../public/images/Imagen landing.png";
 import CategoriesPage from "./CategoriesPage";
 import SupplierLanding from "../components/supplierLanding";
 import PublicationsLanding from "../components/PublicationsLanding";
+import SearchBar from "../components/searchBar";
 
 const LandingPage = () => {
   return (
@@ -18,6 +19,7 @@ const LandingPage = () => {
           backgroundPosition: "center",
         }}
       >
+        <SearchBar />
         <div
           style={{
             position: "absolute",
