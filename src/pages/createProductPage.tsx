@@ -23,6 +23,7 @@ import {
   SupplierForm,
 } from "../types/typesSupplier";
 import {
+  createProduct,
   getAllCategories,
   getAllCountries,
   getAllProvinces,
@@ -31,7 +32,7 @@ import {
 export default function CreateProductPage() {
   const [count, setCount] = useState<number>(0);
   const [countD, setCountD] = useState<number>(0);
-  const [images, setImages] = useState<File[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [success, setSuccess] = useState<boolean | null>(null);
   const [fileErrors, setFileErrors] = useState<{
     sizeError?: boolean;
@@ -59,7 +60,7 @@ export default function CreateProductPage() {
       city: "",
       province: null,
       country: null,
-      images: [],
+      files: [],
     },
   });
 
@@ -99,9 +100,9 @@ export default function CreateProductPage() {
     const files: File[] = Array.from(event.target.files || []);
     let sizeError: boolean = false;
     let countError: boolean = false;
-    if (files.length + images.length > 3) {
+    if (files.length + files.length > 3) {
       countError = true;
-      files.length = 3 - images.length;
+      files.length = 3 - files.length;
     }
 
     files.forEach((file) => {
@@ -117,16 +118,16 @@ export default function CreateProductPage() {
       });
     } else {
       setFileErrors({});
-      const totalFiles: File[] = images.concat(files);
-      setImages(totalFiles);
-      setValue("images", totalFiles, { shouldValidate: true });
+      const totalFiles: File[] = files.concat(files);
+      setFiles(totalFiles);
+      setValue("files", totalFiles, { shouldValidate: true });
     }
   };
 
   const handleDelete = (index: number): void => {
-    const newImages: File[] = images.filter((_, i) => i !== index);
-    setImages(newImages);
-    setValue("images", newImages);
+    const newfiles: File[] = files.filter((_, i) => i !== index);
+    setFiles(newfiles);
+    setValue("files", newfiles);
   };
 
   const handleEdit = (
@@ -138,10 +139,10 @@ export default function CreateProductPage() {
       if (file.size > 3 * 1024 * 1024) {
         setFileErrors({ sizeError: true });
       } else {
-        const newImages: File[] = [...images];
-        newImages[index] = file;
-        setImages(newImages);
-        setValue("images", newImages);
+        const newfiles: File[] = [...files];
+        newfiles[index] = file;
+        setFiles(newfiles);
+        setValue("files", newfiles);
       }
     }
   };
@@ -150,9 +151,27 @@ export default function CreateProductPage() {
     setSuccess(null);
   };
 
-  const isSubmit: SubmitHandler<SupplierForm> = (data): void => {
+  const isSubmit: SubmitHandler<SupplierForm> = async (data): void => {
     console.log(data);
     try {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("shortDescription", data.shortDescription);
+      formData.append("categoryId", String(data.category));
+      formData.append("email", data.email);
+      formData.append("phoneNumber", String(data.phoneNumber));
+      formData.append("instagram", String(data.instagram));
+      formData.append("facebook", String(data.facebook));
+      formData.append("countryId", String(data.country));
+      formData.append("provinceId", String(data.province));
+      formData.append("city", data.city);
+      formData.append("longDescription", String(data.longDescription));
+      Array.from(data.files).forEach((file) => {
+        formData.append("files", file);
+      });
+
+      const dataResponse = await createProduct(formData);
+      console.log(dataResponse);
       setSuccess(true);
     } catch (error) {
       setSuccess(false);
@@ -600,9 +619,9 @@ export default function CreateProductPage() {
             </FormHelperText>
           </Box>
         </FormControl>
-        {images.length > 0 && (
+        {files.length > 0 && (
           <Box sx={{ display: "flex", gap: "10px", margin: "15px 0" }}>
-            {images.map((file, index) => (
+            {files.map((file, index) => (
               <Box key={index} sx={{ position: "relative" }}>
                 <img
                   src={URL.createObjectURL(file)}
@@ -664,17 +683,17 @@ export default function CreateProductPage() {
             ))}
           </Box>
         )}
-        {images.length < 3 && (
+        {files.length < 3 && (
           <FormControl
             sx={{
               textAlign: "left",
               marginLeft: "auto",
               marginBottom: "20px",
             }}
-            error={errors.images ? true : false}
+            error={errors.files ? true : false}
           >
             <Controller
-              name="images"
+              name="files"
               control={control}
               rules={{
                 required: "Debe subir al menos una imagen",
@@ -728,7 +747,7 @@ export default function CreateProductPage() {
             </Button>
             <Typography
               variant="caption"
-              sx={{ color: errors.images ? "red" : "inherit" }}
+              sx={{ color: errors.files ? "red" : "inherit" }}
             >
               *Requerida al menos una imagen
             </Typography>
