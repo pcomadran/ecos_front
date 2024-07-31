@@ -63,7 +63,9 @@ export const getAllCountries = async (): Promise<Country[]> => {
   }
 };
 
-export const getAllProvinces = async (countryId: number) => {
+export const getAllProvinces = async (
+  countryId: number
+): Promise<Province[]> => {
   try {
     const response = await axios.get(`/api/provinces/country/${countryId}`);
     return response.data;
