@@ -151,7 +151,7 @@ export default function CreateProductPage() {
     setSuccess(null);
   };
 
-  const isSubmit: SubmitHandler<SupplierForm> = async (data): void => {
+  const isSubmit: SubmitHandler<SupplierForm> = async (data): Promise<void> => {
     console.log(data);
     try {
       const formData = new FormData();
