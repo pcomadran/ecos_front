@@ -1,75 +1,73 @@
 import { Box, Button, Typography } from "@mui/material";
 import { status, Supplier } from "../types/typesSupplier";
-// import image1 from "/images/Card bienestar imagen 1.jpg";
-// import image2 from "/images/Card bienestar imagen 2.jpg";
-// import image3 from "/images/Card bienestar imagen 3.jpg";
+import image1 from "/images/Card bienestar imagen 1.jpg";
+import image2 from "/images/Card bienestar imagen 2.jpg";
+import image3 from "/images/Card bienestar imagen 3.jpg";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import CircleIcon from "@mui/icons-material/Circle";
 import { Link } from "react-router-dom";
 import SupplierCard from "../components/SupplierCard";
-import { useEffect, useState } from "react";
-import { getAllProducts, getProductsBySupplier } from "../servises/callsApi";
 
-// const suppliers: Supplier[] = [
-//   {
-//     category: { id: 2, name: "Capacitaciones" },
-//     imagesURLs: [image1, image2, image3],
-//     name: "Lavanda",
-//     shortDescription: "Cosmética Natural",
-//     longDescription:
-//       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-//     city: "Godoy Cruz",
-//     province: { id: 12, name: "Mendoza" },
-//     country: { id: 1, name: "Argentina" },
-//     status: status.REVISION_INICIAL,
-//   },
-//   {
-//     category: { id: 4, name: "Cultivos" },
-//     imagesURLs: [image1, image2, image3],
-//     name: "Lavanda",
-//     shortDescription: "Cosmética Natural",
-//     longDescription:
-//       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-//     city: "Godoy Cruz",
-//     province: { id: 12, name: "Mendoza" },
-//     country: { id: 1, name: "Argentina" },
-//     status: status.REQUIERE_CAMBIOS,
-//   },
-//   {
-//     category: { id: 6, name: "Indumentaria" },
-//     imagesURLs: [image1, image2, image3],
-//     name: "Lavanda",
-//     shortDescription: "Cosmética Natural",
-//     longDescription:
-//       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-//     city: "Godoy Cruz",
-//     province: { id: 12, name: "Mendoza" },
-//     country: { id: 1, name: "Argentina" },
-//     status: status.ACEPTADO,
-//   },
-//   {
-//     category: { id: 1, name: "Bienestar" },
-//     imagesURLs: [image1, image2, image3],
-//     name: "Lavanda",
-//     shortDescription: "Cosmética Natural",
-//     longDescription:
-//       "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
-//     city: "Godoy Cruz",
-//     province: { id: 12, name: "Mendoza" },
-//     country: { id: 1, name: "Argentina" },
-//     status: status.DENEGADO,
-//   },
-// ];
+const suppliers: Supplier[] = [
+  {
+    category: { id: 2, name: "Capacitaciones" },
+    imagesURLs: [image1, image2, image3],
+    name: "Lavanda",
+    shortDescription: "Cosmética Natural",
+    longDescription:
+      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
+    city: "Godoy Cruz",
+    province: { id: 12, name: "Mendoza" },
+    country: { id: 1, name: "Argentina" },
+    status: status.REVISION_INICIAL,
+  },
+  {
+    category: { id: 4, name: "Cultivos" },
+    imagesURLs: [image1, image2, image3],
+    name: "Lavanda",
+    shortDescription: "Cosmética Natural",
+    longDescription:
+      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
+    city: "Godoy Cruz",
+    province: { id: 12, name: "Mendoza" },
+    country: { id: 1, name: "Argentina" },
+    status: status.REQUIERE_CAMBIOS,
+  },
+  {
+    category: { id: 6, name: "Indumentaria" },
+    imagesURLs: [image1, image2, image3],
+    name: "Lavanda",
+    shortDescription: "Cosmética Natural",
+    longDescription:
+      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
+    city: "Godoy Cruz",
+    province: { id: 12, name: "Mendoza" },
+    country: { id: 1, name: "Argentina" },
+    status: status.ACEPTADO,
+  },
+  {
+    category: { id: 1, name: "Bienestar" },
+    imagesURLs: [image1, image2, image3],
+    name: "Lavanda",
+    shortDescription: "Cosmética Natural",
+    longDescription:
+      "Lavanda es un proyecto familiar. Perseguimos una cosmética efectiva, magistral y con personalidad. Nuestro objetivo es hacer productos que enamoren, que cuiden al planeta, con principios activos que dejen el pelo sano y la piel bella.",
+    city: "Godoy Cruz",
+    province: { id: 12, name: "Mendoza" },
+    country: { id: 1, name: "Argentina" },
+    status: status.DENEGADO,
+  },
+];
 
 const profile = {
   name: "Julieta",
   last_name: "Pérez",
-  // products: suppliers,
+  products: suppliers,
 };
 
 const renderProductStatus = (product: Supplier) => {
   switch (product.status) {
-    case status.REVISION_INICIAL:
+    case 0:
       return (
         <>
           <Box
@@ -104,7 +102,7 @@ const renderProductStatus = (product: Supplier) => {
           <Typography>Pronto tendrás más novedades.</Typography>
         </>
       );
-    case status.ACEPTADO:
+    case 1:
       return (
         <>
           <Box
@@ -150,7 +148,7 @@ const renderProductStatus = (product: Supplier) => {
           </Typography>
         </>
       );
-    case status.DENEGADO:
+    case 2:
       return (
         <>
           <Box
@@ -181,7 +179,7 @@ const renderProductStatus = (product: Supplier) => {
           </Typography>
         </>
       );
-    case status.REQUIERE_CAMBIOS:
+    case 3:
       return (
         <>
           <Box
@@ -212,7 +210,7 @@ const renderProductStatus = (product: Supplier) => {
           </Typography>
         </>
       );
-    case status.CAMBIOS_REALIZADOS:
+    case 4:
       return (
         <Typography>Los cambios en el producto han sido realizados.</Typography>
       );
@@ -222,19 +220,6 @@ const renderProductStatus = (product: Supplier) => {
 };
 
 export default function ProfilePage() {
-  const [products, setProducts] = useState<Supplier[]>([]);
-
-  console.log(products);
-
-  useEffect(() => {
-    async function fetchProducts() {
-      const productsApi = await getAllProducts();
-      // const productsApi = await getProductsBySupplier(supplierID);
-      setProducts(productsApi);
-    }
-    fetchProducts();
-  }, []);
-
   return (
     <Box
       sx={{
@@ -275,7 +260,7 @@ export default function ProfilePage() {
       <Typography sx={{ fontSize: "22px", fontWeight: "500" }}>
         Mis Productos/Servicios
       </Typography>
-      {products.map((product, index) => (
+      {profile.products.map((product, index) => (
         <Box
           key={index}
           sx={{ display: "flex", flexDirection: "column", gap: "25px" }}

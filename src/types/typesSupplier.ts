@@ -1,15 +1,16 @@
 export enum status {
-  "REVISION_INICIAL" = "REVISION_INICIAL",
-  "ACEPTADO" = "ACEPTADO",
-  "DENEGADO" = "DENEGADO",
-  "REQUIERE_CAMBIOS" = "REQUIERE_CAMBIOS",
-  "CAMBIOS_REALIZADOS" = "CAMBIOS_REALIZADOS",
+  REVISION_INICIAL,
+  ACEPTADO,
+  DENEGADO,
+  REQUIERE_CAMBIOS,
+  CAMBIOS_REALIZADOS,
 }
 
 export type Category = {
   id: number;
   name: string;
   icon?: string;
+  image?: string;
 };
 
 export type Province = {
@@ -54,5 +55,5 @@ export type SupplierForm = {
   province: number | null;
   city: string;
   longDescription?: string;
-  files: File[];
+  images: File[];
 };
