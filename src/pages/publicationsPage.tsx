@@ -1,14 +1,12 @@
 import {
-  TextField,
   Typography,
   Box,
   Container,
   Grid,
-  InputAdornment,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import BackgroundImage from "../../public/images/Imagen publicaciones.png";
 import Publication from "../components/Publication";
+import SearchBar from "../components/searchBar";
 
 const PublicationsPage = () => {
   return (
@@ -49,34 +47,9 @@ const PublicationsPage = () => {
             paddingTop: "24px",
           }}
         >
-          {/* Campo de búsqueda */}
-          <TextField
-            variant="outlined"
-            placeholder="Buscar Proveedores"
-            fullWidth
-            style={{
-              marginBottom: "16px",
-              backgroundColor: "#fafafa",
-              borderRadius: "50px",
-              maxWidth: "500px",
-              height: "60px",
-              zIndex: 1,
-            }}
-            InputProps={{
-              style: {
-                padding: "2px 20px",
-                borderRadius: "50px",
-                border: "none",
-              },
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <SearchBar />
           <Grid container justifyContent="center">
-            <Grid item xs={12} sm={12} sx={{ mt: 3 }}>
+            <Grid item xs={12} sm={12} sx={{ mt: 13}}>
               <Typography
                 gutterBottom
                 sx={{

@@ -2,8 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  
-  
 }
 
 .Red-title {
@@ -23,18 +21,18 @@
 
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   justify-items: center;
-  width: 100%; 
+  width: 100%;
 }
 
 .category-card {
   background-color: #f0f0f0;
-  border-radius: 20px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
-  width: 152px; 
+  width: 152px;
   height: 64px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
@@ -52,17 +50,16 @@
 }
 
 .category-image {
-  width: 40px; 
+  width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1.1px solid black; 
+  border: 1.1px solid black;
   margin-left: 7px;
   margin-right: 5px;
   padding: 4px;
 }
 
 .category-name {
-  margin-bottom: 10px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -70,20 +67,20 @@
 }
 
 .category-name {
-  font-size: 15px;
-  margin-bottom: 0;
-  text-align: center; 
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
 }
 
 .category-name::after {
-  content: '';
+  content: "";
   height: 3px;
-  width: 60%; 
-  background-color: #4E169D;
+  width: 60%;
+  background-color: #4e169d;
   border-radius: 2px;
   transition: width 0.3s;
   align-self: left;
-  margin-top: 5px; 
+  margin-top: 5px;
 }
 
 .category-card:hover .category-name::after {
@@ -91,12 +88,14 @@
 }
 
 .view-more-button-container {
-  margin-top: 20px;
+  height: 40px;
+  width: 184px;
+  margin-top: 30px;
 }
 
 .view-more-button {
-  background-color: #4E169D;
-  color: white;
+  width: 100%;
+  background-color: #4e169d;
   border: none;
   padding: 10px 20px;
   border-radius: 20px;
@@ -105,10 +104,14 @@
   margin-bottom: 20px;
 }
 
-.view-more-button{
+.view-more-button a {
+  color: white;
+  text-decoration: none;
+  width: 100%;
   font-size: 14px;
-
+  font-weight: 700;
 }
+
 .view-more-button:hover {
-  background-color: #4E169D;
+  background-color: #4e169d;
 }

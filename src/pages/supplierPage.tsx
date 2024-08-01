@@ -2,11 +2,8 @@ import {
   Box,
   Container,
   Grid,
-  InputAdornment,
-  TextField,
   Typography,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import BackgroundImage from "/images/Imagen proveedores.png";
 import Bienestar from "/images/BIENESTAR.png";
 import Capacitaciones from "/images/CAPACITACION.png";
@@ -23,6 +20,8 @@ import { useEffect, useState } from "react";
 import SupplierCard from "../components/SupplierCard";
 import { Category, Supplier } from "../types/typesSupplier";
 import { getAllCategories, getAllProducts } from "../servises/callsApi";
+import { useLocation, useNavigate } from "react-router-dom";
+import SearchBar from "../components/searchBar";
 
 export default function SupplierPage() {
   const [categories, setCategories] = useState<Category[]>([
@@ -39,9 +38,19 @@ export default function SupplierPage() {
     { id: 11, icon: Transporte, name: "" },
   ]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<Category>();
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const [filteredSuppliers, setFilteredSuppliers] = useState<Supplier[]>([]);
   const [showCategories, setShowCategories] = useState<boolean>(true);
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const categoryId = searchParams.get("categoria");
+
+  const navigate = useNavigate();
+
+  console.log("categoria", categoryId);
 
   useEffect(() => {
     async function fetchData() {
@@ -60,15 +69,40 @@ export default function SupplierPage() {
       setSuppliers(suppliersApi);
     }
     fetchData();
-  }, []);
+  }, [categories]);
+
+  useEffect(() => {
+    if (categoryId && categories.length > 0 && suppliers.length > 0) {
+      const category = categories.find(
+        (cat) => cat.id === parseInt(categoryId)
+      );
+      if (category) {
+        setSelectedCategory(category);
+        setFilteredSuppliers(
+          suppliers.filter((supplier) => supplier.category?.id === category.id)
+        );
+        setShowCategories(false);
+      }
+    } else {
+      setSelectedCategory(null);
+      setFilteredSuppliers([]);
+      setShowCategories(true);
+    }
+  }, [categoryId, categories, suppliers]);
 
   const handleCategory = (category: Category) => {
+    navigate(`/proveedores?categoria=${category.id}`);
     setSelectedCategory(category);
     setFilteredSuppliers(
       suppliers.filter((supplier) => supplier.category?.id === category.id)
     );
     setShowCategories(false);
   };
+
+  console.log(filteredSuppliers);
+
+  console.log("categorias: ", categories);
+  console.log("categoria seleccionada: ", selectedCategory);
 
   return (
     <div>
@@ -105,34 +139,9 @@ export default function SupplierPage() {
             paddingTop: "80px",
           }}
         >
-          {/* Campo de búsqueda */}
-          <TextField
-            variant="outlined"
-            placeholder="Buscar Proveedores"
-            fullWidth
-            style={{
-              marginBottom: "20px",
-              backgroundColor: "#fafafa",
-              borderRadius: "50px",
-              maxWidth: "500px",
-              height: "60px",
-              zIndex: 1,
-            }}
-            InputProps={{
-              style: {
-                padding: "2px 20px",
-                borderRadius: "50px",
-                border: "none",
-              },
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <SearchBar />
           <Grid container textAlign="start">
-            <Grid item xs={12} sm={12} sx={{ mt: 3 }}>
+            <Grid item xs={12} sm={12} sx={{ mt: 13 }}>
               <Typography sx={{ fontSize: "18px", fontWeight: "bold" }}>
                 PROVEEDORES
               </Typography>
@@ -189,7 +198,7 @@ export default function SupplierPage() {
             direction="column"
             sx={{ zIndex: 1, position: "relative" }}
           >
-            {categories.map((category) => (
+            {categories?.map((category) => (
               <Grid
                 item
                 key={category.id}
@@ -261,7 +270,7 @@ export default function SupplierPage() {
               </Typography>
             </Box>
             <Grid container spacing={2} justifyContent="center">
-              {filteredSuppliers.map((supplier) => (
+              {filteredSuppliers?.map((supplier) => (
                 <Grid item key={supplier.id}>
                   <SupplierCard product={supplier} />
                 </Grid>

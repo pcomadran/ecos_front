@@ -1,16 +1,24 @@
+import { useEffect } from "react";
 import { Container, Typography, Box, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import LoginImage from "../../public/images/FondoLogin.png";
 import LogoEcos from "../../public/images/marcaLogin.png";
 import GoogleIcon from "../../public/images/logoGoogle.png";
+import { useAuth } from "../context/authContext";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
+  const { login, getToken } = useAuth();
 
-  const handleLogin = () => {
-    navigate("/Login");
-  };
-
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        await getToken();
+      } catch (error) {
+        console.error('Esperando usuario en consola:', error);
+      }
+    };
+    
+    fetchToken();
+  }, [getToken]);
   return (
     <div
       style={{
@@ -74,7 +82,7 @@ const LoginPage = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleLogin}
+              onClick={login}
               sx={{
                 backgroundColor: "#4E169D",
                 color: "#fafafa",
