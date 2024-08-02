@@ -20,6 +20,7 @@ import {
   Category,
   Country,
   Province,
+  Supplier,
   SupplierForm,
 } from "../types/typesSupplier";
 import {
@@ -27,6 +28,7 @@ import {
   getAllCategories,
   getAllCountries,
   getAllProvinces,
+  getProductsBySupplier,
 } from "../servises/callsApi";
 
 export default function CreateProductPage() {
@@ -38,6 +40,9 @@ export default function CreateProductPage() {
     sizeError?: boolean;
     countError?: boolean;
   }>({});
+  const [productsSupplier, setProductsSupplier] = useState<Supplier[] | null>(
+    null
+  );
   const [categories, setCategories] = useState<Category[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
   const [provinces, setProvinces] = useState<Province[]>([]);
@@ -46,7 +51,7 @@ export default function CreateProductPage() {
     setValue,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<SupplierForm>({
     defaultValues: {
       category: null,
@@ -68,8 +73,10 @@ export default function CreateProductPage() {
     const fetchInitialData = async () => {
       const categoriesData = await getAllCategories();
       const countriesData = await getAllCountries();
+      const productsData = await getProductsBySupplier();
       setCategories(categoriesData);
       setCountries(countriesData);
+      setProductsSupplier(productsData);
     };
     fetchInitialData();
   }, []);
@@ -97,15 +104,17 @@ export default function CreateProductPage() {
   };
 
   const handlePhotos = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const files: File[] = Array.from(event.target.files || []);
+    const selectedFiles: File[] = Array.from(event.target.files || []);
     let sizeError: boolean = false;
     let countError: boolean = false;
-    if (files.length + files.length > 3) {
+    const newFiles: File[] = [...files, ...selectedFiles];
+
+    if (files.length > 3) {
       countError = true;
-      files.length = 3 - files.length;
+      newFiles.splice(3);
     }
 
-    files.forEach((file) => {
+    newFiles.forEach((file) => {
       if (file.size > 3 * 1024 * 1024) {
         sizeError = true;
       }
@@ -118,9 +127,8 @@ export default function CreateProductPage() {
       });
     } else {
       setFileErrors({});
-      const totalFiles: File[] = files.concat(files);
-      setFiles(totalFiles);
-      setValue("files", totalFiles, { shouldValidate: true });
+      setFiles(newFiles);
+      setValue("files", newFiles, { shouldValidate: true });
     }
   };
 
@@ -152,7 +160,6 @@ export default function CreateProductPage() {
   };
 
   const isSubmit: SubmitHandler<SupplierForm> = async (data): Promise<void> => {
-    console.log(data);
     try {
       const formData = new FormData();
       formData.append("name", data.name);
@@ -170,8 +177,7 @@ export default function CreateProductPage() {
         formData.append("files", file);
       });
 
-      const dataResponse = await createProduct(formData);
-      console.log(dataResponse);
+      await createProduct(formData);
       setSuccess(true);
     } catch (error) {
       setSuccess(false);
@@ -181,6 +187,8 @@ export default function CreateProductPage() {
   const onError = () => {
     setSuccess(false);
   };
+
+  // console.log("Cuanto llegan?", productsSupplier);
 
   return (
     <Box
@@ -412,7 +420,7 @@ export default function CreateProductPage() {
           <OutlinedInput
             {...register("instagram", {
               pattern:
-                /^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/,
+                /^(https?:\/\/)?(www\.)?instagram\.com\/[A-Za-z0-9._-]+\/?$/,
             })}
             label="Instagram"
           />
@@ -446,7 +454,8 @@ export default function CreateProductPage() {
           <InputLabel>Facebook</InputLabel>
           <OutlinedInput
             {...register("facebook", {
-              pattern: /^https?:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9.]+\/?$/,
+              pattern:
+                /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9._-]+\/?$/,
             })}
             label="Facebook"
           />
@@ -597,7 +606,7 @@ export default function CreateProductPage() {
         >
           <InputLabel>Descripción del Producto/Servicio</InputLabel>
           <OutlinedInput
-            {...register("longDescription", { maxLength: 3 })}
+            {...register("longDescription", { maxLength: 300 })}
             label="Descripción del Producto/Servicio"
             onChange={handleCountD}
             multiline
@@ -782,7 +791,10 @@ export default function CreateProductPage() {
               fontWeight: "400",
             },
           }}
-          // disabled={!isDirty || !isValid}
+          disabled={
+            !isDirty ||
+            (productsSupplier !== null && productsSupplier.length >= 3)
+          }
         >
           Cargar Producto/Servicio
         </Button>
