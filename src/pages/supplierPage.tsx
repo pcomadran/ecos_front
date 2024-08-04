@@ -1,9 +1,4 @@
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import BackgroundImage from "/images/Imagen proveedores.png";
 import Bienestar from "/images/BIENESTAR.png";
 import Capacitaciones from "/images/CAPACITACION.png";
@@ -19,7 +14,7 @@ import Transporte from "/images/TRANSPORTE.png";
 import { useEffect, useState } from "react";
 import SupplierCard from "../components/SupplierCard";
 import { Category, Supplier } from "../types/typesSupplier";
-import { getAllCategories, getAllProducts } from "../servises/callsApi";
+import { getAllCategories, getProductsByCategory } from "../servises/callsApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "../components/searchBar";
 
@@ -41,21 +36,20 @@ export default function SupplierPage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
-  const [filteredSuppliers, setFilteredSuppliers] = useState<Supplier[]>([]);
   const [showCategories, setShowCategories] = useState<boolean>(true);
 
+  const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const categoryId = searchParams.get("categoria");
 
-  const navigate = useNavigate();
-
-  console.log("categoria", categoryId);
-
   useEffect(() => {
     async function fetchData() {
       const categoriesApi = await getAllCategories();
-      const suppliersApi = await getAllProducts();
+      if (categoryId) {
+        const suppliersApi = await getProductsByCategory(parseInt(categoryId));
+        setSuppliers(suppliersApi);
+      }
       const updatedCategories = categories.map((category) => {
         const apiCategory = categoriesApi.find(
           (cat: Category) => cat.id === category.id
@@ -66,43 +60,40 @@ export default function SupplierPage() {
         return category;
       });
       setCategories(updatedCategories);
-      setSuppliers(suppliersApi);
     }
     fetchData();
-  }, [categories]);
+  }, []);
 
   useEffect(() => {
-    if (categoryId && categories.length > 0 && suppliers.length > 0) {
-      const category = categories.find(
-        (cat) => cat.id === parseInt(categoryId)
-      );
-      if (category) {
-        setSelectedCategory(category);
-        setFilteredSuppliers(
-          suppliers.filter((supplier) => supplier.category?.id === category.id)
+    async function fetchData() {
+      if (categoryId && categories.length > 0) {
+        const category = categories.find(
+          (cat) => cat.id === parseInt(categoryId)
         );
-        setShowCategories(false);
+        if (category) {
+          setSelectedCategory(category);
+          const suppliersApi = await getProductsByCategory(
+            parseInt(categoryId)
+          );
+          setSuppliers(suppliersApi);
+          setShowCategories(false);
+        }
+      } else {
+        setSelectedCategory(null);
+        setSuppliers([]);
+        setShowCategories(true);
       }
-    } else {
-      setSelectedCategory(null);
-      setFilteredSuppliers([]);
-      setShowCategories(true);
     }
-  }, [categoryId, categories, suppliers]);
+    fetchData();
+  }, [categoryId, categories]);
 
-  const handleCategory = (category: Category) => {
+  const handleCategory = async (category: Category) => {
     navigate(`/proveedores?categoria=${category.id}`);
     setSelectedCategory(category);
-    setFilteredSuppliers(
-      suppliers.filter((supplier) => supplier.category?.id === category.id)
-    );
     setShowCategories(false);
+    const suppliersApi = await getProductsByCategory(category.id);
+    setSuppliers(suppliersApi);
   };
-
-  console.log(filteredSuppliers);
-
-  console.log("categorias: ", categories);
-  console.log("categoria seleccionada: ", selectedCategory);
 
   return (
     <div>
@@ -270,7 +261,7 @@ export default function SupplierPage() {
               </Typography>
             </Box>
             <Grid container spacing={2} justifyContent="center">
-              {filteredSuppliers?.map((supplier) => (
+              {suppliers?.map((supplier) => (
                 <Grid item key={supplier.id}>
                   <SupplierCard product={supplier} />
                 </Grid>
