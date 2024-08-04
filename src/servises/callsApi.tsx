@@ -1,5 +1,11 @@
 import axios from "../servises/axiosConfig";
-import { Category, Country, Province, Supplier } from "../types/typesSupplier";
+import {
+  Category,
+  Country,
+  Province,
+  Supplier,
+  SupplierForm,
+} from "../types/typesSupplier";
 
 export const getAllProducts = async (): Promise<any[]> => {
   try {
