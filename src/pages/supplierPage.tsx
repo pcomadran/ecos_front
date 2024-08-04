@@ -1,9 +1,4 @@
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import BackgroundImage from "/images/Imagen proveedores.png";
 import Bienestar from "/images/BIENESTAR.png";
 import Capacitaciones from "/images/CAPACITACION.png";
@@ -50,8 +45,6 @@ export default function SupplierPage() {
 
   const navigate = useNavigate();
 
-  console.log("categoria", categoryId);
-
   useEffect(() => {
     async function fetchData() {
       const categoriesApi = await getAllCategories();
@@ -69,7 +62,7 @@ export default function SupplierPage() {
       setSuppliers(suppliersApi);
     }
     fetchData();
-  }, [categories]);
+  }, []);
 
   useEffect(() => {
     if (categoryId && categories.length > 0 && suppliers.length > 0) {
@@ -98,11 +91,6 @@ export default function SupplierPage() {
     );
     setShowCategories(false);
   };
-
-  console.log(filteredSuppliers);
-
-  console.log("categorias: ", categories);
-  console.log("categoria seleccionada: ", selectedCategory);
 
   return (
     <div>
