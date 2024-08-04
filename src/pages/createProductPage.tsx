@@ -69,6 +69,8 @@ export default function CreateProductPage() {
     },
   });
 
+  // console.log(productsSupplier);
+
   useEffect(() => {
     const fetchInitialData = async () => {
       const categoriesData = await getAllCategories();
@@ -160,6 +162,7 @@ export default function CreateProductPage() {
   };
 
   const isSubmit: SubmitHandler<SupplierForm> = async (data): Promise<void> => {
+    console.log("le entra al formulario: ", data);
     try {
       const formData = new FormData();
       formData.append("name", data.name);
@@ -187,8 +190,6 @@ export default function CreateProductPage() {
   const onError = () => {
     setSuccess(false);
   };
-
-  // console.log("Cuanto llegan?", productsSupplier);
 
   return (
     <Box
