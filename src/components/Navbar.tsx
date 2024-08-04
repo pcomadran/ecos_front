@@ -9,17 +9,23 @@ import {
   ListItemText,
   Button,
   Typography,
+  Avatar,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoEcos from "../../public/images/marca ecosistema-07.png";
 import { useNavigate } from "react-router-dom";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import { useAuth } from "../context/authContext";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [menuIcon, setMenuIcon] = useState(true);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -31,12 +37,43 @@ const Navbar = () => {
     }
     setDrawerOpen(!drawerOpen);
     setMenuIcon(!menuIcon);
+
+    if (anchorEl) {
+      setAnchorEl(null);
+    }
   };
 
   const handleNavigation = (path: string) => {
     navigate(path);
     setDrawerOpen(false);
     setMenuIcon(true);
+
+    if (anchorEl) {
+      setAnchorEl(null);
+    }
+  };
+
+  const handleMenuToggle = (event: React.MouseEvent<HTMLElement>) => {
+    if (anchorEl) {
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
+    setDrawerOpen(false);
+    setMenuIcon(true);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleMenuClose();
+  };
+
+  const getInitials = (name: string, surname: string) => {
+    return `${name[0]}${surname[0]}`;
   };
 
   return (
@@ -67,7 +104,7 @@ const Navbar = () => {
           <div
             style={{
               position: "absolute",
-              left: "50%",
+              left: "48%",
               transform: "translateX(-50%)",
               height: "100%",
               display: "flex",
@@ -82,22 +119,131 @@ const Navbar = () => {
           </div>
 
           <div style={{ marginLeft: "auto" }}>
-            <Button
-              color="inherit"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#FFFFFF",
-              }}
-              onClick={() => handleNavigation('/login')}
-            >
-              <AccountCircleOutlinedIcon style={{ color: "#000000" }} />
-              <Typography variant="body2" style={{ color: "black" }}>
-                Ingresá
-              </Typography>
-            </Button>
+            {user ? (
+              <>
+                <Button
+                  color="inherit"
+                  onClick={handleMenuToggle}
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <Avatar
+                    src={user.picture || ""}
+                    style={{
+                      backgroundColor: user.picture ? "transparent" : "#000000",
+                      border: "1px solid black",
+                      marginRight: "-15px",
+                    }}
+                  >
+                    {!user.picture &&
+                      getInitials(user.name || "", user.lastName || "")}
+                  </Avatar>
+                </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                  PaperProps={{
+                    style: {
+                      marginLeft: "10px",
+                      marginTop: "10px",
+                      borderRadius: "4px",
+                      backgroundColor: "#fafafa",
+                      boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.05)",
+                    },
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    style={{ fontWeight: "bold", textAlign: "center" }}
+                  >
+                    Bienvenido
+                  </Typography>
+
+                  <MenuItem
+                    onClick={() => {
+                      handleNavigation("/profile");
+                      handleMenuClose();
+                    }}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      "&:hover": {
+                        backgroundColor: "#e0e0e0",
+                      },
+                    }}
+                  >
+                    <Avatar
+                      src={user.picture || ""}
+                      style={{
+                        backgroundColor: user.picture
+                          ? "transparent"
+                          : "#000000",
+                        border: "1px solid black",
+                        marginRight: "8px",
+                        marginTop: "-35px",
+                      }}
+                    >
+                      {!user.picture &&
+                        getInitials(user.name || "", user.lastName || "")}
+                    </Avatar>
+                    <div>
+                      <Typography
+                        variant="body2"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {user.name} {user.lastName}
+                      </Typography>
+                      <Typography variant="body2" style={{ color: "gray" }}>
+                        {user.email}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        style={{
+                          color: "#4E169D",
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          marginLeft: "-50px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        Mi perfil
+                      </Typography>
+                    </div>
+                  </MenuItem>
+
+                  <MenuItem
+                    onClick={() => {
+                      handleLogout();
+                      handleMenuClose();
+                    }}
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "#e0e0e0",
+                      },
+                    }}
+                  >
+                    Cerrar sesión
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <Button
+                color="inherit"
+                style={{
+                  marginRight: "-15px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#FFFFFF",
+                }}
+                onClick={() => handleNavigation("/login")}
+              >
+                <AccountCircleOutlinedIcon
+                  style={{ color: "#000000", fontSize: 40 }}
+                />
+              </Button>
+            )}
           </div>
         </Toolbar>
       </AppBar>
@@ -105,7 +251,14 @@ const Navbar = () => {
       <Drawer
         anchor="left"
         open={drawerOpen}
-        onClose={toggleDrawer}
+        onClose={() => {
+          setDrawerOpen(false);
+          setMenuIcon(true);
+
+          if (anchorEl) {
+            setAnchorEl(null);
+          }
+        }}
         PaperProps={{
           style: {
             width: 242,
@@ -115,56 +268,72 @@ const Navbar = () => {
           },
         }}
       >
-        <List style={{ height: "100%", fontFamily: 'Cairo, sans-serif', gap: '16px' }}>
-          {[
-            { text: "Inicio", path: "/" },
-            { text: "Proveedores", path: "/proveedores" },
-            { text: "Publicaciones", path: "/publicaciones" },
-            { text: "Iniciá sesión", path: "/login" },
-          ].map((item) => (
-            <ListItem
-              button
-              key={item.text}
-              onClick={() => handleNavigation(item.path)}
-            >
-              <ListItemText primary={item.text} style={{ color: "#FFFFFF", fontWeight: 'bold' }} />
-            </ListItem>
-          ))}
-          <ListItem>
-            <Typography
-              variant="body1"
-              style={{
-                color: "#FAFAFA",
-                width: "242px",
-                height: "66px",
-                fontFamily: "Nunito, sans-serif",
-                fontWeight: 400,
-                fontStyle: "italic",
-                fontSize: "18px",
-                lineHeight: "22px",
-                textAlign: "center",
-              }}
-            >
-              ¿Querés formar parte de la Red de impacto ECO como Proveedor?
-            </Typography>
+        <List
+          style={{
+            height: "100%",
+            fontFamily: "Cairo, sans-serif",
+            gap: "16px",
+          }}
+        >
+          <ListItem button onClick={() => handleNavigation("/")}>
+            <ListItemText
+              primary="Inicio"
+              style={{ color: "#FFFFFF", fontWeight: "bold" }}
+            />
           </ListItem>
-          <ListItem button onClick={() => handleNavigation("/register")}>
-            <Typography
-              variant="body1"
-              style={{
-                color: "#FAFAFA",
-                width: "242px",
-                height: "24px",
-                fontFamily: "Nunito, sans-serif",
-                fontWeight: 700,
-                fontSize: "18px",
-                lineHeight: "20px",
-                textAlign: "center",
-              }}
-            >
-              Registrate
-            </Typography>
+          <ListItem button onClick={() => handleNavigation("/proveedores")}>
+            <ListItemText
+              primary="Proveedores"
+              style={{ color: "#FFFFFF", fontWeight: "bold" }}
+            />
           </ListItem>
+          <ListItem button onClick={() => handleNavigation("/publicaciones")}>
+            <ListItemText
+              primary="Publicaciones"
+              style={{ color: "#FFFFFF", fontWeight: "bold" }}
+            />
+          </ListItem>
+          {!user && (
+            <>
+              <ListItem button onClick={() => handleNavigation("/login")}>
+                <ListItemText
+                  primary="Iniciar sesión"
+                  style={{ color: "#FFFFFF", fontWeight: "bold" }}
+                />
+              </ListItem>
+              <ListItem>
+                <Typography
+                  variant="body1"
+                  style={{
+                    color: "#FAFAFA",
+                    width: "242px",
+                    height: "66px",
+                    fontFamily: "Nunito, sans-serif",
+                    fontWeight: 600,
+                    fontSize: "16px",
+                    textAlign: "center",
+                  }}
+                >
+                  ¿Querés formar parte de la Red de impacto ECO como Proveedor?
+                </Typography>
+              </ListItem>
+              <ListItem style={{ paddingLeft: "16px" }}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => handleNavigation("/register")}
+                  style={{
+                    width: "100%",
+                    color: "#fafafa",
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                  }}
+                >
+                  Registrate
+                </Button>
+              </ListItem>
+            </>
+          )}
         </List>
       </Drawer>
     </>

@@ -11,32 +11,38 @@ import SupplierPage from "./pages/supplierPage";
 import SearchPage from "./pages/searchPage";
 import ProfilePage from "./pages/profilePage";
 import CreateProductPage from "./pages/createProductPage";
+import { AuthProvider, Role } from "./context/authContext";
+import ProtectedRoute from "./context/ProtectedRoute";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            height: "100vh",
-            position: "relative",
-          }}
-        >
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/proveedores" element={<SupplierPage />} />
-            <Route path="/publicaciones" element={<Publications />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/createProduct" element={<CreateProductPage />} />
-          </Routes>
-        </div>
+        <AuthProvider>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100vh",
+              position: "relative",
+            }}
+          >
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/proveedores" element={<SupplierPage />} />
+              <Route path="/publicaciones" element={<Publications />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route element={<ProtectedRoute roles={[Role.USER]} />}>
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/createProduct" element={<CreateProductPage />} />
+              </Route>
+            </Routes>
+          </div>
+        </AuthProvider>
       </Router>
     </ThemeProvider>
   );
