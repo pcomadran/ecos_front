@@ -47,8 +47,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <Container
       style={{
-        position: "fixed",
-        top: "80px",
+        position: "relative",
+        top: "10px",
         left: "50%",
         transform: "translateX(-50%)",
         zIndex: 1000,

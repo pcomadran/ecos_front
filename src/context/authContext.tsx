@@ -13,6 +13,7 @@ export enum Role {
   ADMIN = "ROLE_ADMIN",
   USER = "ROLE_USER",
   VISITOR = "ROLE_VISITOR",
+  SUPPLIER= "SUPPLIER",
 }
 
 export interface DecodedToken {

@@ -13,6 +13,7 @@ import ProfilePage from "./pages/profilePage";
 import CreateProductPage from "./pages/createProductPage";
 import { AuthProvider, Role } from "./context/authContext";
 import ProtectedRoute from "./context/ProtectedRoute";
+import IconChatbot from "./components/chatbot/IconChatbot";
 
 function App() {
   return (
@@ -36,11 +37,12 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/search" element={<SearchPage />} />
-              <Route element={<ProtectedRoute roles={[Role.USER]} />}>
+              <Route element={<ProtectedRoute roles={[Role.SUPPLIER]} />}>
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/createProduct" element={<CreateProductPage />} />
               </Route>
             </Routes>
+            <IconChatbot />
           </div>
         </AuthProvider>
       </Router>
