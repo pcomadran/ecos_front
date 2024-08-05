@@ -72,8 +72,15 @@ const Navbar = () => {
     handleMenuClose();
   };
 
-  const getInitials = (name: string, surname: string) => {
-    return `${name[0]}${surname[0]}`;
+  const getInitials = (name: string = "", surname: string = ""): string => {
+    if (name && surname) {
+      return `${name[0]}${surname[0]}`;
+    } else if (name) {
+      return `${name[0]}`;
+    } else if (surname) {
+      return `${surname[0]}`;
+    }
+    return "";
   };
 
   return (

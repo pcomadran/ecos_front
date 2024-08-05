@@ -19,7 +19,6 @@ const LandingPage = () => {
           backgroundPosition: "center",
         }}
       >
-        <SearchBar />
         <div
           style={{
             position: "absolute",
@@ -44,6 +43,7 @@ const LandingPage = () => {
             paddingTop: "24px",
           }}
         >
+          <SearchBar />
           <Grid container justifyContent="center">
             <Grid item xs={12} sm={12} sx={{ mt: 13 }}>
               <Typography
