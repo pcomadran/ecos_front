@@ -1,5 +1,11 @@
 import axios from "../servises/axiosConfig";
-import { Category, Province, Supplier } from "../types/typesSupplier";
+import {
+  Category,
+  Country,
+  Province,
+  Supplier,
+  SupplierForm,
+} from "../types/typesSupplier";
 
 export const getAllProducts = async (): Promise<any[]> => {
   try {
@@ -34,6 +40,21 @@ export const getProductsByCategory = async (
   }
 };
 
+export const getProductsBySupplier = async (): Promise<Supplier[]> => {
+  try {
+    const userString = localStorage.getItem("user");
+    if (userString) {
+      const user = JSON.parse(userString);
+      const supplierID = user.id;
+      const response = await axios.get(`api/products/${supplierID}`);
+      return response.data;
+    }
+    return [];
+  } catch (error) {
+    return [];
+  }
+};
+
 export const getAllCategories = async (): Promise<Category[]> => {
   try {
     const response = await axios.get("/api/categories");
@@ -43,7 +64,7 @@ export const getAllCategories = async (): Promise<Category[]> => {
   }
 };
 
-export const getAllCountries = async (): Promise<Category[]> => {
+export const getAllCountries = async (): Promise<Country[]> => {
   try {
     const response = await axios.get("/api/countries");
     return response.data;
@@ -60,5 +81,23 @@ export const getAllProvinces = async (
     return response.data;
   } catch (error) {
     return [];
+  }
+};
+
+export const createProduct = async (productData: any) => {
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) throw new Error("Token not found");
+
+    const response = await axios.post("api/products", productData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };

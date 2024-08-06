@@ -55,5 +55,5 @@ export type SupplierForm = {
   province: number | null;
   city: string;
   longDescription?: string;
-  images: File[];
+  files: File[];
 };
