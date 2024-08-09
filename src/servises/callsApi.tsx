@@ -55,6 +55,15 @@ export const getProductsBySupplier = async (): Promise<Supplier[]> => {
   }
 };
 
+export const getProductById = async (id: number) => {
+  try {
+    const response = await axios.get(`api/products/find/${id}`);
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};
+
 export const getAllCategories = async (): Promise<Category[]> => {
   try {
     const response = await axios.get("/api/categories");
@@ -95,6 +104,25 @@ export const createProduct = async (productData: any) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const updateProduct = async (product: any, productID: number) => {
+  for (let pair of product.entries()) {
+    console.log(pair[0] + ", " + pair[1]);
+  }
+  try {
+    const response = await axios.put(
+      `api/products/update/${productID}`,
+      product,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error(error);
