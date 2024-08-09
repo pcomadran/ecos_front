@@ -85,7 +85,7 @@ const IconChatbot: React.FC = () => {
             <img
               src={IconBot}
               alt="Chatbot Icon"
-              style={{ width: 130, height: 100 }}
+              style={{ width: 70, height: 70 }}
             />{" "}
             {/* Reemplaza el ícono con la imagen */}
           </IconButton>
@@ -109,7 +109,7 @@ const IconChatbot: React.FC = () => {
         PaperProps={{
           style: {
             marginBottom: "-30px",
-            marginTop: "-30px",
+            marginTop: "-10px",
             borderRadius: "50px",
             padding: "8px",
           },

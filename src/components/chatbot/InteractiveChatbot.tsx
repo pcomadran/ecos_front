@@ -10,120 +10,41 @@ import {
   Avatar,
   Box,
 } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import IconBot from "../../../public/images/IconBot.png"; // Asegúrate de que esta ruta es correcta
+import axios from "../../servises/axiosConfig"; // Importa axios para realizar la solicitud HTTP
 
 interface Question {
-  question: string;
-  answer: string;
-  active: boolean;
+  id: number;
+  text: string;
+  category: {
+    id: number;
+    name: string;
+  } | null;
 }
 
-const questionData: Question[] = [
-  {
-    question: "¿Cuáles son los objetivos de la App?",
-    answer:
-      "Conectar consumidores y empresas con proveedores sustentables, fomentando prácticas de consumo consciente que contribuyen al cuidado del medio ambiente.",
-    active: true,
-  },
-  {
-    question: "¿Qué tipo de empresa es Ecosistema-Red de Impacto?",
-    answer:
-      "Somos un Grupo Asociativo dedicado a la promoción de servicios y productos ecológicos.",
-    active: true,
-  },
-  {
-    question: "¿Cuántas personas componen la empresa?",
-    answer:
-      "Nuestro equipo está compuesto por 50 personas apasionadas por la sostenibilidad.",
-    active: true,
-  },
-  {
-    question: "¿En dónde surge la empresa?",
-    answer:
-      "La empresa tiene sus raíces en Mendoza, donde comenzamos nuestra misión de impacto positivo.",
-    active: true,
-  },
-  {
-    question: "¿Qué ofrece el proyecto?",
-    answer:
-      "Ofrecemos un servicio que facilita el acceso a proveedores comprometidos con el reciclaje y la sostenibilidad.",
-    active: true,
-  },
-  {
-    question: "¿A qué rubro pertenece la empresa?",
-    answer:
-      "Nos especializamos en la comunicación de triple impacto, destacando los beneficios sociales, ambientales y económicos.",
-    active: true,
-  },
-  {
-    question: "¿Cuál es la breve descripción de la empresa?",
-    answer:
-      "Ecosistema-Red de Impacto es una plataforma que conecta a los consumidores con proveedores que promueven un consumo consciente, ayudando a generar un impacto socioambiental positivo.",
-    active: true,
-  },
-  {
-    question: "¿Qué tipo de proyecto es?",
-    answer:
-      "Es un proyecto de impacto ambiental, social y cultural que busca transformar hábitos de consumo a través de prácticas sostenibles.",
-    active: true,
-  },
-  {
-    question: "¿Cuál es el propósito del proyecto?",
-    answer:
-      "Crear una web para divulgar información sobre proveedores de triple impacto, destacando el reciclaje y la responsabilidad ambiental.",
-    active: true,
-  },
-  {
-    question: "¿Cuáles son los objetivos de la empresa?",
-    answer:
-      "Difundir información sobre proveedores de triple impacto, facilitar el contacto con ellos, y gestionar publicaciones relevantes para fomentar el reciclaje y la sostenibilidad.",
-    active: true,
-  },
-  {
-    question: "¿Qué es el triple impacto?",
-    answer:
-      "Refiere a iniciativas que generan impacto social, ambiental y económico positivo.",
-    active: true,
-  },
-  {
-    question: "¿Qué servicios ofrece Ecosistema?",
-    answer:
-      "Conexión entre proveedores sustentables y consumidores interesados en el consumo consciente.",
-    active: true,
-  },
-  {
-    question: "¿Cómo puedo unirme como proveedor?",
-    answer:
-      "Debes registrarte y esperar la aprobación de tu perfil por parte del administrador.",
-    active: true,
-  },
-  {
-    question: "¿Qué beneficios obtengo al unirme a Ecosistema?",
-    answer:
-      "Mayor visibilidad, acceso a una red comprometida con la sostenibilidad y oportunidades de negocio.",
-    active: true,
-  },
-  {
-    question:
-      "¿Cómo puedo contribuir al cuidado del medio ambiente con Ecosistema?",
-    answer:
-      "Apoyando a proveedores que practican la sostenibilidad en sus procesos.",
-    active: true,
-  },
-  {
-    question: "¿Qué tipo de publicaciones puedo cargar en la plataforma?",
-    answer:
-      "Publicaciones relacionadas con el triple impacto y el consumo consciente.",
-    active: true,
-  },
-];
+interface Answer {
+  id: number;
+  text: string;
+  question: {
+    id: number;
+    text: string;
+    category: {
+      id: number;
+      name: string;
+    } | null;
+  };
+}
 
 const InteractiveChatbot: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState<{ text: string; type: "user" | "chatbot" }[]>([]);
+  const [messages, setMessages] = useState<
+    { text: string; type: "user" | "chatbot" }[]
+  >([]);
   const [userName, setUserName] = useState<string | null>(null);
   const [userImage, setUserImage] = useState<string | null>(null);
+  const [questions, setQuestions] = useState<Question[]>([]); // Estado para las preguntas
+  const [answers, setAnswers] = useState<Answer[]>([]); // Estado para las respuestas
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -132,10 +53,36 @@ const InteractiveChatbot: React.FC = () => {
     const userString = localStorage.getItem("user");
     if (userString) {
       const user = JSON.parse(userString);
-      setUserName(user.name || user.email); // Usa el email si el nombre está vacío
+      setUserName(user.name || user.email);
       setUserImage(user.picture);
     }
     console.log(userString);
+  }, []);
+
+  useEffect(() => {
+    // Obtenemos las preguntas del backend
+    axios
+      .get("api/questions")
+      .then((response) => {
+        setQuestions(response.data);
+        console.log("preguntas: ", response.data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener las preguntas:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    // Obtenemos las respuestas del backend
+    axios
+      .get("api/answers")
+      .then((response) => {
+        setAnswers(response.data);
+        console.log("respuestas: ", response.data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener las respuestas:", error);
+      });
   }, []);
 
   useEffect(() => {
@@ -144,18 +91,40 @@ const InteractiveChatbot: React.FC = () => {
     }
   }, [messages]);
 
-  const filteredQuestions = questionData.filter(
-    (q) =>
-      q.active && q.question.toLowerCase().includes(inputValue.toLowerCase())
-  );
+  const filteredQuestions = questions
+    .map((q) => {
+      // Limpia el símbolo de interrogación al inicio de la pregunta
+      const cleanedQuestionText = q.text.startsWith('¿') ? q.text.substring(1).trim() : q.text;
+
+      return {
+        ...q,
+        cleanedText: cleanedQuestionText,
+        startsWithValue: cleanedQuestionText.toLowerCase().startsWith(inputValue.toLowerCase()),
+        containsValue: cleanedQuestionText.toLowerCase().includes(inputValue.toLowerCase()),
+      };
+    })
+    .filter((q) => q.startsWithValue || q.containsValue)
+    .sort((a, b) => {
+      if (a.startsWithValue && !b.startsWithValue) return -1;
+      if (!a.startsWithValue && b.startsWithValue) return 1;
+      return 0;
+    });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
   const handleQuestionClick = (question: Question) => {
+    const answer = answers.find((a) => a.question.id === question.id);
     setInputValue("");
-    setMessages([...messages, { text: question.question, type: "user" }, { text: question.answer, type: "chatbot" }]);
+    setMessages([
+      ...messages,
+      { text: question.text, type: "user" },
+      {
+        text: answer ? answer.text : "No se encontró respuesta para esta pregunta.",
+        type: "chatbot",
+      },
+    ]);
   };
 
   // Avatar del usuario
@@ -229,7 +198,7 @@ const InteractiveChatbot: React.FC = () => {
                 style={{ width: "100%" }}
                 onClick={() => handleQuestionClick(q)}
               >
-                <ListItemText primary={q.question} />
+                <ListItemText primary={q.text} />
               </ListItemButton>
             </ListItem>
           ))}
@@ -259,15 +228,16 @@ const InteractiveChatbot: React.FC = () => {
             {message.type === "user" ? userAvatar : chatbotAvatar}
             <Box
               sx={{
-                backgroundColor: message.type === "user" ? "#eaeaea" : "#4E169D",
+                backgroundColor:
+                  message.type === "user" ? "#eaeaea" : "#4E169D",
                 color: message.type === "user" ? "black" : "white",
                 borderRadius: "20px",
                 padding: "10px",
-                maxWidth: "70%",
+                maxWidth: "100%",
                 boxSizing: "border-box",
               }}
             >
-              <Typography sx={{fontSize: "14px"}}>{message.text}</Typography>
+              <Typography sx={{ fontSize: "14px" }}>{message.text}</Typography>
             </Box>
           </Box>
         ))}
