@@ -255,18 +255,27 @@ export default function UpdateProductPage() {
     formData.append("provinceId", String(data.provinceId));
     formData.append("city", data.city);
     formData.append("longDescription", String(data.longDescription));
+    // if (URLsDelete.length > 0) {
+    //   formData.append("URLsToDelete", JSON.stringify(URLsDelete));
+    // } else {
+    //   formData.append("URLsToDelete", JSON.stringify([]));
+    // }
+    if (URLsDelete.length > 0) {
+      formData.append("URLsToDelete", JSON.stringify(URLsDelete));
+    }
+    // if (files.length > 0) {
+    //   Array.from(files).forEach((file) => {
+    //     formData.append("files", file);
+    //   });
+    // } else {
+    //   formData.append("files", JSON.stringify([]));
+    // }
     if (files.length > 0) {
       Array.from(files).forEach((file) => {
         formData.append("files", file);
       });
-    } else {
-      formData.append("files", JSON.stringify([]));
     }
-    if (URLsDelete.length > 0) {
-      formData.append("URLsToDelete", JSON.stringify(URLsDelete));
-    } else {
-      formData.append("URLsToDelete", JSON.stringify([]));
-    }
+
     // for (let pair of formData.entries()) {
     //   console.log(pair[0] + ", " + pair[1]);
     // }
