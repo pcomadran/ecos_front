@@ -84,12 +84,8 @@ export default function UpdateProductPage() {
     async function fetchInitialData() {
       if (id) {
         const productApi = await getProductById(parseInt(id));
-        // console.log("de la api viene: ", productApi);
         setProduct(productApi);
         setValue("categoryId", productApi.category?.id);
-        // if (productApi.category?.id) {
-        //   setValue("categoryId", productApi.category.id);
-        // }
         setValue("name", productApi.name);
         setValue("shortDescription", productApi.shortDescription);
         setValue("longDescription", productApi.longDescription);
@@ -101,7 +97,6 @@ export default function UpdateProductPage() {
         setValue("countryId", productApi.country?.id);
         setValue("files", productApi?.imagesURLs);
         setImages(productApi?.imagesURLs);
-        // productApi?.map((img) => setImages([...images, img]));
         setCount(productApi?.shortDescription?.length);
         setCount(productApi?.longDescription?.length);
       }
@@ -121,8 +116,6 @@ export default function UpdateProductPage() {
     }
     fetchProvinces();
   }, [countries]);
-
-  // console.log(provinces);
 
   const handleCount = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const word: string = event.target.value;
@@ -147,8 +140,6 @@ export default function UpdateProductPage() {
     }
   };
 
-  // console.log(product);
-  // console.log(errors);
   const handlePhotos = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedFiles: File[] = Array.from(event.target.files || []);
     let sizeError: boolean = false;
@@ -186,13 +177,10 @@ export default function UpdateProductPage() {
       setURLsDelete(newURLsDelete);
       setValue("URLsToDelete", newURLsDelete);
     } else {
-      // const newfiles: File[] = files.filter((_, i) => i !== index);
-      // setFiles(newfiles);
       const newFiles = files.filter((_, i) => i !== index - images.length);
       setFiles(newFiles);
     }
   };
-  // console.log("provincia: ", product.province.id);
 
   const handleEdit = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -217,33 +205,15 @@ export default function UpdateProductPage() {
         setFiles(newFiles);
         setValue("files", newFiles);
       }
-
-      // } else {
-      //   const newImages: string[] = images.filter((_, i) => i !== index);
-      //   setImages(newImages);
-      //   const newfiles: File[] = [...files];
-      //   newfiles[index] = file;
-      //   setFiles(newfiles);
-      //   setValue("files", newfiles);
-      // }
     }
   };
-
-  // console.log(URLsDelete);
-
-  // console.log("images: ", images);
-  // console.log("files: ", files);
-  // console.log(watch("URLsToDelete"));
-  // console.log("pa eliminar: ", URLsDelete);
 
   const handleSuccess = (): void => {
     setSuccess(null);
   };
 
   const isSubmit: SubmitHandler<any> = async (data): Promise<void> => {
-    // console.log(data);
     const formData = new FormData();
-    // formData.append("id", product?.id);
     formData.append("name", data.name);
     formData.append("shortDescription", data.shortDescription);
     formData.append("categoryId", String(data.categoryId));
@@ -255,41 +225,24 @@ export default function UpdateProductPage() {
     formData.append("provinceId", String(data.provinceId));
     formData.append("city", data.city);
     formData.append("longDescription", String(data.longDescription));
-    // if (URLsDelete.length > 0) {
-    //   formData.append("URLsToDelete", JSON.stringify(URLsDelete));
-    // } else {
-    //   formData.append("URLsToDelete", JSON.stringify([]));
-    // }
     if (URLsDelete.length > 0) {
       formData.append("URLsToDelete", JSON.stringify(URLsDelete));
     }
-    // if (files.length > 0) {
-    //   Array.from(files).forEach((file) => {
-    //     formData.append("files", file);
-    //   });
-    // } else {
-    //   formData.append("files", JSON.stringify([]));
-    // }
     if (files.length > 0) {
       Array.from(files).forEach((file) => {
         formData.append("files", file);
       });
     }
 
-    // for (let pair of formData.entries()) {
-    //   console.log(pair[0] + ", " + pair[1]);
-    // }
     try {
       await updateProduct(formData, product?.id);
       setSuccess(true);
     } catch (error) {
-      // console.log(data);
       setSuccess(false);
     }
   };
 
   const onError = () => {
-    // console.log(data);
     setSuccess(false);
   };
 
@@ -394,13 +347,9 @@ export default function UpdateProductPage() {
             Se visualizará en el subtítulo de la publicación {count}/50
           </FormHelperText>
         </FormControl>
-        {/* <FormControl
-          variant="outlined"
-          error={errors.categoryId ? true : false}
-        > */}
         <TextField
           {...register("categoryId", { required: true })}
-          // error={!!errors.categoryId}
+          error={!!errors.categoryId}
           select
           label="Categoría"
           // defaultValue=""
