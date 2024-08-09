@@ -17,6 +17,7 @@ import IconChatbot from "./components/chatbot/IconChatbot";
 import SupAdminPage from "./pages/supAdminPage";
 import PublicationsFormPage from "./pages/publicationsformPage";
 import DashboardPage from "./pages/dashboardPage";
+import UpdateProductPage from "./pages/updateProductPage";
 
 function App() {
   return (
@@ -43,6 +44,10 @@ function App() {
               <Route element={<ProtectedRoute roles={[Role.SUPPLIER]} />}>
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/createProduct" element={<CreateProductPage />} />
+                <Route
+                  path="/updateProduct/:id"
+                  element={<UpdateProductPage />}
+                />
               </Route>
               <Route element={<ProtectedRoute roles={[Role.ADMIN]} />}>
                 <Route path="/suppliersadmin" element={<SupAdminPage />} />
