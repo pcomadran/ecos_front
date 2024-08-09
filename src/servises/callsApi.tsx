@@ -18,9 +18,9 @@ export const getAllProducts = async (): Promise<any[]> => {
   }
 };
 
-export const getProductsByLetter = async (letter: string): Promise<any[]> => {
+export const getProductsByLetter = async (name: string): Promise<any[]> => {
   try {
-    const response = await axios.get(`/api/products/findname/${letter}`);
+    const response = await axios.get(`/api/products/search/${name}`);
     console.log("Response products:", response);
     return response.data;
   } catch (error) {
