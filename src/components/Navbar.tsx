@@ -18,7 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import LogoEcos from "../../public/images/marca ecosistema-07.png";
 import { useNavigate } from "react-router-dom";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { useAuth } from "../context/authContext";
+import { useAuth, Role } from "../context/authContext";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -255,94 +255,206 @@ const Navbar = () => {
         </Toolbar>
       </AppBar>
 
-      <Drawer
-        anchor="left"
-        open={drawerOpen}
-        onClose={() => {
-          setDrawerOpen(false);
-          setMenuIcon(true);
-
-          if (anchorEl) {
-            setAnchorEl(null);
-          }
-        }}
-        PaperProps={{
-          style: {
-            width: 242,
-            marginTop: 64,
-            backgroundColor: "#4E169D",
-            color: "#FFFFFF",
-          },
-        }}
-      >
-        <List
-          style={{
-            height: "100%",
-            fontFamily: "Cairo, sans-serif",
-            gap: "16px",
+      {/* Drawer para usuarios no logueados */}
+      {!user && (
+        <Drawer
+          anchor="left"
+          open={drawerOpen}
+          onClose={toggleDrawer}
+          PaperProps={{
+            style: {
+              width: 242,
+              marginTop: 64,
+              backgroundColor: "#4E169D",
+              color: "#FFFFFF",
+            },
           }}
         >
-          <ListItem button onClick={() => handleNavigation("/")}>
-            <ListItemText
-              primary="Inicio"
-              style={{ color: "#FFFFFF", fontWeight: "bold" }}
-            />
-          </ListItem>
-          <ListItem button onClick={() => handleNavigation("/proveedores")}>
-            <ListItemText
-              primary="Proveedores"
-              style={{ color: "#FFFFFF", fontWeight: "bold" }}
-            />
-          </ListItem>
-          <ListItem button onClick={() => handleNavigation("/publicaciones")}>
-            <ListItemText
-              primary="Publicaciones"
-              style={{ color: "#FFFFFF", fontWeight: "bold" }}
-            />
-          </ListItem>
-          {!user && (
-            <>
-              <ListItem button onClick={() => handleNavigation("/login")}>
-                <ListItemText
-                  primary="Iniciar sesión"
-                  style={{ color: "#FFFFFF", fontWeight: "bold" }}
-                />
-              </ListItem>
-              <ListItem>
-                <Typography
-                  variant="body1"
-                  style={{
-                    color: "#FAFAFA",
-                    width: "242px",
-                    height: "66px",
-                    fontFamily: "Nunito, sans-serif",
-                    fontWeight: 600,
-                    fontSize: "16px",
-                    textAlign: "center",
-                  }}
-                >
-                  ¿Querés formar parte de la Red de impacto ECO como Proveedor?
-                </Typography>
-              </ListItem>
-              <ListItem style={{ paddingLeft: "16px" }}>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => handleNavigation("/register")}
-                  style={{
-                    width: "100%",
-                    color: "#fafafa",
-                    fontWeight: "bold",
-                    fontSize: "16px",
-                  }}
-                >
-                  Registrate
-                </Button>
-              </ListItem>
-            </>
-          )}
-        </List>
-      </Drawer>
+          <List
+            style={{
+              height: "100%",
+              fontFamily: "Cairo, sans-serif",
+              gap: "16px",
+            }}
+          >
+            <ListItem button onClick={() => handleNavigation("/")}>
+              <ListItemText
+                primary="Inicio"
+                style={{ color: "#FFFFFF", fontWeight: "bold" }}
+              />
+            </ListItem>
+            <ListItem button onClick={() => handleNavigation("/proveedores")}>
+              <ListItemText
+                primary="Proveedores"
+                style={{ color: "#FFFFFF", fontWeight: "bold" }}
+              />
+            </ListItem>
+            <ListItem button onClick={() => handleNavigation("/publicaciones")}>
+              <ListItemText
+                primary="Publicaciones"
+                style={{ color: "#FFFFFF", fontWeight: "bold" }}
+              />
+            </ListItem>
+            <ListItem button onClick={() => handleNavigation("/login")}>
+              <ListItemText
+                primary="Iniciar sesión"
+                style={{ color: "#FFFFFF", fontWeight: "bold" }}
+              />
+            </ListItem>
+            <ListItem>
+              <Typography
+                variant="body1"
+                style={{
+                  color: "#FAFAFA",
+                  width: "242px",
+                  height: "66px",
+                  fontFamily: "Nunito, sans-serif",
+                  fontWeight: 600,
+                  fontSize: "16px",
+                  textAlign: "center",
+                }}
+              >
+                ¿Querés formar parte de la Red de impacto ECO como Proveedor?
+              </Typography>
+            </ListItem>
+            <ListItem style={{ paddingLeft: "16px" }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => handleNavigation("/register")}
+                style={{
+                  width: "100%",
+                  color: "#fafafa",
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                }}
+              >
+                Registrate
+              </Button>
+            </ListItem>
+          </List>
+        </Drawer>
+      )}
+
+      {/* Drawer para el supplier */}
+      {user && user.role === Role.SUPPLIER && (
+        <Drawer
+          anchor="left"
+          open={drawerOpen}
+          onClose={toggleDrawer}
+          PaperProps={{
+            style: {
+              width: 242,
+              marginTop: 64,
+              backgroundColor: "#4E169D",
+              color: "#FFFFFF",
+            },
+          }}
+        >
+          <List
+            style={{
+              height: "100%",
+              fontFamily: "Cairo, sans-serif",
+              gap: "16px",
+            }}
+          >
+            <ListItem button onClick={() => handleNavigation("/")}>
+              <ListItemText
+                primary="Inicio"
+                style={{ color: "#FFFFFF", fontWeight: "bold" }}
+              />
+            </ListItem>
+            <ListItem button onClick={() => handleNavigation("/proveedores")}>
+              <ListItemText
+                primary="Proveedores"
+                style={{ color: "#FFFFFF", fontWeight: "bold" }}
+              />
+            </ListItem>
+            <ListItem button onClick={() => handleNavigation("/publicaciones")}>
+              <ListItemText
+                primary="Publicaciones"
+                style={{ color: "#FFFFFF", fontWeight: "bold" }}
+              />
+            </ListItem>
+          </List>
+        </Drawer>
+      )}
+
+      {/* Drawer para el admin */}
+      {user && user.role === Role.ADMIN && (
+        <Drawer
+          anchor="left"
+          open={drawerOpen}
+          onClose={toggleDrawer}
+          PaperProps={{
+            style: {
+              width: 242,
+              marginTop: 64,
+              backgroundColor: "#4E169D",
+              color: "#FFFFFF",
+            },
+          }}
+        >
+          <List
+            style={{
+              height: "100%",
+              fontFamily: "Cairo, sans-serif",
+              gap: "16px",
+            }}
+          >
+            <ListItem>
+              <ListItemText
+                primary="Administrador"
+                sx={{
+                  fontSize: "22px",
+                  fontWeight: 700,
+                  lineHeight: "20px",
+                  color: "#FFFFFF",
+                }}
+              />
+            </ListItem>
+            <ListItem button onClick={() => handleNavigation("/dashboard")}>
+              <ListItemText
+                primary="Dashboard Administrador"
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  lineHeight: "20px",
+                  color: "#FFFFFF",
+                }}
+              />
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => handleNavigation("/suppliersadmin")}
+            >
+              <ListItemText
+                primary="Proveedores"
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  lineHeight: "20px",
+                  color: "#FFFFFF",
+                }}
+              />
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => handleNavigation("/publicationsform")}
+            >
+              <ListItemText
+                primary="Publicaciones"
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  lineHeight: "20px",
+                  color: "#FFFFFF",
+                }}
+              />
+            </ListItem>
+          </List>
+        </Drawer>
+      )}
     </>
   );
 };
