@@ -13,7 +13,7 @@ export enum Role {
   ADMIN = "ROLE_ADMIN",
   USER = "ROLE_USER",
   VISITOR = "ROLE_VISITOR",
-  SUPPLIER= "SUPPLIER",
+  SUPPLIER = "SUPPLIER",
 }
 
 export interface DecodedToken {
@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const navigate = useNavigate();
 
   const login = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href = "http://localhost:8080/api/auth/login";
   };
 
   const getToken = async () => {
