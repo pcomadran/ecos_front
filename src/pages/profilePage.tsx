@@ -248,8 +248,6 @@ export default function ProfilePage() {
               <Typography
                 variant="subtitle1"
                 sx={{
-                  fontWeight: "700",
-                  color: "#fafafa",
                   textTransform: "none",
 
                   display: "flex",
@@ -257,7 +255,16 @@ export default function ProfilePage() {
                   gap: "5px",
                 }}
               >
-                Editar
+                <Link
+                  to={`/updateProduct/${product.id}`}
+                  style={{
+                    textDecoration: "none",
+                    color: "#fafafa",
+                    fontWeight: "700",
+                  }}
+                >
+                  Editar
+                </Link>
                 <NavigateNextIcon sx={{ color: "#fafafa" }} />
               </Typography>
             </Button>
