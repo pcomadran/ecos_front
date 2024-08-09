@@ -14,6 +14,9 @@ import CreateProductPage from "./pages/createProductPage";
 import { AuthProvider, Role } from "./context/authContext";
 import ProtectedRoute from "./context/ProtectedRoute";
 import IconChatbot from "./components/chatbot/IconChatbot";
+import SupAdminPage from "./pages/supAdminPage";
+import PublicationsFormPage from "./pages/publicationsformPage";
+import DashboardPage from "./pages/dashboardPage";
 
 function App() {
   return (
@@ -40,6 +43,14 @@ function App() {
               <Route element={<ProtectedRoute roles={[Role.SUPPLIER]} />}>
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/createProduct" element={<CreateProductPage />} />
+              </Route>
+              <Route element={<ProtectedRoute roles={[Role.ADMIN]} />}>
+                <Route path="/suppliersadmin" element={<SupAdminPage />} />
+                <Route
+                  path="/publicationsform"
+                  element={<PublicationsFormPage />}
+                />
+                <Route path="/dashboard" element={<DashboardPage />} />
               </Route>
             </Routes>
             <IconChatbot />

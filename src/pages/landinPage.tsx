@@ -67,8 +67,8 @@ const LandingPage = () => {
                   textAlign: "left",
                 }}
               >
-                Conectamos proveedores y personas comprometidas con el impacto y
-                el consumo consciente
+                Conectamos personas comprometidas con generar un cambio profundo
+                en nuestro planeta
               </Typography>
             </Grid>
           </Grid>
