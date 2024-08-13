@@ -86,14 +86,14 @@ export default function UpdateProductPage() {
         const productApi = await getProductById(parseInt(id));
         setProduct(productApi);
         setValue("categoryId", productApi.category?.id);
-        setValue("name", productApi.name);
-        setValue("shortDescription", productApi.shortDescription);
-        setValue("longDescription", productApi.longDescription);
-        setValue("email", productApi.email);
-        setValue("phoneNumber", productApi.phoneNumber);
+        setValue("name", productApi?.name);
+        setValue("shortDescription", productApi?.shortDescription);
+        setValue("longDescription", productApi?.longDescription);
+        setValue("email", productApi?.email);
+        setValue("phoneNumber", productApi?.phoneNumber);
         setValue("facebook", productApi.facebook);
         setValue("instagram", productApi.instagram);
-        setValue("city", productApi.city);
+        setValue("city", productApi?.city);
         setValue("countryId", productApi.country?.id);
         setValue("files", productApi?.imagesURLs);
         setImages(productApi?.imagesURLs);
@@ -139,7 +139,7 @@ export default function UpdateProductPage() {
       setProvinces(provincesData);
     }
   };
-
+  //Manejo de imagenes visualizadas
   const handlePhotos = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedFiles: File[] = Array.from(event.target.files || []);
     let sizeError: boolean = false;
@@ -168,7 +168,7 @@ export default function UpdateProductPage() {
       setValue("files", newFiles, { shouldValidate: true });
     }
   };
-
+  //Manejo de imagenes cuando se eliminan
   const handleDelete = (image: any, index: number): void => {
     if (typeof image === "string") {
       const newImages: string[] = images.filter((_, i) => i !== index);
@@ -181,7 +181,7 @@ export default function UpdateProductPage() {
       setFiles(newFiles);
     }
   };
-
+  //Manejo de imagenes cuando se reemplazan
   const handleEdit = (
     event: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -212,7 +212,9 @@ export default function UpdateProductPage() {
     setSuccess(null);
   };
 
+  //Al presionar el boton de Carga se ejecuta esto:
   const isSubmit: SubmitHandler<any> = async (data): Promise<void> => {
+    //Se transforman los datos en el tipo FormData para enviar correctamente las imagenes
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("shortDescription", data.shortDescription);
@@ -249,7 +251,7 @@ export default function UpdateProductPage() {
   const categoryId = watch("categoryId");
   const countryId = watch("countryId");
   const provinceId = watch("provinceId");
-
+  //Renderizado de formulario
   return (
     <Box
       sx={{ marginTop: "100px", padding: "0px 15px 60px", textAlign: "center" }}
@@ -276,84 +278,94 @@ export default function UpdateProductPage() {
           marginTop: "25px",
         }}
       >
-        <FormControl
-          sx={{
-            width: "100%",
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#222222",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#222222",
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "#222222",
-            },
-            "& .MuiInputLabel-root.MuiFormLabel-filled": {
-              color: "#4E169D",
-            },
-            "& .MuiInputLabel-root.Mui-error": {
-              color: "red",
-            },
-          }}
-          variant="outlined"
-          error={errors.name ? true : false}
-        >
-          <InputLabel required>Nombre de la organización</InputLabel>
-          <OutlinedInput
-            {...register("name", { required: true })}
-            label="Nombre de la organización"
-          />
-          <FormHelperText sx={{ color: "#222222" }}>
-            Se visualizará en el título de la publicación
-          </FormHelperText>
-        </FormControl>
-        <FormControl
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#222222",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#222222",
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "#222222",
-            },
-            "& .MuiInputLabel-root.MuiFormLabel-filled": {
-              color: "#4E169D",
-            },
-            "& .MuiInputLabel-root.Mui-error": {
-              color: "red",
-            },
-          }}
-          variant="outlined"
-          error={errors.shortDescription ? true : false}
-        >
-          <InputLabel required>
-            Breve descripción del Producto/Servicio
-          </InputLabel>
-          <OutlinedInput
-            {...register("shortDescription", {
-              required: true,
-              maxLength: 50,
-            })}
-            label="Breve descripción del Producto/Servicio"
-            onChange={handleCount}
-          />
-          <FormHelperText sx={{ color: "#222222" }}>
-            Se visualizará en el subtítulo de la publicación {count}/50
-          </FormHelperText>
-        </FormControl>
+        <Controller
+          name="name"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <FormControl
+              sx={{
+                width: "100%",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#222222",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#222222",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#222222",
+                },
+                "& .MuiInputLabel-root.MuiFormLabel-filled": {
+                  color: "#4E169D",
+                },
+                "& .MuiInputLabel-root.Mui-error": {
+                  color: "red",
+                },
+              }}
+              variant="outlined"
+              error={errors.name ? true : false}
+            >
+              <InputLabel required>Nombre de la organización</InputLabel>
+              <OutlinedInput {...field} label="Nombre de la organización" />
+              <FormHelperText sx={{ color: "#222222" }}>
+                Se visualizará en el título de la publicación
+              </FormHelperText>
+            </FormControl>
+          )}
+        />
+
+        <Controller
+          name="shortDescription"
+          control={control}
+          rules={{ required: true, maxLength: 50 }}
+          render={({ field }) => (
+            <FormControl
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#222222",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#222222",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#222222",
+                },
+                "& .MuiInputLabel-root.MuiFormLabel-filled": {
+                  color: "#4E169D",
+                },
+                "& .MuiInputLabel-root.Mui-error": {
+                  color: "red",
+                },
+              }}
+              variant="outlined"
+              error={errors.shortDescription ? true : false}
+            >
+              <InputLabel required>
+                Breve descripción del Producto/Servicio
+              </InputLabel>
+              <OutlinedInput
+                {...field}
+                label="Breve descripción del Producto/Servicio"
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleCount(e);
+                }}
+              />
+              <FormHelperText sx={{ color: "#222222" }}>
+                Se visualizará en el subtítulo de la publicación {count}/50
+              </FormHelperText>
+            </FormControl>
+          )}
+        />
         <TextField
           {...register("categoryId", { required: true })}
           error={!!errors.categoryId}
           select
           label="Categoría"
-          // defaultValue=""
-          // value={product?.category?.id || ""}
           value={categoryId || ""}
           onChange={(e) => setValue("categoryId", e.target.value)}
           helperText="Seleccioná la categoría de tu Producto/Servicio"
@@ -389,154 +401,164 @@ export default function UpdateProductPage() {
             </MenuItem>
           ))}
         </TextField>
-        {/* </FormControl> */}
-        <FormControl
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#222222",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#222222",
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "#222222",
-            },
-            "& .MuiInputLabel-root.MuiFormLabel-filled": {
-              color: "#4E169D",
-            },
-            "& .MuiInputLabel-root.Mui-error": {
-              color: "red",
-            },
+        <Controller
+          name="email"
+          control={control}
+          rules={{
+            required: true,
+            pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
           }}
-          variant="outlined"
-          error={errors.email ? true : false}
-        >
-          <InputLabel required>Correo Electrónico</InputLabel>
-          <OutlinedInput
-            {...register("email", {
-              required: true,
-              pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-            })}
-            label="Correo Electrónico"
-          />
-          <FormHelperText sx={{ color: "#222222" }}>
-            El mismo con el que te registraste o uno diferente
-          </FormHelperText>
-        </FormControl>
-        <FormControl
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#222222",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#222222",
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "#222222",
-            },
-            "& .MuiInputLabel-root.MuiFormLabel-filled": {
-              color: "#4E169D",
-            },
-            "& .MuiInputLabel-root.Mui-error": {
-              color: "red",
-            },
+          render={({ field }) => (
+            <FormControl
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#222222",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#222222",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#222222",
+                },
+                "& .MuiInputLabel-root.MuiFormLabel-filled": {
+                  color: "#4E169D",
+                },
+                "& .MuiInputLabel-root.Mui-error": {
+                  color: "red",
+                },
+              }}
+              variant="outlined"
+              error={errors.email ? true : false}
+            >
+              <InputLabel required>Correo Electrónico</InputLabel>
+              <OutlinedInput {...field} label="Correo Electrónico" />
+              <FormHelperText sx={{ color: "#222222" }}>
+                El mismo con el que te registraste o uno diferente
+              </FormHelperText>
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="phoneNumber"
+          control={control}
+          rules={{ required: true, pattern: /^\+\d+$/ }}
+          render={({ field }) => (
+            <FormControl
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#222222",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#222222",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#222222",
+                },
+                "& .MuiInputLabel-root.MuiFormLabel-filled": {
+                  color: "#4E169D",
+                },
+                "& .MuiInputLabel-root.Mui-error": {
+                  color: "red",
+                },
+              }}
+              variant="outlined"
+              error={errors.phoneNumber ? true : false}
+            >
+              <InputLabel required>Teléfono o Whatsapp</InputLabel>
+              <OutlinedInput {...field} label="Teléfono o Whatsapp" />
+              <FormHelperText sx={{ color: "#222222" }}>
+                Con el siguiente formato +54 9 261 002 002
+              </FormHelperText>
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="instagram"
+          control={control}
+          rules={{
+            pattern: /^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/,
           }}
-          variant="outlined"
-          error={errors.phoneNumber ? true : false}
-        >
-          <InputLabel required>Teléfono o Whatsapp</InputLabel>
-          <OutlinedInput
-            {...register("phoneNumber", { required: true, pattern: /^\+\d+$/ })}
-            label="Teléfono o Whatsapp"
-            value={product.phoneNumber}
-          />
-          <FormHelperText sx={{ color: "#222222" }}>
-            Con el siguiente formato +54 9 261 002 002
-          </FormHelperText>
-        </FormControl>
-        <FormControl
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#222222",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#222222",
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "#222222",
-            },
-            "& .MuiInputLabel-root.MuiFormLabel-filled": {
-              color: "#4E169D",
-            },
-            "& .MuiInputLabel-root.Mui-error": {
-              color: "red",
-            },
+          render={({ field }) => (
+            <FormControl
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#222222",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#222222",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#222222",
+                },
+                "& .MuiInputLabel-root.MuiFormLabel-filled": {
+                  color: "#4E169D",
+                },
+                "& .MuiInputLabel-root.Mui-error": {
+                  color: "red",
+                },
+              }}
+              variant="outlined"
+              error={errors.instagram ? true : false}
+            >
+              <InputLabel>Instagram</InputLabel>
+              <OutlinedInput {...field} label="Instagram" />
+              <FormHelperText sx={{ color: "#222222" }}>
+                Podés pegar el link de tu perfil
+              </FormHelperText>
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="facebook"
+          control={control}
+          rules={{
+            pattern: /^https?:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9.]+\/?$/,
           }}
-          variant="outlined"
-          error={errors.instagram ? true : false}
-        >
-          <InputLabel>Instagram</InputLabel>
-          <OutlinedInput
-            {...register("instagram", {
-              pattern:
-                /^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._-]+\/?$/,
-            })}
-            label="Instagram"
-            defaultValue={product.instagram}
-          />
-          <FormHelperText sx={{ color: "#222222" }}>
-            Podés pegar el link de tu perfil{" "}
-          </FormHelperText>
-        </FormControl>
-        <FormControl
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#222222",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#222222",
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "#222222",
-            },
-            "& .MuiInputLabel-root.MuiFormLabel-filled": {
-              color: "#4E169D",
-            },
-            "& .MuiInputLabel-root.Mui-error": {
-              color: "red",
-            },
-          }}
-          variant="outlined"
-          error={errors.facebook ? true : false}
-        >
-          <InputLabel>Facebook</InputLabel>
-          <OutlinedInput
-            {...register("facebook", {
-              pattern: /^https?:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9.]+\/?$/,
-            })}
-            label="Facebook"
-          />
-          <FormHelperText sx={{ color: "#222222" }}>
-            Podés pegar el link de tu perfil{" "}
-          </FormHelperText>
-        </FormControl>
+          render={({ field }) => (
+            <FormControl
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#222222",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#222222",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#222222",
+                },
+                "& .MuiInputLabel-root.MuiFormLabel-filled": {
+                  color: "#4E169D",
+                },
+                "& .MuiInputLabel-root.Mui-error": {
+                  color: "red",
+                },
+              }}
+              variant="outlined"
+              error={errors.facebook ? true : false}
+            >
+              <InputLabel>Facebook</InputLabel>
+              <OutlinedInput {...field} label="Facebook" />
+              <FormHelperText sx={{ color: "#222222" }}>
+                Podés pegar el link de tu perfil
+              </FormHelperText>
+            </FormControl>
+          )}
+        />
         <TextField
           {...register("countryId", { required: true })}
           error={errors.country ? true : false}
           select
           label="País*"
-          // defaultValue=""
           helperText="Seleccioná un país de la lista"
           value={countryId || ""}
-          // onChange={(e) => setValue("categoryId", e.target.value)}
           onChange={handleProvinces}
           sx={{
             "& .MuiOutlinedInput-root": {
@@ -573,10 +595,8 @@ export default function UpdateProductPage() {
         <TextField
           {...register("provinceId", { required: true })}
           error={errors.province ? true : false}
-          // disabled={provinces.length <= 0}
           select
           label="Provincia/Estado*"
-          // defaultValue=""
           value={provinceId || ""}
           onChange={(e) => setValue("provinceId", e.target.value)}
           helperText="Seleccioná una provincia/estado de la lista"
@@ -615,88 +635,103 @@ export default function UpdateProductPage() {
             </MenuItem>
           ))}
         </TextField>
-        <FormControl
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#222222",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#222222",
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "#222222",
-            },
-            "& .MuiInputLabel-root.MuiFormLabel-filled": {
-              color: "#4E169D",
-            },
-            "& .MuiInputLabel-root.Mui-error": {
-              color: "red",
-            },
-          }}
-          variant="outlined"
-          error={errors.city ? true : false}
-        >
-          <InputLabel>Ciudad*</InputLabel>
-          <OutlinedInput
-            {...register("city", {
-              required: true,
-              pattern: /^[a-zA-ZÀ-ÿ\s'-]+$/,
-            })}
-            label="Ciudad*"
-          />
-          <FormHelperText sx={{ color: "#222222" }}>
-            Sin abreviaturas, nombre completo
-          </FormHelperText>
-        </FormControl>
-        <FormControl
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#222222",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#222222",
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "#222222",
-            },
-            "& .MuiInputLabel-root.MuiFormLabel-filled": {
-              color: "#4E169D",
-            },
-            "& .MuiInputLabel-root.Mui-error": {
-              color: "red",
-            },
-          }}
-          variant="outlined"
-          error={errors.longDescription ? true : false}
-        >
-          <InputLabel>Descripción del Producto/Servicio</InputLabel>
-          <OutlinedInput
-            {...register("longDescription", { maxLength: 300 })}
-            label="Descripción del Producto/Servicio"
-            onChange={handleCountD}
-            multiline
-            rows={8}
-            sx={{
-              height: "192px",
-              paddingTop: "30px",
-              paddingRight: "35px",
-              overflow: "auto",
-              fontSize: "16px",
-            }}
-          />
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <FormHelperText sx={{ color: "#222222" }}>
-              Máximo 300 caracteres
-            </FormHelperText>
-            <FormHelperText sx={{ color: "#222222" }}>
-              {countD}/300
-            </FormHelperText>
-          </Box>
-        </FormControl>
+        <Controller
+          name="city"
+          control={control}
+          rules={{ required: true, pattern: /^[a-zA-ZÀ-ÿ\s'-]+$/ }}
+          render={({ field }) => (
+            <FormControl
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#222222",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#222222",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#222222",
+                },
+                "& .MuiInputLabel-root.MuiFormLabel-filled": {
+                  color: "#4E169D",
+                },
+                "& .MuiInputLabel-root.Mui-error": {
+                  color: "red",
+                },
+              }}
+              variant="outlined"
+              error={errors.city ? true : false}
+            >
+              <InputLabel>Ciudad*</InputLabel>
+              <OutlinedInput
+                {...field}
+                label="Ciudad*"
+                // onChange={(e) => setValue("city", e.target.value)}
+              />
+              <FormHelperText sx={{ color: "#222222" }}>
+                Sin abreviaturas, nombre completo
+              </FormHelperText>
+            </FormControl>
+          )}
+        />
+        <Controller
+          name="longDescription"
+          rules={{ maxLength: 300 }}
+          control={control}
+          render={({ field }) => (
+            <FormControl
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#222222",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#222222",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#222222",
+                },
+                "& .MuiInputLabel-root.MuiFormLabel-filled": {
+                  color: "#4E169D",
+                },
+                "& .MuiInputLabel-root.Mui-error": {
+                  color: "red",
+                },
+              }}
+              variant="outlined"
+              error={errors.longDescription ? true : false}
+            >
+              <InputLabel>Descripción del Producto/Servicio</InputLabel>
+              <OutlinedInput
+                {...field}
+                label="Descripción del Producto/Servicio"
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleCountD(e);
+                }}
+                multiline
+                rows={8}
+                sx={{
+                  height: "192px",
+                  paddingTop: "30px",
+                  paddingRight: "35px",
+                  overflow: "auto",
+                  fontSize: "16px",
+                }}
+              />
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <FormHelperText sx={{ color: "#222222" }}>
+                  Máximo 300 caracteres
+                </FormHelperText>
+                <FormHelperText sx={{ color: "#222222" }}>
+                  {countD}/300
+                </FormHelperText>
+              </Box>
+            </FormControl>
+          )}
+        />
         {images?.length + files?.length > 0 && (
           <Box sx={{ display: "flex", gap: "10px", margin: "15px 0" }}>
             {images.concat(files).map((image, index) => (

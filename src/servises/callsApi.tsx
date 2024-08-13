@@ -112,6 +112,11 @@ export const createProduct = async (productData: any) => {
 };
 
 export const updateProduct = async (product: any, productID: number) => {
+  //Muestra en la consola todo lo que se envia al back
+  for (let pair of product.entries()) {
+    console.log(pair[0] + ": " + pair[1]);
+  }
+
   try {
     const response = await axios.put(
       `api/products/update/${productID}`,
