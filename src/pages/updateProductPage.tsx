@@ -139,7 +139,6 @@ export default function UpdateProductPage() {
       setProvinces(provincesData);
     }
   };
-  //Manejo de imagenes visualizadas
   const handlePhotos = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedFiles: File[] = Array.from(event.target.files || []);
     let sizeError: boolean = false;
@@ -168,7 +167,6 @@ export default function UpdateProductPage() {
       setValue("files", newFiles, { shouldValidate: true });
     }
   };
-  //Manejo de imagenes cuando se eliminan
   const handleDelete = (image: any, index: number): void => {
     if (typeof image === "string") {
       const newImages: string[] = images.filter((_, i) => i !== index);
@@ -181,7 +179,6 @@ export default function UpdateProductPage() {
       setFiles(newFiles);
     }
   };
-  //Manejo de imagenes cuando se reemplazan
   const handleEdit = (
     event: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -212,9 +209,7 @@ export default function UpdateProductPage() {
     setSuccess(null);
   };
 
-  //Al presionar el boton de Carga se ejecuta esto:
   const isSubmit: SubmitHandler<any> = async (data): Promise<void> => {
-    //Se transforman los datos en el tipo FormData para enviar correctamente las imagenes
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("shortDescription", data.shortDescription);
@@ -251,7 +246,6 @@ export default function UpdateProductPage() {
   const categoryId = watch("categoryId");
   const countryId = watch("countryId");
   const provinceId = watch("provinceId");
-  //Renderizado de formulario
   return (
     <Box
       sx={{ marginTop: "100px", padding: "0px 15px 60px", textAlign: "center" }}
@@ -664,11 +658,7 @@ export default function UpdateProductPage() {
               error={errors.city ? true : false}
             >
               <InputLabel>Ciudad*</InputLabel>
-              <OutlinedInput
-                {...field}
-                label="Ciudad*"
-                // onChange={(e) => setValue("city", e.target.value)}
-              />
+              <OutlinedInput {...field} label="Ciudad*" />
               <FormHelperText sx={{ color: "#222222" }}>
                 Sin abreviaturas, nombre completo
               </FormHelperText>
