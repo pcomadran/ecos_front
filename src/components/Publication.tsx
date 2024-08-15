@@ -1,15 +1,22 @@
-import React from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import {
+  IconButton,
+  Menu,
+  MenuItem,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+  Button,
+  SxProps,
+} from "@mui/material";
+import {
+  MoreVert as MoreVertIcon,
+  VisibilityOutlined as VisibilityOutlinedIcon,
+  VisibilityOffOutlined as VisibilityOffOutlinedIcon,
+} from "@mui/icons-material";
 import Carrusel from "./Carrusel";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
 
 interface PublicationProps {
   title: string;
@@ -17,17 +24,21 @@ interface PublicationProps {
   borderRadius?: number | string;
   date: string;
   text: string;
+  viewCount?: number;
+  deleted?: boolean;
 }
 
 const Publication: React.FC<PublicationProps> = ({
   title,
   imageUrls,
-  borderRadius = "16px", // Valor por defecto
+  borderRadius = "16px",
   date,
   text,
+  viewCount,
+  deleted,
 }) => {
-  const [showFullText, setShowFullText] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [showFullText, setShowFullText] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const location = useLocation();
 
   const handleToggleText = () => {
@@ -45,24 +56,25 @@ const Publication: React.FC<PublicationProps> = ({
   const shortText = text.split(".")[0] + ".";
   const fullText = text.split("\n\n").join("\n\n");
 
-  // Configura aquí las rutas donde se debe mostrar el botón
-  const shouldShowMoreOptionsButton = ["/publicationsform"].includes(
+  // Condiciones para las rutas
+  const isDashboardRoute = location.pathname === "/dashboard";
+  const shouldShowMoreOptionsButton = ["/publications/menu"].includes(
     location.pathname
   );
-
-  // Alineación del título según la ruta
   const titleAlignment = shouldShowMoreOptionsButton ? "left" : "center";
 
+  // Estilo condicional del borde y contenido según la ruta
+  const cardStyle: SxProps = {
+    border: isDashboardRoute ? "1px solid #4E169D" : undefined,
+    borderRadius: typeof borderRadius === "number" ? `${borderRadius}px` : borderRadius,
+    width: "328px",
+    padding: "16px 0",
+    gap: "16px",
+    position: "relative",
+  };
+
   return (
-    <Card
-      sx={{
-        width: "328px",
-        padding: "16px 0",
-        gap: "16px",
-        borderRadius,
-        position: "relative",
-      }}
-    >
+    <Card sx={cardStyle}>
       <div
         style={{
           width: "304px",
@@ -93,10 +105,10 @@ const Publication: React.FC<PublicationProps> = ({
                 position: "absolute",
                 top: 8,
                 right: 8,
-                backgroundColor: anchorEl ? "#4E169D" : "transparent", // Cambia color si está seleccionado
-                color: anchorEl ? "#FFFFFF" : "inherit", // Cambia el color del ícono si está seleccionado
+                backgroundColor: anchorEl ? "#4E169D" : "transparent",
+                color: anchorEl ? "#FFFFFF" : "inherit",
                 "&:hover": {
-                  backgroundColor: "#4E169D", // Asegura que mantenga el color en hover si está seleccionado
+                  backgroundColor: "#4E169D",
                 },
               }}
               onClick={handleMenuClick}
@@ -153,47 +165,118 @@ const Publication: React.FC<PublicationProps> = ({
           </>
         )}
       </div>
-      <Carrusel imageUrls={imageUrls} borderRadius={borderRadius} />
-      <CardContent>
-        <Typography
-          color="#222222"
-          sx={{
-            fontSize: "14px",
-            fontWeight: 600,
-            lineHeight: "20px",
-          }}
-        >
-          {date}
-        </Typography>
-        <Typography
-          color="#222222"
-          sx={{
-            width: "304px",
-            fontSize: "16px",
-            fontWeight: 400,
-            lineHeight: "20px",
-            whiteSpace: "pre-line",
-            cursor: "pointer", // Agrega el cursor de pointer para indicar que el texto es clicable
-          }}
-          onClick={handleToggleText} // Añade el onClick para alternar el texto
-        >
-          {showFullText ? fullText : shortText}
-        </Typography>
-      </CardContent>
-      <CardActions sx={{ justifyContent: "center" }}>
-        <Button
-          sx={{
-            fontSize: "16px",
-            fontWeight: 500,
-            lineHeight: "20px",
-            color: "#4E169D",
-            textTransform: "none",
-          }}
-          onClick={handleToggleText}
-        >
-          {showFullText ? "Ver menos" : "Ver más"}
-        </Button>
-      </CardActions>
+
+      {isDashboardRoute ? (
+        <>
+          <CardContent>
+            <Typography
+              color="#222222"
+              sx={{
+                fontSize: "14px",
+                fontWeight: 600,
+                lineHeight: "20px",
+              }}
+            >
+              {date}
+            </Typography>
+          </CardContent>
+          <CardActions sx={{ justifyContent: "flex-end", paddingRight: "16px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                color: "#4E169D",
+              }}
+            >
+              {deleted ? (
+                <VisibilityOffOutlinedIcon sx={{ width: "24px", height: "24px" }} />
+              ) : (
+                <VisibilityOutlinedIcon sx={{ width: "24px", height: "24px" }} />
+              )}
+              <Typography
+                sx={{
+                  marginLeft: "4px",
+                  fontSize: "18px",
+                  fontWeight: 700,
+                }}
+              >
+                {viewCount}
+              </Typography>
+            </div>
+          </CardActions>
+        </>
+      ) : (
+        <>
+          <Carrusel imageUrls={imageUrls} borderRadius={borderRadius} />
+          <CardContent>
+            <Typography
+              color="#222222"
+              sx={{
+                fontSize: "14px",
+                fontWeight: 600,
+                lineHeight: "20px",
+              }}
+            >
+              {date}
+            </Typography>
+            <Typography
+              color="#222222"
+              sx={{
+                width: "304px",
+                fontSize: "16px",
+                fontWeight: 400,
+                lineHeight: "20px",
+                whiteSpace: "pre-line",
+                cursor: "pointer",
+              }}
+              onClick={handleToggleText}
+            >
+              {showFullText ? fullText : shortText}
+            </Typography>
+          </CardContent>
+          <CardActions sx={{ justifyContent: "center", position: "relative" }}>
+            <Button
+              sx={{
+                fontSize: "16px",
+                fontWeight: 500,
+                lineHeight: "20px",
+                color: "#4E169D",
+                textTransform: "none",
+              }}
+              onClick={handleToggleText}
+            >
+              {showFullText ? "Ver menos" : "Ver más"}
+            </Button>
+            {shouldShowMoreOptionsButton && (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 8,
+                  right: 8,
+                  display: "flex",
+                  alignItems: "center",
+                  color: "#4E169D",
+                }}
+              >
+                {deleted ? (
+                  <VisibilityOffOutlinedIcon sx={{ width: "24px", height: "24px" }} />
+                ) : (
+                  <VisibilityOutlinedIcon sx={{ width: "24px", height: "24px" }} />
+                )}
+                <Typography
+                  sx={{
+                    marginLeft: "4px",
+                    fontSize: "18px",
+                    fontWeight: 700,
+                  }}
+                >
+                  {viewCount}
+                </Typography>
+              </div>
+            )}
+          </CardActions>
+        </>
+      )}
     </Card>
   );
 };

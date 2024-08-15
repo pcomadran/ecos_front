@@ -15,9 +15,10 @@ import { AuthProvider, Role } from "./context/authContext";
 import ProtectedRoute from "./context/ProtectedRoute";
 import IconChatbot from "./components/chatbot/IconChatbot";
 import SupAdminPage from "./pages/supAdminPage";
-import PublicationsFormPage from "./pages/publicationsformPage";
 import DashboardPage from "./pages/dashboardPage";
 import UpdateProductPage from "./pages/updateProductPage";
+import PublicationForm from "./components/PublicationForm";
+import PublicationsMenuPage from "./pages/publicationsmenuPage";
 
 function App() {
   return (
@@ -52,9 +53,10 @@ function App() {
               <Route element={<ProtectedRoute roles={[Role.ADMIN]} />}>
                 <Route path="/suppliersadmin" element={<SupAdminPage />} />
                 <Route
-                  path="/publicationsform"
-                  element={<PublicationsFormPage />}
+                  path="/publications/menu"
+                  element={<PublicationsMenuPage/>}
                 />
+                <Route path="/publications/new" element={<PublicationForm/>} />
                 <Route path="/dashboard" element={<DashboardPage />} />
               </Route>
             </Routes>

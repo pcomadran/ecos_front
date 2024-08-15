@@ -442,7 +442,7 @@ const Navbar = () => {
               </ListItem>
               <ListItem
                 button
-                onClick={() => handleNavigation("/publicationsform")}
+                onClick={() => handleNavigation("/publications/menu")}
               >
                 <Typography
                   sx={{
