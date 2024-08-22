@@ -6,7 +6,6 @@ import {
   Country,
   Province,
   Supplier,
-  SupplierForm,
 } from "../types/typesSupplier";
 
 export const getAllProducts = async (): Promise<any[]> => {
