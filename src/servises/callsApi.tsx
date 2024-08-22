@@ -181,6 +181,17 @@ export const getAllPublications = async (): Promise<any[]> => {
   }
 };
 
+// GET - Obtener una publicación por ID sin aumentar las vistas
+export const getPublicationByIdWithoutViews = async (id: number) => {
+  try {
+    const response = await axios.get(`/api/publications/get/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching publication by ID without increasing views:", error);
+    throw error;
+  }
+};
+
 // GET - Obtener una publicación por ID
 export const getPublicationById = async (id: number) => {
   try {

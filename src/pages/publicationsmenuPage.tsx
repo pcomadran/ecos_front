@@ -1,3 +1,5 @@
+// src/pages/publicationsmenuPage.tsx
+
 import React, { useEffect, useState } from "react";
 import { Typography, Container, Grid, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +17,7 @@ interface PublicationData {
 }
 
 const PublicationsMenuPage: React.FC = () => {
+  
   const [publications, setPublications] = useState<PublicationData[]>([]);
   const navigate = useNavigate();
 
@@ -99,6 +102,7 @@ const PublicationsMenuPage: React.FC = () => {
               text={publication.description}
               viewCount={publication.viewCount}
               deleted={publication.deleted} 
+              id={publication.id}
             />
           </Grid>
         ))}

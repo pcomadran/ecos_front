@@ -1,3 +1,5 @@
+// src/App.tsx
+
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -57,6 +59,7 @@ function App() {
                   element={<PublicationsMenuPage/>}
                 />
                 <Route path="/publications/new" element={<PublicationForm/>} />
+                <Route path="/publications/edit/:id" element={<PublicationForm />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
               </Route>
             </Routes>
