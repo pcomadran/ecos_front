@@ -79,7 +79,9 @@ const PublicationsLanding = () => {
       >
         <Button
           variant="contained"
+          disableElevation
           sx={{
+            width: "184px",
             backgroundColor: "#4E169D",
             color: "#fafafa",
             borderRadius: "100px",
