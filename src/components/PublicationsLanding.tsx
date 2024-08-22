@@ -2,8 +2,43 @@ import { Typography, Box, Grid } from "@mui/material";
 import Publication from "./Publication";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { getAllLastThreeActivePublications } from "../servises/callsApi";
+import { useEffect, useState } from "react";
 
-const PublicationsLanding = () => {
+interface PublicationData {
+  id: number;
+  title: string;
+  description: string;
+  creationDate: string;
+  imagesURLs: string[];
+  viewCount: number;
+  deleted: boolean;
+}
+
+const PublicationsLanding: React.FC = () => {
+
+  const [publications, setPublications] = useState<PublicationData[]>([]);
+
+  useEffect(() => {
+    
+    const fetchPublications = async () => {
+      try {
+        const response = await getAllLastThreeActivePublications();
+        // Ordenar las publicaciones por fecha de creación (de la más reciente a la más antigua)
+        const sortedPublications = response.sort((a: PublicationData, b: PublicationData) => {
+          const dateA = new Date(a.creationDate.split('-').reverse().join('-')); 
+          const dateB = new Date(b.creationDate.split('-').reverse().join('-'));
+          return dateB.getTime() - dateA.getTime(); 
+        });
+        setPublications(sortedPublications);
+      } catch (error) {
+        console.error("Error fetching publications:", error);
+      }
+    };
+
+    fetchPublications();
+  }, []);
+
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -44,26 +79,21 @@ const PublicationsLanding = () => {
           position: "relative",
         }}
       >
-        <Grid container spacing={2} sx={{ position: "relative", zIndex: 1 }}>
-          {[1, 2, 3].map((index) => (
-            <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ mt: 3, position: "relative", zIndex: 1 }}
+        >
+          {publications.map((publication) => (
+            <Grid item xs={12} sm={12} md={6} lg={4} key={publication.id}>
               <Publication
-                title="¿Qué es el Upcycling?"
-                imageUrls={[
-                  "/images/Publicacion upcycling imagen 1.png",
-                  "/images/Publicacion upcycling 2.png",
-                  "/images/Publicacion upcycling imagen 3.png",
-                ]}
-                date="17/04/2023"
-                text={`El upcycling, también conocido como supra-reciclaje o reutilización creativa, es un enfoque innovador y sostenible para la gestión de residuos y la conservación de recursos. A diferencia del reciclaje convencional, que implica descomponer materiales para crear nuevos productos, el upcycling busca transformar objetos o materiales desechados en productos de mayor valor, sin degradar su calidad.
-    
-                            Este proceso implica la reimaginación y reinvención de elementos que normalmente se considerarían basura, dándoles una segunda vida y reduciendo la cantidad de desechos enviados a vertederos. El upcycling fomenta la creatividad y la innovación, ya que requiere repensar cómo se pueden utilizar los materiales existentes de nuevas formas.
-    
-                            El upcycling se ha convertido en una poderosa herramienta para abordar los desafíos medioambientales y sociales que enfrenta nuestro planeta. Algunos ejemplos de upcycling incluyen la creación de muebles a partir de palets de madera, la confección de ropa a partir de telas recicladas o la transformación de objetos cotidianos en piezas de arte. Esto no solo reduce la cantidad de residuos, sino que también fomenta la economía circular, donde los productos y materiales se reutilizan y reciclan continuamente en lugar de desecharse.
-    
-                            El upcycling no solo beneficia al medio ambiente al reducir la cantidad de residuos, sino que también puede generar oportunidades económicas y sociales. Muchos emprendedores y artistas han encontrado en el upcycling una forma de crear productos únicos y sostenibles que atraen a consumidores conscientes de su impacto en el medio ambiente.
-    
-                            En resumen, el upcycling es una práctica innovadora que transforma desechos en tesoros, promoviendo la sostenibilidad, la creatividad y la reducción de residuos. Al adoptar el upcycling en nuestras vidas y comunidades, podemos contribuir a un mundo más limpio y respetuoso con los recursos naturales. ¡Únete al movimiento del upcycling y ayúdanos a crear un futuro más sostenible!`}
+                title={publication.title}
+                imageUrls={publication.imagesURLs}
+                date={publication.creationDate}
+                text={publication.description}
+                viewCount={publication.viewCount}
+                deleted={publication.deleted} 
+                id={publication.id}
               />
             </Grid>
           ))}
