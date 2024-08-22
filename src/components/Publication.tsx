@@ -19,7 +19,7 @@ import {
   VisibilityOffOutlined as VisibilityOffOutlinedIcon,
 } from "@mui/icons-material";
 import Carrusel from "./Carrusel";
-import { deletePublication } from "../servises/callsApi";
+import { deletePublication, increaseViewsById } from "../servises/callsApi";
 
 interface PublicationProps {
   id: number;
@@ -49,8 +49,17 @@ const Publication: React.FC<PublicationProps> = ({
   const [deleted, setDeleted] = useState(initialDeletedStatus);
   const location = useLocation();
 
-  const handleToggleText = () => {
-    setShowFullText((prevShowFullText) => !prevShowFullText);
+  const handleToggleText = async () => {
+    const isShowingFullText = !showFullText;
+    setShowFullText(isShowingFullText);
+
+    if (isShowingFullText) {
+      try {
+        await increaseViewsById(id);
+      } catch (error) {
+        console.error("Error increasing views:", error);
+      }
+    }
   };
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {

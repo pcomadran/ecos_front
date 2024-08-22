@@ -191,17 +191,15 @@ export const getPublicationByIdWithoutViews = async (id: number) => {
   }
 };
 
-// GET - Obtener una publicación por ID
-export const getPublicationById = async (id: number) => {
+// GET - Aumenta las Views de la publicacion en 1 (solo si no es admin)
+export const increaseViewsById = async (id: number) => {
   try {
     const token = localStorage.getItem("authToken");
-    if (!token) throw new Error("Token not found");
-
+    
     const response = await axios.get(`/api/publications/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
+    
     return response.data;
   } catch (error) {
     console.error("Error fetching publication by ID:", error);
@@ -235,5 +233,16 @@ export const deletePublication = async (id: number) => {
   } catch (error) {
     console.error("Error deleting publication:", error);
     throw error;
+  }
+};
+
+// GET - Obtener las ultimas 3 publicaciones activas ordenadas 
+export const getAllLastThreeActivePublications = async (): Promise<any[]> => {
+  try {
+    const response = await axios.get("/api/publications/last-three");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching active publications:", error);
+    return [];
   }
 };

@@ -51,10 +51,10 @@ const PublicationForm: React.FC = () => {
       const validFiles = selectedFiles.filter(file => file.size <= MAX_IMAGE_SIZE_MB * 1024 * 1024);
 
       if (indexToReplace !== undefined) {
-        const newFiles = [...files];
         if (isEditMode && previews[indexToReplace]) {
           setUrlsToDelete(prev => [...prev, previews[indexToReplace]]);
         }
+        const newFiles = [...files];
         newFiles.splice(indexToReplace, 1, validFiles[0]);
         setFiles(newFiles);
 
@@ -62,12 +62,14 @@ const PublicationForm: React.FC = () => {
         newPreviews[indexToReplace] = URL.createObjectURL(validFiles[0]);
         setPreviews(newPreviews);
       } else {
-        const newFiles = files.concat(validFiles).slice(0, MAX_IMAGES);
+        const newFiles = [...files, ...validFiles].slice(0, MAX_IMAGES);
         setFiles(newFiles);
 
-        const newPreviews = newFiles.map((file) => URL.createObjectURL(file));
+        const newPreviews = [...previews, ...validFiles.map(file => URL.createObjectURL(file))].slice(0, MAX_IMAGES);
         setPreviews(newPreviews);
       }
+
+      event.target.value = '';
     }
   };
 
@@ -109,13 +111,16 @@ const PublicationForm: React.FC = () => {
     }
   };
 
+  // Nueva lógica para calcular si se debe ocultar el botón "Subir imagen" y los textos de validación
+  const shouldHideUploadButtonAndText = previews.length >= MAX_IMAGES;
+
   return (
     <Container sx={{ paddingTop: '65px' }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
-        <Typography sx={{ width: "328px", color:'#222222', fontSize: "28px", fontWeight: 600, lineHeight: "35px", textAlign: "center"}}>
+        <Typography sx={{ width: "328px", color: '#222222', fontSize: "28px", fontWeight: 600, lineHeight: "35px", textAlign: "center" }}>
           {isEditMode ? 'Edición de publicación' : 'Carga de publicación'}
         </Typography>
-        <Typography sx={{ marginTop: "32px", width: "328px", color:'#222222', fontSize: "20px", fontWeight: 600, lineHeight: "30px", textAlign: "center"}}>
+        <Typography sx={{ marginTop: "32px", width: "328px", color: '#222222', fontSize: "20px", fontWeight: 600, lineHeight: "30px", textAlign: "center" }}>
           {isEditMode ? 'Modificá los datos de la publicación' : 'Completá los datos para crear una nueva publicación'}
         </Typography>
         <TextField
@@ -194,7 +199,7 @@ const PublicationForm: React.FC = () => {
             </Box>
           ))}
         </Box>
-        {files.length + previews.length < MAX_IMAGES && (
+        {!shouldHideUploadButtonAndText && (
           <Box sx={{ width: "328px", display: "flex", justifyContent: "flex-end" }}>
             <Box sx={{ marginTop: '16px', textAlign: 'left' }}>
               <input
