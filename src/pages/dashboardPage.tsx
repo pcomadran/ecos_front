@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Typography,
   ListItem,
   Divider,
@@ -11,28 +10,6 @@ import {
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import React, { useEffect, useState } from "react";
 import { getDashboardAdmin } from "../servises/callsApi";
-
-const categories = [
-  { label: "Bienestar", view: 10 },
-  { label: "Capacitaciones", view: 10 },
-  { label: "Construcción", view: 10 },
-  { label: "Cultivos", view: 10 },
-  { label: "Gastronomía", view: 5 },
-  { label: "Indumentaria", view: 5 },
-  { label: "Merchandising", view: 5 },
-  { label: "Muebles/Deco", view: 5 },
-  { label: "Reciclaje", view: 20 },
-  { label: "Tecnología", view: 10 },
-  { label: "Transporte", view: 10 },
-];
-
-const publications = [
-  { title: "¿Qué es el Upcycling?", creationDate: "17/04/2023", view: 50 },
-  { title: "¿Qué es el Upcycling?", creationDate: "17/04/2023", view: 50 },
-  { title: "¿Qué es el Upcycling?", creationDate: "17/04/2023", view: 50 },
-  { title: "¿Qué es el Upcycling?", creationDate: "17/04/2023", view: 50 },
-  { title: "¿Qué es el Upcycling?", creationDate: "17/04/2023", view: 50 },
-];
 
 type Publication = {
   id: number;
@@ -63,7 +40,7 @@ const DashboardPage: React.FC = () => {
     async function fetchData() {
       const dashboardApi = await getDashboardAdmin();
       setCantProducts(dashboardApi["Nuevos productos creados"].Total);
-      setApproved(dashboardApi["Nuevos productos creados"].Aprobado);
+      setApproved(dashboardApi["Nuevos productos creados"].Aceptado);
       setReview(dashboardApi["Nuevos productos creados"]["En revisión"]);
       setDenied(dashboardApi["Nuevos productos creados"].Denegado);
 
@@ -76,7 +53,7 @@ const DashboardPage: React.FC = () => {
       setLastPublications(dashboardApi["Publicaciones (5 últimas subidas)"]);
       setViewestPublications(dashboardApi["Publicaciones (5 más vistas)"]);
     }
-    // fetchData();
+    fetchData();
   }, []);
 
   const handlePublication = (event: any) => {
@@ -111,12 +88,12 @@ const DashboardPage: React.FC = () => {
         }}
       >
         <Typography
-          sx={{ color: "#FAFAFA", fontWeight: "700", fontSize: "20px" }}
+          sx={{ color: "#FAFAFA", fontWeight: "700", fontSize: "17px" }}
         >
-          Nuevos Productos creados
+          Nuevos Productos/Servicios creados
         </Typography>
         <Typography
-          sx={{ color: "#FAFAFA", fontWeight: "700", fontSize: "22px" }}
+          sx={{ color: "#FAFAFA", fontWeight: "700", fontSize: "20px" }}
         >
           {cantProducts}
         </Typography>
@@ -251,7 +228,7 @@ const DashboardPage: React.FC = () => {
             padding: "12px 0 5px",
           }}
         >
-          Productos por categoría
+          Productos/Servicios por categoría
         </Typography>
         <Divider sx={{ background: "#4E169D", height: "2px" }} />
         <List
