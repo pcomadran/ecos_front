@@ -5,9 +5,12 @@ import {
   ListItem,
   Divider,
   List,
+  TextField,
+  MenuItem,
 } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getDashboardAdmin } from "../servises/callsApi";
 
 const categories = [
   { label: "Bienestar", view: 10 },
@@ -24,31 +27,67 @@ const categories = [
 ];
 
 const publications = [
-  { title: "¿Qué es el Upcycling?", date: "17/04/2023", view: 50 },
-  { title: "¿Qué es el Upcycling?", date: "17/04/2023", view: 50 },
-  { title: "¿Qué es el Upcycling?", date: "17/04/2023", view: 50 },
-  { title: "¿Qué es el Upcycling?", date: "17/04/2023", view: 50 },
-  { title: "¿Qué es el Upcycling?", date: "17/04/2023", view: 50 },
+  { title: "¿Qué es el Upcycling?", creationDate: "17/04/2023", view: 50 },
+  { title: "¿Qué es el Upcycling?", creationDate: "17/04/2023", view: 50 },
+  { title: "¿Qué es el Upcycling?", creationDate: "17/04/2023", view: 50 },
+  { title: "¿Qué es el Upcycling?", creationDate: "17/04/2023", view: 50 },
+  { title: "¿Qué es el Upcycling?", creationDate: "17/04/2023", view: 50 },
 ];
 
+type Publication = {
+  id: number;
+  title: string;
+  creationDate: string;
+  view: number;
+};
+
+type Category = {
+  label: string;
+  view: number;
+};
+
 const DashboardPage: React.FC = () => {
+  const [cantProducts, setCantProducts] = useState<number>(0);
+  const [approved, setApproved] = useState<number>(0);
+  const [review, setReview] = useState<number>(0);
+  const [denied, setDenied] = useState<number>(0);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [lastPublications, setLastPublications] = useState<Publication[]>([]);
+  const [viewestPublications, setViewestPublications] = useState<Publication[]>(
+    []
+  );
+
+  const [selectPublication, setSelectPublication] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      const dashboardApi = await getDashboardAdmin();
+      setCantProducts(dashboardApi["Nuevos productos creados"].Total);
+      setApproved(dashboardApi["Nuevos productos creados"].Aprobado);
+      setReview(dashboardApi["Nuevos productos creados"]["En revisión"]);
+      setDenied(dashboardApi["Nuevos productos creados"].Denegado);
+
+      const categoriesApi = Object.entries(
+        dashboardApi["Proveedores por categoria"]
+      ).map(([label, view]) => ({ label, view: view as number }));
+
+      setCategories(categoriesApi);
+
+      setLastPublications(dashboardApi["Publicaciones (5 últimas subidas)"]);
+      setViewestPublications(dashboardApi["Publicaciones (5 más vistas)"]);
+    }
+    // fetchData();
+  }, []);
+
+  const handlePublication = (event: any) => {
+    console.log(event.target.value);
+    if (event.target.value === 1) {
+      setSelectPublication(false);
+    } else setSelectPublication(true);
+  };
+
   return (
     <Box sx={{ marginTop: "60px", padding: "0px 16px", textAlign: "center" }}>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button
-          sx={{
-            width: "106px",
-            height: "40px",
-            background: "#D2D2D2",
-            color: "#222222",
-            textTransform: "none",
-            fontWeight: "700",
-            textAlign: "center",
-          }}
-        >
-          Cerrar Sesión
-        </Button>
-      </Box>
       <Typography sx={{ fontSize: "28px", fontWeight: "500" }}>
         Dashboard Administrador
       </Typography>
@@ -74,12 +113,12 @@ const DashboardPage: React.FC = () => {
         <Typography
           sx={{ color: "#FAFAFA", fontWeight: "700", fontSize: "20px" }}
         >
-          Nuevos Perfiles creados
+          Nuevos Productos creados
         </Typography>
         <Typography
           sx={{ color: "#FAFAFA", fontWeight: "700", fontSize: "22px" }}
         >
-          100
+          {cantProducts}
         </Typography>
       </Box>
       <List
@@ -111,7 +150,6 @@ const DashboardPage: React.FC = () => {
               width: "55%",
               background: "#1D9129",
             }}
-            component="li"
           />
           <Typography
             sx={{
@@ -121,7 +159,7 @@ const DashboardPage: React.FC = () => {
               width: "100%",
             }}
           >
-            80
+            {approved}
           </Typography>
         </ListItem>
         <ListItem
@@ -151,7 +189,6 @@ const DashboardPage: React.FC = () => {
               width: "55%",
               background: "#B86B11",
             }}
-            component="li"
           />
           <Typography
             sx={{
@@ -161,7 +198,7 @@ const DashboardPage: React.FC = () => {
               width: "100%",
             }}
           >
-            10
+            {review}
           </Typography>
         </ListItem>
         <ListItem
@@ -186,7 +223,6 @@ const DashboardPage: React.FC = () => {
               width: "55%",
               background: "#BC1111",
             }}
-            component="li"
           />
           <Typography
             sx={{
@@ -196,7 +232,7 @@ const DashboardPage: React.FC = () => {
               width: "100%",
             }}
           >
-            10
+            {denied}
           </Typography>
         </ListItem>
       </List>
@@ -215,7 +251,7 @@ const DashboardPage: React.FC = () => {
             padding: "12px 0 5px",
           }}
         >
-          Proveedores por categoría
+          Productos por categoría
         </Typography>
         <Divider sx={{ background: "#4E169D", height: "2px" }} />
         <List
@@ -251,7 +287,7 @@ const DashboardPage: React.FC = () => {
                   {category.view}
                 </Typography>
               </Box>
-              <Divider sx={{ width: "100%", background: "#222222" }}></Divider>
+              <Divider sx={{ width: "100%", background: "#222222" }} />
             </ListItem>
           ))}
         </List>
@@ -262,36 +298,53 @@ const DashboardPage: React.FC = () => {
         >
           Visualizaciones por Publicación
         </Typography>
+        <TextField
+          sx={{ position: "relative", right: -85, marginBottom: "10px" }}
+          label="Filtrar"
+          select
+          defaultValue={1}
+          onChange={handlePublication}
+        >
+          <MenuItem value={1}>Mas vistos</MenuItem>
+          <MenuItem value={2}>Ultimos subidos</MenuItem>
+        </TextField>
         <List sx={{ width: "100%" }}>
-          {publications.map((publication) => (
-            <ListItem
-              sx={{
-                width: "100%",
-                border: "solid 1px #4E169D",
-                borderRadius: "8px",
-                display: "flex",
-                justifyContent: "space-around",
-                marginBottom: "15px",
-              }}
-            >
-              <Box sx={{ width: "100%" }}>
-                <Typography sx={{ fontWeight: "600", fontSize: "18px" }}>
-                  {publication.title}
-                </Typography>
-                <Typography sx={{ fontWeight: "600", fontSize: "14px" }}>
-                  {publication.date}
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", gap: "10px" }}>
-                <VisibilityOutlinedIcon sx={{ color: "#4E169D" }} />
-                <Typography
-                  sx={{ color: "#4E169D", fontWeight: "700", fontSize: "18px" }}
-                >
-                  {publication.view}
-                </Typography>
-              </Box>
-            </ListItem>
-          ))}
+          {(selectPublication ? lastPublications : viewestPublications).map(
+            (publication) => (
+              <ListItem
+                key={publication.id}
+                sx={{
+                  width: "100%",
+                  border: "solid 1px #4E169D",
+                  borderRadius: "8px",
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginBottom: "15px",
+                }}
+              >
+                <Box sx={{ width: "100%" }}>
+                  <Typography sx={{ fontWeight: "600", fontSize: "18px" }}>
+                    {publication.title}
+                  </Typography>
+                  <Typography sx={{ fontWeight: "600", fontSize: "14px" }}>
+                    {publication.creationDate}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", gap: "10px" }}>
+                  <VisibilityOutlinedIcon sx={{ color: "#4E169D" }} />
+                  <Typography
+                    sx={{
+                      color: "#4E169D",
+                      fontWeight: "700",
+                      fontSize: "18px",
+                    }}
+                  >
+                    {publication.view}
+                  </Typography>
+                </Box>
+              </ListItem>
+            )
+          )}
         </List>
       </Box>
     </Box>
