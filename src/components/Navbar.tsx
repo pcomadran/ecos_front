@@ -1,3 +1,5 @@
+// src/components/Navbar.tsx
+
 import React, { useState } from "react";
 import {
   AppBar,
@@ -12,6 +14,7 @@ import {
   Avatar,
   Menu,
   MenuItem,
+  Box,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -118,11 +121,7 @@ const Navbar = () => {
               alignItems: "center",
             }}
           >
-            <img
-              src={LogoEcos}
-              alt="Logo"
-              style={{ height: "300%", marginTop: 10 }}
-            />
+            <img src={LogoEcos} alt="Logo" style={{ height: "100%" }} />
           </div>
 
           <div style={{ marginLeft: "auto" }}>
@@ -403,55 +402,62 @@ const Navbar = () => {
             }}
           >
             <ListItem>
-              <ListItemText
-                primary="Administrador"
+              <Typography
                 sx={{
                   fontSize: "22px",
                   fontWeight: 700,
                   lineHeight: "20px",
                   color: "#FFFFFF",
                 }}
-              />
+              >
+                Administrador
+              </Typography>
             </ListItem>
-            <ListItem button onClick={() => handleNavigation("/dashboard")}>
-              <ListItemText
-                primary="Dashboard Administrador"
-                sx={{
-                  fontSize: "18px",
-                  fontWeight: 700,
-                  lineHeight: "20px",
-                  color: "#FFFFFF",
-                }}
-              />
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => handleNavigation("/suppliersadmin")}
-            >
-              <ListItemText
-                primary="Proveedores"
-                sx={{
-                  fontSize: "18px",
-                  fontWeight: 700,
-                  lineHeight: "20px",
-                  color: "#FFFFFF",
-                }}
-              />
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => handleNavigation("/publicationsform")}
-            >
-              <ListItemText
-                primary="Publicaciones"
-                sx={{
-                  fontSize: "18px",
-                  fontWeight: 700,
-                  lineHeight: "20px",
-                  color: "#FFFFFF",
-                }}
-              />
-            </ListItem>
+
+            <Box sx={{ marginTop: 2 }}>
+              <ListItem button onClick={() => handleNavigation("/dashboard")}>
+                <Typography
+                  sx={{
+                    fontSize: "17px",
+                    fontWeight: 600,
+                    lineHeight: "20px",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  Dashboard Administrador
+                </Typography>
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => handleNavigation("/suppliersadmin")}
+              >
+                <Typography
+                  sx={{
+                    fontSize: "17px",
+                    fontWeight: 600,
+                    lineHeight: "20px",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  Proveedores
+                </Typography>
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => handleNavigation("/publications/menu")}
+              >
+                <Typography
+                  sx={{
+                    fontSize: "17px",
+                    fontWeight: 600,
+                    lineHeight: "20px",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  Publicaciones
+                </Typography>
+              </ListItem>
+            </Box>
           </List>
         </Drawer>
       )}

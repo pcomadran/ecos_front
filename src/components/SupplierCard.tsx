@@ -5,9 +5,11 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Divider,
   Grid,
   Typography,
 } from "@mui/material";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -53,11 +55,11 @@ export default function SupplierCard({ product }: SupplierProps) {
         break;
       }
       case "Instagram": {
-        window.open(`https://www.instagram.com/${contact.data}`, "_blank");
+        window.open(`${contact.data}`, "_blank");
         break;
       }
       case "Facebook": {
-        window.open(`https://www.facebook.com/${contact.data}`, "_blank");
+        window.open(`${contact.data}`, "_blank");
         break;
       }
       case "Mail": {
@@ -80,7 +82,36 @@ export default function SupplierCard({ product }: SupplierProps) {
     setDetails(!details);
   };
 
-  return (
+  return location === "/suppliersadmin" ? (
+    <Card
+      sx={{
+        width: "328px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "8px 8px 8px 16px",
+        borderRadius: "8px",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          gap: "2px",
+        }}
+      >
+        <Typography
+          sx={{ fontWeight: "700", fontSize: "18px", color: "#4E169D" }}
+        >
+          {product.name}
+        </Typography>
+        <Divider sx={{ background: "#00A364", width: "200px" }} />
+        <Typography>{product.shortDescription}</Typography>
+      </Box>
+      <KeyboardArrowRightIcon />
+    </Card>
+  ) : (
     <Box
       sx={{
         position:
@@ -286,9 +317,9 @@ export default function SupplierCard({ product }: SupplierProps) {
                     >
                       {location === "/"
                         ? details
-                          ? `${product.city},${product.province?.name},${product.country?.name}`
+                          ? `${product.city}, ${product.province?.name}, ${product.country?.name}`
                           : product.city
-                        : `${product.city},${product.province?.name},${product.country?.name}`}
+                        : `${product.city}, ${product.province?.name}, ${product.country?.name}`}
                     </Typography>
                   </Grid>
                 </Grid>
