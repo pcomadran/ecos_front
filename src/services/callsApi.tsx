@@ -45,7 +45,10 @@ export const getProductsByCategory = async (
 export const getProductsBySupplier = async (): Promise<Supplier[]> => {
   try {
     const userString = localStorage.getItem("user");
-    if (userString) {
+    const token = localStorage.getItem("authToken");
+    if (!token) throw new Error("Token not found");
+
+    if (userString && token) {
       const user = JSON.parse(userString);
       const supplierID = user.id;
       const response = await axios.get(`http://localhost:8080/api/products/${supplierID}`);
@@ -53,6 +56,7 @@ export const getProductsBySupplier = async (): Promise<Supplier[]> => {
     }
     return [];
   } catch (error) {
+    console.error(error);
     return [];
   }
 };
@@ -129,6 +133,15 @@ export const updateProduct = async (product: any, productID: number) => {
   }
 };
 
+export const getDashboardAdmin = async () => {
+  try {
+    const response = await axios.get(`api/dashboard`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 // Calls para las publicaciones
 
@@ -197,7 +210,10 @@ export const getPublicationByIdWithoutViews = async (id: number) => {
     const response = await axios.get(`http://localhost:8080/api/publications/get/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching publication by ID without increasing views:", error);
+    console.error(
+      "Error fetching publication by ID without increasing views:",
+      error
+    );
     throw error;
   }
 };
@@ -210,7 +226,7 @@ export const increaseViewsById = async (id: number) => {
     const response = await axios.get(`http://localhost:8080/api/publications/${id}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
-    
+
     return response.data;
   } catch (error) {
     console.error("Error fetching publication by ID:", error);
@@ -247,7 +263,7 @@ export const deletePublication = async (id: number) => {
   }
 };
 
-// GET - Obtener las ultimas 3 publicaciones activas ordenadas 
+// GET - Obtener las ultimas 3 publicaciones activas ordenadas
 export const getAllLastThreeActivePublications = async (): Promise<any[]> => {
   try {
     const response = await axios.get("http://localhost:8080/api/publications/last-three");

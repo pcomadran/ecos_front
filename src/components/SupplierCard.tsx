@@ -53,11 +53,11 @@ export default function SupplierCard({ product }: SupplierProps) {
         break;
       }
       case "Instagram": {
-        window.open(`https://www.instagram.com/${contact.data}`, "_blank");
+        window.open(`${contact.data}`, "_blank");
         break;
       }
       case "Facebook": {
-        window.open(`https://www.facebook.com/${contact.data}`, "_blank");
+        window.open(`${contact.data}`, "_blank");
         break;
       }
       case "Mail": {
@@ -267,6 +267,8 @@ export default function SupplierCard({ product }: SupplierProps) {
                       }`,
                       margin: 0,
                       paddingTop: "2px",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
                       overflow: "hidden",
                       textAlign: "left",
                     }}
@@ -286,9 +288,9 @@ export default function SupplierCard({ product }: SupplierProps) {
                     >
                       {location === "/"
                         ? details
-                          ? `${product.city},${product.province?.name},${product.country?.name}`
+                          ? `${product.city}, ${product.province?.name}, ${product.country?.name}`
                           : product.city
-                        : `${product.city},${product.province?.name},${product.country?.name}`}
+                        : `${product.city}, ${product.province?.name}, ${product.country?.name}`}
                     </Typography>
                   </Grid>
                 </Grid>
