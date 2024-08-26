@@ -8,7 +8,7 @@ import BackgroundImage from "../../public/images/Imagen publicaciones.png";
 import Publication from "../components/Publication";
 import SearchBar from "../components/searchBar";
 import { useEffect, useState } from "react";
-import { getAllActivePublications } from "../servises/callsApi";
+import { getAllActivePublications } from "../services/callsApi";
 
 interface PublicationData {
   id: number;

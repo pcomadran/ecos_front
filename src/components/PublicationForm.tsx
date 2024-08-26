@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Container, IconButton, TextField, Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createPublication, updatePublication, getPublicationByIdWithoutViews } from '../servises/callsApi';
+import { createPublication, updatePublication, getPublicationByIdWithoutViews } from '../services/callsApi';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+// import axios from 'axios';
 
 const MAX_IMAGES = 3;
 const MAX_IMAGE_SIZE_MB = 3;
@@ -83,6 +84,34 @@ const PublicationForm: React.FC = () => {
     setPreviews(newPreviews);
     setFiles(newFiles);
   };
+
+  const token = localStorage.getItem("authToken")
+  console.log(token)
+
+  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+
+  //   const formData = new FormData();
+  //   formData.append('title', title);
+  //   formData.append('description', description);
+
+  //   if (files) {
+  //     files.forEach(file => {
+  //       formData.append('files', file);
+  //     });
+  //   }
+
+  //   console.log(files)
+
+  //   axios.post('http://localhost:8080/api/publications', formData, {
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`,
+  //       'Content-Type': 'multipart/form-data'
+  //     }
+  //   })
+  //     .then(response => console.log(response.data))
+  //     .catch(error => console.log(error.message));
+  // }
 
   const handleSubmit = async () => {
     setIsSubmitting(true);

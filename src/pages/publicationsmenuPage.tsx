@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Typography, Container, Grid, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Publication from "../components/Publication";
-import { getAllPublications } from "../servises/callsApi";
+import { getAllPublications } from "../services/callsApi";
 
 interface PublicationData {
   id: number;

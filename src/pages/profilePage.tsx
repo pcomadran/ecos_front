@@ -5,7 +5,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import { Link } from "react-router-dom";
 import SupplierCard from "../components/SupplierCard";
 import { useEffect, useState } from "react";
-import { getProductsBySupplier } from "../servises/callsApi";
+import { getProductsBySupplier } from "../services/callsApi";
 
 const renderProductStatus = (product: Supplier) => {
   switch (product.status) {

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import IconBot from "../../../public/images/IconBot.png"; // Asegúrate de que esta ruta es correcta
-import axios from "../../servises/axiosConfig"; // Importa axios para realizar la solicitud HTTP
+import axios from "../../services/axiosConfig"; // Importa axios para realizar la solicitud HTTP
 
 interface Question {
   id: number;

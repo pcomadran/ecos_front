@@ -7,7 +7,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
-import { getProductsByLetter } from "../servises/callsApi";
+import { getProductsByLetter } from "../services/callsApi";
 import SupplierCard from "../components/SupplierCard";
 import { Product } from "../types/typeProduct";
 import SearchBar from "../components/searchBar";

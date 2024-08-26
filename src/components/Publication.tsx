@@ -19,7 +19,7 @@ import {
   VisibilityOffOutlined as VisibilityOffOutlinedIcon,
 } from "@mui/icons-material";
 import Carrusel from "./Carrusel";
-import { deletePublication, increaseViewsById } from "../servises/callsApi";
+import { deletePublication, increaseViewsById } from "../services/callsApi";
 
 interface PublicationProps {
   id: number;

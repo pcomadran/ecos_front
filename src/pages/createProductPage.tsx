@@ -29,7 +29,7 @@ import {
   getAllCountries,
   getAllProvinces,
   getProductsBySupplier,
-} from "../servises/callsApi";
+} from "../services/callsApi";
 
 export default function CreateProductPage() {
   const [count, setCount] = useState<number>(0);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Grid, Typography, CircularProgress } from "@mui/material";
 import SupplierCard from "../components/SupplierCard";
-import { getAllProducts } from "../servises/callsApi";
+import { getAllProducts } from "../services/callsApi";
 import LocationDialog from "../components/LocationDialog";
 import axios from "axios";
 import { Supplier } from "../types/typesSupplier";
