@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import React, { useEffect, useState } from "react";
-import { getDashboardAdmin } from "../servises/callsApi";
+import { getDashboardAdmin } from "../services/callsApi";
 
 type Publication = {
   id: number;

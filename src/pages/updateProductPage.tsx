@@ -5,7 +5,7 @@ import {
   getAllProvinces,
   getProductById,
   updateProduct,
-} from "../servises/callsApi";
+} from "../services/callsApi";
 import { useParams } from "react-router-dom";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";

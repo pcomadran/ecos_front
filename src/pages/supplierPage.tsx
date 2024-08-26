@@ -14,7 +14,7 @@ import Transporte from "/images/TRANSPORTE.png";
 import { useEffect, useState } from "react";
 import SupplierCard from "../components/SupplierCard";
 import { Category, Supplier } from "../types/typesSupplier";
-import { getAllCategories, getProductsByCategory } from "../servises/callsApi";
+import { getAllCategories, getProductsByCategory } from "../services/callsApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "../components/searchBar";
 

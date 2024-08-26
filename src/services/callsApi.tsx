@@ -1,11 +1,17 @@
-//src/servises/callsApi.tsx
+//src/services/callsApi.tsx
 
-import axios from "../servises/axiosConfig";
-import { Category, Country, Province, Supplier } from "../types/typesSupplier";
+import axios from 'axios';
+// import axios from "../services/axiosConfig";
+import {
+  Category,
+  Country,
+  Province,
+  Supplier,
+} from "../types/typesSupplier";
 
 export const getAllProducts = async (): Promise<any[]> => {
   try {
-    const response = await axios.get(`/api/products/all`);
+    const response = await axios.get(`http://localhost:8080/api/products/all`);
     return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -16,7 +22,7 @@ export const getAllProducts = async (): Promise<any[]> => {
 
 export const getProductsByLetter = async (name: string): Promise<any[]> => {
   try {
-    const response = await axios.get(`/api/products/search/${name}`);
+    const response = await axios.get(`http://localhost:8080/api/products/search/${name}`);
     console.log("Response products:", response);
     return response.data;
   } catch (error) {
@@ -29,7 +35,7 @@ export const getProductsByCategory = async (
   categoryID: number
 ): Promise<Supplier[]> => {
   try {
-    const response = await axios.get(`api/products/category/${categoryID}`);
+    const response = await axios.get(`http://localhost:8080/api/products/category/${categoryID}`);
     return response.data;
   } catch (error) {
     return [];
@@ -45,11 +51,7 @@ export const getProductsBySupplier = async (): Promise<Supplier[]> => {
     if (userString && token) {
       const user = JSON.parse(userString);
       const supplierID = user.id;
-      const response = await axios.get(`/api/products/${supplierID}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`http://localhost:8080/api/products/${supplierID}`);
       return response.data;
     }
     return [];
@@ -61,7 +63,7 @@ export const getProductsBySupplier = async (): Promise<Supplier[]> => {
 
 export const getProductById = async (id: number) => {
   try {
-    const response = await axios.get(`api/products/find/${id}`);
+    const response = await axios.get(`http://localhost:8080/api/products/find/${id}`);
     return response.data;
   } catch (error) {
     return [];
@@ -70,7 +72,7 @@ export const getProductById = async (id: number) => {
 
 export const getAllCategories = async (): Promise<Category[]> => {
   try {
-    const response = await axios.get("/api/categories");
+    const response = await axios.get("http://localhost:8080/api/categories");
     return response.data;
   } catch (error) {
     return [];
@@ -79,7 +81,7 @@ export const getAllCategories = async (): Promise<Category[]> => {
 
 export const getAllCountries = async (): Promise<Country[]> => {
   try {
-    const response = await axios.get("/api/countries");
+    const response = await axios.get("http://localhost:8080/api/countries");
     return response.data;
   } catch (error) {
     return [];
@@ -90,7 +92,7 @@ export const getAllProvinces = async (
   countryId: number
 ): Promise<Province[]> => {
   try {
-    const response = await axios.get(`/api/provinces/country/${countryId}`);
+    const response = await axios.get(`http://localhost:8080/api/provinces/country/${countryId}`);
     return response.data;
   } catch (error) {
     return [];
@@ -102,7 +104,7 @@ export const createProduct = async (productData: any) => {
     const token = localStorage.getItem("authToken");
     if (!token) throw new Error("Token not found");
 
-    const response = await axios.post("api/products", productData, {
+    const response = await axios.post("http://localhost:8080/api/products", productData, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
@@ -118,7 +120,7 @@ export const createProduct = async (productData: any) => {
 export const updateProduct = async (product: any, productID: number) => {
   try {
     const response = await axios.put(
-      `api/products/update/${productID}`,
+      `http://localhost:8080/api/products/update/${productID}`,
       product,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -149,10 +151,10 @@ export const createPublication = async (publicationData: any) => {
     const token = localStorage.getItem("authToken");
     if (!token) throw new Error("Token not found");
 
-    const response = await axios.post("/api/publications", publicationData, {
+    const response = await axios.post("http://localhost:8080/api/publications", publicationData, {
       headers: {
-        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data;
@@ -168,16 +170,12 @@ export const updatePublication = async (publicationData: any, id: number) => {
     const token = localStorage.getItem("authToken");
     if (!token) throw new Error("Token not found");
 
-    const response = await axios.put(
-      `/api/publications/${id}`,
-      publicationData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.put(`http://localhost:8080/api/publications/${id}`, publicationData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error updating publication:", error);
@@ -188,7 +186,17 @@ export const updatePublication = async (publicationData: any, id: number) => {
 // GET - Obtener todas las publicaciones (activas y no activas)
 export const getAllPublications = async (): Promise<any[]> => {
   try {
-    const response = await axios.get("/api/publications");
+
+    const token = localStorage.getItem("authToken");
+    if (!token) throw new Error("Token not found");
+
+    const response = await axios.get("http://localhost:8080/api/publications", 
+      {headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      }}
+    );
+
     return response.data;
   } catch (error) {
     console.error("Error fetching all publications:", error);
@@ -199,7 +207,7 @@ export const getAllPublications = async (): Promise<any[]> => {
 // GET - Obtener una publicación por ID sin aumentar las vistas
 export const getPublicationByIdWithoutViews = async (id: number) => {
   try {
-    const response = await axios.get(`/api/publications/get/${id}`);
+    const response = await axios.get(`http://localhost:8080/api/publications/get/${id}`);
     return response.data;
   } catch (error) {
     console.error(
@@ -214,8 +222,8 @@ export const getPublicationByIdWithoutViews = async (id: number) => {
 export const increaseViewsById = async (id: number) => {
   try {
     const token = localStorage.getItem("authToken");
-
-    const response = await axios.get(`/api/publications/${id}`, {
+    
+    const response = await axios.get(`http://localhost:8080/api/publications/${id}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
 
@@ -229,7 +237,7 @@ export const increaseViewsById = async (id: number) => {
 // GET - Obtener todas las publicaciones activas
 export const getAllActivePublications = async (): Promise<any[]> => {
   try {
-    const response = await axios.get("/api/publications/active");
+    const response = await axios.get("http://localhost:8080/api/publications/active");
     return response.data;
   } catch (error) {
     console.error("Error fetching active publications:", error);
@@ -243,7 +251,7 @@ export const deletePublication = async (id: number) => {
     const token = localStorage.getItem("authToken");
     if (!token) throw new Error("Token not found");
 
-    const response = await axios.delete(`/api/publications/delete/${id}`, {
+    const response = await axios.delete(`http://localhost:8080/api/publications/delete/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -258,7 +266,7 @@ export const deletePublication = async (id: number) => {
 // GET - Obtener las ultimas 3 publicaciones activas ordenadas
 export const getAllLastThreeActivePublications = async (): Promise<any[]> => {
   try {
-    const response = await axios.get("/api/publications/last-three");
+    const response = await axios.get("http://localhost:8080/api/publications/last-three");
     return response.data;
   } catch (error) {
     console.error("Error fetching active publications:", error);

@@ -2,7 +2,7 @@ import { Typography, Box, Grid } from "@mui/material";
 import Publication from "./Publication";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { getAllLastThreeActivePublications } from "../servises/callsApi";
+import { getAllLastThreeActivePublications } from "../services/callsApi";
 import { useEffect, useState } from "react";
 
 interface PublicationData {

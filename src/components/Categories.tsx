@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Categories.css";
 import { Category } from "../types/typesSupplier";
-import { getAllCategories } from "../servises/callsApi";
+import { getAllCategories } from "../services/callsApi";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
