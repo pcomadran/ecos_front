@@ -6,11 +6,10 @@ import { Category, Country, Province, Supplier } from "../types/typesSupplier";
 
 export const getAllProducts = async (): Promise<any[]> => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/products/all`);
+    const response = await axios.get(`http://localhost:8080/api/products`);
     return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
-    // Retornando un array vacío en caso de error o de no encontrar productos
     return [];
   }
 };
