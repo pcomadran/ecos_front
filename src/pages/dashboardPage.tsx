@@ -15,7 +15,7 @@ type Publication = {
   id: number;
   title: string;
   creationDate: string;
-  view: number;
+  viewCount: number;
 };
 
 type Category = {
@@ -316,7 +316,7 @@ const DashboardPage: React.FC = () => {
                       fontSize: "18px",
                     }}
                   >
-                    {publication.view}
+                    {publication.viewCount}
                   </Typography>
                 </Box>
               </ListItem>

@@ -51,7 +51,8 @@ export const getProductsBySupplier = async (): Promise<Supplier[]> => {
       const user = JSON.parse(userString);
       const supplierID = user.id;
       const response = await axios.get(
-        `http://localhost:8080/api/products/${supplierID}`
+        `http://localhost:8080/api/products/${supplierID}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       return response.data;
     }
