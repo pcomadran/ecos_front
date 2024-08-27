@@ -33,7 +33,7 @@ export default function SupplierLanding() {
     try {
       setLoading(true);
       const products = await getAllProducts();
-      setSuppliers(products.slice(-4));
+      setSuppliers(products.slice(0, 4));
     } catch (error) {
       console.error("Error fetching all products:", error);
       setError("Error fetching products. Please try again later.");
