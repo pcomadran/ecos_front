@@ -5,7 +5,6 @@ import { createPublication, updatePublication, getPublicationByIdWithoutViews } 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-// import axios from 'axios';
 
 const MAX_IMAGES = 3;
 const MAX_IMAGE_SIZE_MB = 3;
@@ -115,7 +114,6 @@ const PublicationForm: React.FC = () => {
     }
   };
 
-  // Nueva lógica para calcular si se debe ocultar el botón "Subir imagen" y los textos de validación
   const shouldHideUploadButtonAndText = previews.length >= MAX_IMAGES;
 
   return (

@@ -1,7 +1,6 @@
 //src/services/callsApi.tsx
 
 import axios from "axios";
-// import axios from "../services/axiosConfig";
 import { Category, Country, Province, Supplier } from "../types/typesSupplier";
 
 export const getAllProducts = async (): Promise<any[]> => {
