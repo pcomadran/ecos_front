@@ -7,15 +7,18 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import React, { useEffect, useState } from "react";
 import { getDashboardAdmin } from "../services/callsApi";
+import Publication from "../components/Publication";
 
 type Publication = {
   id: number;
   title: string;
+  imageUrls: string[];
   creationDate: string;
-  viewCount: number;
+  date: string;
+  text: string;
+  viewCount?: number;
 };
 
 type Category = {
@@ -299,26 +302,14 @@ const DashboardPage: React.FC = () => {
                   marginBottom: "15px",
                 }}
               >
-                <Box sx={{ width: "100%" }}>
-                  <Typography sx={{ fontWeight: "600", fontSize: "18px" }}>
-                    {publication.title}
-                  </Typography>
-                  <Typography sx={{ fontWeight: "600", fontSize: "14px" }}>
-                    {publication.creationDate}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", gap: "10px" }}>
-                  <VisibilityOutlinedIcon sx={{ color: "#4E169D" }} />
-                  <Typography
-                    sx={{
-                      color: "#4E169D",
-                      fontWeight: "700",
-                      fontSize: "18px",
-                    }}
-                  >
-                    {publication.viewCount}
-                  </Typography>
-                </Box>
+                <Publication
+                  id={publication.id}
+                  title={publication.title}
+                  imageUrls={publication.imageUrls}
+                  date={publication.date}
+                  text={publication.text}
+                  viewCount={publication.viewCount}
+                />
               </ListItem>
             )
           )}
