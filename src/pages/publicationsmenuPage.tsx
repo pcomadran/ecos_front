@@ -46,6 +46,7 @@ const PublicationsMenuPage: React.FC = () => {
   };
 
   return (
+    console.log(publications),
     <Container sx={{ width: "100%", paddingTop: "96px", paddingBottom: "48px" }}>
       <Typography
         sx={{

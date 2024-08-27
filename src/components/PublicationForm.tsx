@@ -88,31 +88,6 @@ const PublicationForm: React.FC = () => {
   const token = localStorage.getItem("authToken")
   console.log(token)
 
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   const formData = new FormData();
-  //   formData.append('title', title);
-  //   formData.append('description', description);
-
-  //   if (files) {
-  //     files.forEach(file => {
-  //       formData.append('files', file);
-  //     });
-  //   }
-
-  //   console.log(files)
-
-  //   axios.post('http://localhost:8080/api/publications', formData, {
-  //     headers: {
-  //       'Authorization': `Bearer ${token}`,
-  //       'Content-Type': 'multipart/form-data'
-  //     }
-  //   })
-  //     .then(response => console.log(response.data))
-  //     .catch(error => console.log(error.message));
-  // }
-
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
