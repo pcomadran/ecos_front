@@ -26,7 +26,6 @@ const PublicationsMenuPage: React.FC = () => {
     const fetchPublications = async () => {
       try {
         const response = await getAllPublications();
-        // Ordenar las publicaciones por fecha de creación (de la más reciente a la más antigua)
         const sortedPublications = response.sort((a: PublicationData, b: PublicationData) => {
           const dateA = new Date(a.creationDate.split('-').reverse().join('-')); 
           const dateB = new Date(b.creationDate.split('-').reverse().join('-'));
@@ -46,6 +45,7 @@ const PublicationsMenuPage: React.FC = () => {
   };
 
   return (
+    console.log(publications),
     <Container sx={{ width: "100%", paddingTop: "96px", paddingBottom: "48px" }}>
       <Typography
         sx={{

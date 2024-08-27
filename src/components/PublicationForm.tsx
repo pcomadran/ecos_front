@@ -5,7 +5,6 @@ import { createPublication, updatePublication, getPublicationByIdWithoutViews } 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-// import axios from 'axios';
 
 const MAX_IMAGES = 3;
 const MAX_IMAGE_SIZE_MB = 3;
@@ -88,31 +87,6 @@ const PublicationForm: React.FC = () => {
   const token = localStorage.getItem("authToken")
   console.log(token)
 
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   const formData = new FormData();
-  //   formData.append('title', title);
-  //   formData.append('description', description);
-
-  //   if (files) {
-  //     files.forEach(file => {
-  //       formData.append('files', file);
-  //     });
-  //   }
-
-  //   console.log(files)
-
-  //   axios.post('http://localhost:8080/api/publications', formData, {
-  //     headers: {
-  //       'Authorization': `Bearer ${token}`,
-  //       'Content-Type': 'multipart/form-data'
-  //     }
-  //   })
-  //     .then(response => console.log(response.data))
-  //     .catch(error => console.log(error.message));
-  // }
-
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
@@ -140,7 +114,6 @@ const PublicationForm: React.FC = () => {
     }
   };
 
-  // Nueva lógica para calcular si se debe ocultar el botón "Subir imagen" y los textos de validación
   const shouldHideUploadButtonAndText = previews.length >= MAX_IMAGES;
 
   return (

@@ -14,11 +14,11 @@ import Publication from "../components/Publication";
 type Publication = {
   id: number;
   title: string;
-  imageUrls: string[];
+  imageUrls?: string[];
   creationDate: string;
   date: string;
-  text: string;
-  viewCount?: number;
+  text?: string;
+  views?: number;
 };
 
 type Category = {
@@ -33,9 +33,7 @@ const DashboardPage: React.FC = () => {
   const [denied, setDenied] = useState<number>(0);
   const [categories, setCategories] = useState<Category[]>([]);
   const [lastPublications, setLastPublications] = useState<Publication[]>([]);
-  const [viewestPublications, setViewestPublications] = useState<Publication[]>(
-    []
-  );
+  const [viewestPublications, setViewestPublications] = useState<Publication[]>([]);
 
   const [selectPublication, setSelectPublication] = useState<boolean>(false);
 
@@ -67,6 +65,9 @@ const DashboardPage: React.FC = () => {
   };
 
   return (
+    console.log(lastPublications),
+    console.log(viewestPublications),
+
     <Box sx={{ marginTop: "60px", padding: "0px 16px", textAlign: "center" }}>
       <Typography sx={{ fontSize: "28px", fontWeight: "500" }}>
         Dashboard Administrador
@@ -295,8 +296,6 @@ const DashboardPage: React.FC = () => {
                 key={publication.id}
                 sx={{
                   width: "100%",
-                  border: "solid 1px #4E169D",
-                  borderRadius: "8px",
                   display: "flex",
                   justifyContent: "space-around",
                   marginBottom: "15px",
@@ -305,10 +304,10 @@ const DashboardPage: React.FC = () => {
                 <Publication
                   id={publication.id}
                   title={publication.title}
-                  imageUrls={publication.imageUrls}
+                  imageUrls={publication.imageUrls ?? []}
                   date={publication.date}
-                  text={publication.text}
-                  viewCount={publication.viewCount}
+                  text={publication.text ?? "Descripción no disponible"}
+                  viewCount={publication.views}
                 />
               </ListItem>
             )

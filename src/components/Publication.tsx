@@ -72,17 +72,17 @@ const Publication: React.FC<PublicationProps> = ({
 
   const handleToggleDeleteStatus = async () => {
     try {
-      await deletePublication(id); // Ejecuta la función con el id
+      await deletePublication(id);
       const newStatus = !deleted;
-      setDeleted(newStatus); // Actualiza el estado local
+      setDeleted(newStatus);
 
       if (onDeleteStatusChange) {
-        onDeleteStatusChange(id, newStatus); // Notifica al componente superior si es necesario
+        onDeleteStatusChange(id, newStatus);
       }
     } catch (error) {
       console.error("Error toggling delete status:", error);
     } finally {
-      handleMenuClose(); // Cierra el menú después de la acción
+      handleMenuClose();
     }
   };
 
