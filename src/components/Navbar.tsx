@@ -1,5 +1,3 @@
-// src/components/Navbar.tsx
-
 import React, { useState } from "react";
 import {
   AppBar,
@@ -166,10 +164,6 @@ const Navbar = () => {
                   </Typography>
 
                   <MenuItem
-                    onClick={() => {
-                      handleNavigation("/profile");
-                      handleMenuClose();
-                    }}
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -186,7 +180,7 @@ const Navbar = () => {
                           : "#000000",
                         border: "1px solid black",
                         marginRight: "8px",
-                        marginTop: "-35px",
+                        marginTop: "-5px",
                       }}
                     >
                       {!user.picture &&
@@ -202,18 +196,27 @@ const Navbar = () => {
                       <Typography variant="body2" style={{ color: "gray" }}>
                         {user.email}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        style={{
-                          color: "#4E169D",
-                          fontWeight: "bold",
-                          textAlign: "center",
-                          marginLeft: "-50px",
-                          marginTop: "10px",
-                        }}
-                      >
-                        Mi perfil
-                      </Typography>
+
+                      {/* Renderizado condicional para "Mi perfil" */}
+                      {user?.role !== Role.ADMIN && (
+                        <Typography
+                          variant="body2"
+                          onClick={() => {
+                            handleNavigation("/profile");
+                            handleMenuClose();
+                          }}
+                          style={{
+                            color: "#4E169D",
+                            fontWeight: "bold",
+                            textAlign: "center",
+                            marginLeft: "-50px",
+                            marginTop: "10px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Mi perfil
+                        </Typography>
+                      )}
                     </div>
                   </MenuItem>
 
@@ -226,6 +229,11 @@ const Navbar = () => {
                       "&:hover": {
                         backgroundColor: "#e0e0e0",
                       },
+                      fontWeight: "bold",
+                      color: "#4E169D",
+                      display: "flex",
+                      justifyContent: "center",
+                      textAlign: "center",
                     }}
                   >
                     Cerrar sesión
