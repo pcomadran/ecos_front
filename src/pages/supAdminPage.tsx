@@ -1,5 +1,5 @@
-import React from "react";
-import WorkinProgress from "../components/WorkinProgress";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   Box,
   Tab,
@@ -11,73 +11,77 @@ import {
   Divider,
 } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
+import { Supplier } from "../types/typesSupplier";
+import ProductForm from "../components/ProductForm";
 
 function SupAdminPage() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [proveedores, setProveedores] = useState<Supplier[]>([]);
+  const [selectedProveedor, setSelectedProveedor] = useState<Supplier | null>(null);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    setSelectedProveedor(null); // Resetea la selección al cambiar de tab
   };
 
-  // Simulación de BD
-  const proveedores = [
-    { nombre: "Lavanda", categoria: "Cosmética natural" },
-    { nombre: "Menta", categoria: "Aromaterapia" },
-    { nombre: "Rosas", categoria: "Perfumería" },
-    { nombre: "Jazmín", categoria: "Cosmética natural" },
-  ];
+  useEffect(() => {
+    const fetchProveedores = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/products/all");
+        console.log("Datos de la API:", response.data);
+        setProveedores(response.data);
+      } catch (error) {
+        console.error("Error al obtener los proveedores:", error);
+      }
+    };
+
+    fetchProveedores();
+  }, [value]); // Se ejecuta cada vez que cambia el tab
+
+  const handleProveedorSelect = (proveedor: Supplier) => {
+    setSelectedProveedor(proveedor);
+  };
+
+  const handleBackToList = () => {
+    setSelectedProveedor(null); // Vuelve a mostrar la lista de proveedores
+  };
+
+  // Filtramos los proveedores según la pestaña seleccionada
+  const filteredProveedores = proveedores.filter((proveedor) => {
+    if (value === 0) return proveedor.status === "REVISION_INICIAL"; // Nuevos Perfiles
+    if (value === 1) return proveedor.status === "ACEPTADO"; // Aprobados
+    if (value === 2) return proveedor.status === "REQUIERE_CAMBIOS" || proveedor.status === "CAMBIOS_REALIZADOS"; // En Revisión
+    if (value === 3) return proveedor.status === "DENEGADO"; // Denegados
+    return false;
+  });
 
   return (
     <Container sx={{ width: "100%", paddingTop: "100px" }}>
-      <Typography
+      <Box
         sx={{
-          width: "100%",
-          fontSize: "28px",
-          fontWeight: 600,
-          lineHeight: "35px",
-          textAlign: "center",
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+          backgroundColor: "#FFFFFF",
+          borderBottom: "1px solid #E0E0E0",
         }}
       >
-        Proveedores
-      </Typography>
-      <Box sx={{ width: "100%", paddingTop: "16px" }}>
+        <Typography
+          sx={{
+            width: "100%",
+            fontSize: "28px",
+            fontWeight: 600,
+            lineHeight: "35px",
+            textAlign: "center",
+            paddingBottom: "8px",
+          }}
+        >
+          Proveedores
+        </Typography>
         <Box
           sx={{
             borderBottom: 1,
             borderColor: "#4E169D",
-            position: "sticky",
-            top: 0,
-            backgroundColor: "#fff",
-            zIndex: 1000,
             width: "100%",
           }}
         >
@@ -88,8 +92,8 @@ function SupAdminPage() {
             TabIndicatorProps={{
               style: {
                 backgroundColor: "#4E169D",
-                height: "3px", // Ajusta la altura del selector
-                width: "108px", // Ajusta el ancho del selector
+                height: "3px",
+                width: "108px",
               },
             }}
             variant="scrollable"
@@ -98,7 +102,6 @@ function SupAdminPage() {
           >
             <Tab
               label="Nuevos Perfiles"
-              {...a11yProps(0)}
               sx={{
                 fontWeight: value === 0 ? "700" : "500",
                 fontSize: "16px",
@@ -111,7 +114,6 @@ function SupAdminPage() {
             />
             <Tab
               label="Aprobados"
-              {...a11yProps(1)}
               sx={{
                 fontWeight: value === 1 ? "700" : "500",
                 fontSize: "16px",
@@ -124,7 +126,6 @@ function SupAdminPage() {
             />
             <Tab
               label="En revisión"
-              {...a11yProps(2)}
               sx={{
                 fontWeight: value === 2 ? "700" : "500",
                 fontSize: "16px",
@@ -137,7 +138,6 @@ function SupAdminPage() {
             />
             <Tab
               label="Denegados"
-              {...a11yProps(3)}
               sx={{
                 fontWeight: value === 3 ? "700" : "500",
                 fontSize: "16px",
@@ -150,90 +150,82 @@ function SupAdminPage() {
             />
           </Tabs>
         </Box>
+      </Box>
 
-        {/* Contenido TABS */}
-
-        <CustomTabPanel value={value} index={0}>
-          <Box sx={{ width: "100%" }}>
-            {proveedores.map((proveedor, index) => (
-              <Card
-                key={index}
+      {/* Contenido TABS */}
+      {!selectedProveedor ? (
+        <Box sx={{ width: "100%" }}>
+          {filteredProveedores.map((proveedor) => (
+            <Card
+              key={proveedor.id}
+              sx={{
+                mb: "16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "8px 8px 8px 16px",
+                borderRadius: "8px",
+                boxShadow: "none",
+                backgroundColor: "#EAEAEA",
+                width: "100%",
+                maxWidth: "328px",
+                margin: "0 auto",
+                height: "72px",
+                mt: "16px",
+              }}
+              onClick={() => handleProveedorSelect(proveedor)}
+            >
+              <CardContent
                 sx={{
-                  mb: "16px", // Usar margen inferior explícito en lugar de mb: 2
                   display: "flex",
-                  alignItems: "center",
                   justifyContent: "space-between",
-                  padding: "8px 8px 8px 16px",
-                  borderRadius: "8px",
-                  boxShadow: "none",
-                  backgroundColor: "#EAEAEA",
-                  width: "100%", // Ocupa todo el ancho disponible
-                  maxWidth: "328px", // Mantiene el ancho máximo de la card
-                  margin: "0 auto", // Centra la card horizontalmente
-                  height: "72px",
-                  // Si sigue sin funcionar, intenta añadir un margen superior también
-                  mt: "16px",
+                  alignItems: "center",
+                  width: "100%",
                 }}
               >
-                <CardContent
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Box>
-                    <Typography
-                      sx={{
-                        color: "#4E169D",
-                        fontWeight: 700,
-                        fontSize: "18px",
-                        lineHeight: "24px",
-                      }}
-                    >
-                      {proveedor.nombre}
-                    </Typography>
-                    <Divider
-                      sx={{
-                        my: "3px",
-                        backgroundColor: "#00A364",
-                        height: "1px",
-                        width: "200px", // Ajusta el ancho de la línea divisoria
-                      }}
-                    />
-                    <Typography
-                      sx={{
-                        color: "#222222",
-                        fontWeight: 400,
-                        fontSize: "16px",
-                        lineHeight: "24px",
-                      }}
-                    >
-                      {proveedor.categoria}
-                    </Typography>
-                  </Box>
-                  <ArrowForwardIosIcon
-                    sx={{ color: "#222222", width: "12px" }}
+                <Box>
+                  <Typography
+                    sx={{
+                      color: "#4E169D",
+                      fontWeight: 700,
+                      fontSize: "18px",
+                      lineHeight: "24px",
+                    }}
+                  >
+                    {proveedor.name}
+                  </Typography>
+                  <Divider
+                    sx={{
+                      my: "3px",
+                      backgroundColor: "#00A364",
+                      height: "1px",
+                      width: "200px",
+                    }}
                   />
-                </CardContent>
-              </Card>
-            ))}
-          </Box>
-        </CustomTabPanel>
-
-        <CustomTabPanel value={value} index={1}>
-          <WorkinProgress />
-        </CustomTabPanel>
-
-        <CustomTabPanel value={value} index={2}>
-          <WorkinProgress />
-        </CustomTabPanel>
-
-        <CustomTabPanel value={value} index={3}>
-          <WorkinProgress />
-        </CustomTabPanel>
-      </Box>
+                  <Typography
+                    sx={{
+                      color: "#222222",
+                      fontWeight: 400,
+                      fontSize: "16px",
+                      lineHeight: "24px",
+                    }}
+                  >
+                    {proveedor.category?.name || "Categoría no disponible"}
+                  </Typography>
+                </Box>
+                <ArrowForwardIosIcon
+                  sx={{ color: "#222222", width: "12px" }}
+                />
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      ) : (
+        <ProductForm
+          selectedProveedor={selectedProveedor}
+          onBack={handleBackToList}
+        />
+      )}
     </Container>
   );
 }
