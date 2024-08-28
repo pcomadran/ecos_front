@@ -84,8 +84,8 @@ const PublicationForm: React.FC = () => {
     setFiles(newFiles);
   };
 
-  const token = localStorage.getItem("authToken")
-  console.log(token)
+  // const token = localStorage.getItem("authToken")
+  // console.log(token)
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
