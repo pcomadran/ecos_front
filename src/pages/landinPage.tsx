@@ -11,8 +11,9 @@ const LandingPage = () => {
       <div
         style={{
           position: "relative",
-          width: "360px",
-          height: "488px",
+          width: "100%",
+          height: "auto",
+          minHeight: "488px", // Minimum height to ensure the section has enough height on small screens
           marginTop: "56px",
           backgroundImage: `url(${BackgroundImage})`,
           backgroundSize: "cover",
