@@ -63,8 +63,14 @@ export const getProductsBySupplier = async (): Promise<Supplier[]> => {
 
 export const getProductById = async (id: number) => {
   try {
+    const token = localStorage.getItem("authToken");
+    if (!token) throw new Error("Token not found");
+
     const response = await axios.get(
-      `http://localhost:8080/api/products/find/${id}`
+      `http://localhost:8080/api/products/find/${id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -104,18 +110,22 @@ export const getAllProvinces = async (
 };
 
 export const createProduct = async (productData: any) => {
+  for (let pair of productData.entries()) {
+    console.log(pair[0] + ", " + pair[1]);
+  }
   try {
     const token = localStorage.getItem("authToken");
     if (!token) throw new Error("Token not found");
 
     const response = await axios.post(
-      "http://localhost:8080/api/products",
+      `http://localhost:8080/api/products`,
       productData,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
+        withCredentials: true,
       }
     );
     return response.data;

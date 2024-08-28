@@ -213,89 +213,90 @@ export default function ProfilePage() {
       <Typography sx={{ fontSize: "22px", fontWeight: "500" }}>
         Mis Productos/Servicios
       </Typography>
-      {products.map((product) => (
-        <Box
-          key={product.id}
-          sx={{ display: "flex", flexDirection: "column", gap: "25px" }}
-        >
+      {products.length > 0 &&
+        products.map((product) => (
           <Box
-            sx={{
-              borderRadius: "16px 16px 4px 4px",
-            }}
+            key={product.id}
+            sx={{ display: "flex", flexDirection: "column", gap: "25px" }}
           >
-            <Button
-              sx={{
-                background: "#4E169D",
-                width: "100%",
-                height: "40px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                borderRadius: "16px 16px 0px 0px",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontWeight: "700",
-                  fontSize: "18px",
-                  color: "#fafafa",
-                  textTransform: "none",
-                  paddingLeft: "5px",
-                }}
-              >
-                {product.name}
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  textTransform: "none",
-
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "5px",
-                }}
-              >
-                <Link
-                  to={`/updateProduct/${product.id}`}
-                  style={{
-                    textDecoration: "none",
-                    color: "#fafafa",
-                    fontWeight: "700",
-                  }}
-                >
-                  Editar
-                </Link>
-                <NavigateNextIcon sx={{ color: "#fafafa" }} />
-              </Typography>
-            </Button>
-
             <Box
               sx={{
-                borderRadius: "0px 0px 4px 4px",
-                border: "1px solid #4E169D",
-                padding: "10px 19px 20px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "15px",
+                borderRadius: "16px 16px 4px 4px",
               }}
             >
-              {renderProductStatus(product)}
+              <Button
+                sx={{
+                  background: "#4E169D",
+                  width: "100%",
+                  height: "40px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderRadius: "16px 16px 0px 0px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: "700",
+                    fontSize: "18px",
+                    color: "#fafafa",
+                    textTransform: "none",
+                    paddingLeft: "5px",
+                  }}
+                >
+                  {product.name}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    textTransform: "none",
+
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                  }}
+                >
+                  <Link
+                    to={`/updateProduct/${product.id}`}
+                    style={{
+                      textDecoration: "none",
+                      color: "#fafafa",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Editar
+                  </Link>
+                  <NavigateNextIcon sx={{ color: "#fafafa" }} />
+                </Typography>
+              </Button>
+
+              <Box
+                sx={{
+                  borderRadius: "0px 0px 4px 4px",
+                  border: "1px solid #4E169D",
+                  padding: "10px 19px 20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "15px",
+                }}
+              >
+                {renderProductStatus(product)}
+              </Box>
             </Box>
+            {product.status === status.DENEGADO ? (
+              <></>
+            ) : (
+              <>
+                <Typography variant="h6">
+                  {product.status === status.ACEPTADO
+                    ? "Asi se ve tu Producto/Servicio en el Directorio "
+                    : "Asi se vería tu Producto/Servicio en el Directorio"}
+                </Typography>
+                <SupplierCard product={product} />
+              </>
+            )}
           </Box>
-          {product.status === status.DENEGADO ? (
-            <></>
-          ) : (
-            <>
-              <Typography variant="h6">
-                {product.status === status.ACEPTADO
-                  ? "Asi se ve tu Producto/Servicio en el Directorio "
-                  : "Asi se vería tu Producto/Servicio en el Directorio"}
-              </Typography>
-              <SupplierCard product={product} />
-            </>
-          )}
-        </Box>
-      ))}
+        ))}
     </Box>
   );
 }
