@@ -10,7 +10,6 @@ import axios from "axios";
 import { decodeToken } from "react-jwt";
 
 export enum Role {
-  // USER = "ROLE_USER",
   ADMIN = "ADMIN",
   SUPPLIER = "SUPPLIER",
 }
@@ -65,8 +64,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       if (decoded) {
         localStorage.setItem("user", JSON.stringify(decoded));
         setUser(decoded);
+
+        // Check user role and navigate accordingly
+        if (decoded.role === Role.ADMIN) {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
       }
-      navigate("/");
     } catch (error) {
       console.error("Error al obtener el token:", error);
     }
