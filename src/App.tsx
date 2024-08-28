@@ -46,9 +46,7 @@ function App() {
               <Route element={<ProtectedRoute roles={[Role.SUPPLIER]} />}>
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/createProduct" element={<CreateProductPage />} />
-                <Route
-                  path="/updateProduct/:id"
-                  element={<UpdateProductPage />}
+                <Route path="/updateProduct/:id" element={<UpdateProductPage />}
                 />
               </Route>
               <Route element={<ProtectedRoute roles={[Role.ADMIN]} />}>

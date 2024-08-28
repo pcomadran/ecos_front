@@ -69,12 +69,15 @@ export const getProductById = async (id: number) => {
     const response = await axios.get(
       `http://localhost:8080/api/products/find/${id}`,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     return response.data;
   } catch (error) {
-    return [];
+    console.error("Error finding product:", error);
+    throw error;
   }
 };
 
@@ -109,10 +112,33 @@ export const getAllProvinces = async (
   }
 };
 
+// export const createProduct = async (productData: any) => {
+//   for (let pair of productData.entries()) {
+//     console.log(pair[0] + ", " + pair[1]);
+//   }
+//   try {
+//     const token = localStorage.getItem("authToken");
+//     if (!token) throw new Error("Token not found");
+
+//     const response = await axios.post(
+//       `http://localhost:8080/api/products`,
+//       productData,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "multipart/form-data",
+//         },
+//         withCredentials: true,
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.error(error);
+//     throw error;
+//   }
+// };
+
 export const createProduct = async (productData: any) => {
-  for (let pair of productData.entries()) {
-    console.log(pair[0] + ", " + pair[1]);
-  }
   try {
     const token = localStorage.getItem("authToken");
     if (!token) throw new Error("Token not found");
@@ -125,7 +151,6 @@ export const createProduct = async (productData: any) => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
-        withCredentials: true,
       }
     );
     return response.data;

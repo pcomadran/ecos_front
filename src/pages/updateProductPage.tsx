@@ -117,14 +117,24 @@ export default function UpdateProductPage() {
     fetchProvinces();
   }, [countries]);
 
-  const handleCount = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+  // const handleCount = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+  //   const word: string = event.target.value;
+  //   setCount(word.length);
+  // };
+
+  const handleCount = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     const word: string = event.target.value;
     setCount(word.length);
   };
 
-  const handleCountD = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ): void => {
+  // const handleCountD = (
+  //   event: React.ChangeEvent<HTMLTextAreaElement>
+  // ): void => {
+  //   const word: string = event.target.value;
+  //   setCountD(word.length);
+  // };
+
+  const handleCountD = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     const word: string = event.target.value;
     setCountD(word.length);
   };
