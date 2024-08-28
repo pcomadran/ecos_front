@@ -11,8 +11,9 @@ import {
   Box,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import IconBot from "../../../public/images/IconBot.png"; // Asegúrate de que esta ruta es correcta
-import axios from "../../services/axiosConfig"; // Importa axios para realizar la solicitud HTTP
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import IconBot from "../../../public/images/IconBot.png";
+import axios from "../../services/axiosConfig";
 
 interface Question {
   id: number;
@@ -36,27 +37,30 @@ interface Answer {
   };
 }
 
-const InteractiveChatbot: React.FC = () => {
+interface InteractiveChatbotProps {
+  onClose: () => void;
+}
+
+const InteractiveChatbot: React.FC<InteractiveChatbotProps> = ({ onClose }) => {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<
     { text: string; type: "user" | "chatbot" }[]
   >([]);
   const [userName, setUserName] = useState<string | null>(null);
   const [userImage, setUserImage] = useState<string | null>(null);
-  const [questions, setQuestions] = useState<Question[]>([]); // Estado para las preguntas
-  const [answers, setAnswers] = useState<Answer[]>([]); // Estado para las respuestas
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [answers, setAnswers] = useState<Answer[]>([]);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Simulamos la obtención del usuario desde el localStorage
+    // Obtención del usuario de el localStorage
     const userString = localStorage.getItem("user");
     if (userString) {
       const user = JSON.parse(userString);
       setUserName(user.name || user.email);
       setUserImage(user.picture);
     }
-    console.log(userString);
   }, []);
 
   useEffect(() => {
@@ -65,7 +69,6 @@ const InteractiveChatbot: React.FC = () => {
       .get("api/questions")
       .then((response) => {
         setQuestions(response.data);
-        console.log("preguntas: ", response.data);
       })
       .catch((error) => {
         console.error("Error al obtener las preguntas:", error);
@@ -78,7 +81,6 @@ const InteractiveChatbot: React.FC = () => {
       .get("api/answers")
       .then((response) => {
         setAnswers(response.data);
-        console.log("respuestas: ", response.data);
       })
       .catch((error) => {
         console.error("Error al obtener las respuestas:", error);
@@ -94,13 +96,19 @@ const InteractiveChatbot: React.FC = () => {
   const filteredQuestions = questions
     .map((q) => {
       // Limpia el símbolo de interrogación al inicio de la pregunta
-      const cleanedQuestionText = q.text.startsWith('¿') ? q.text.substring(1).trim() : q.text;
+      const cleanedQuestionText = q.text.startsWith("¿")
+        ? q.text.substring(1).trim()
+        : q.text;
 
       return {
         ...q,
         cleanedText: cleanedQuestionText,
-        startsWithValue: cleanedQuestionText.toLowerCase().startsWith(inputValue.toLowerCase()),
-        containsValue: cleanedQuestionText.toLowerCase().includes(inputValue.toLowerCase()),
+        startsWithValue: cleanedQuestionText
+          .toLowerCase()
+          .startsWith(inputValue.toLowerCase()),
+        containsValue: cleanedQuestionText
+          .toLowerCase()
+          .includes(inputValue.toLowerCase()),
       };
     })
     .filter((q) => q.startsWithValue || q.containsValue)
@@ -121,13 +129,14 @@ const InteractiveChatbot: React.FC = () => {
       ...messages,
       { text: question.text, type: "user" },
       {
-        text: answer ? answer.text : "No se encontró respuesta para esta pregunta.",
+        text: answer
+          ? answer.text
+          : "No se encontró respuesta para esta pregunta.",
         type: "chatbot",
       },
     ]);
   };
 
-  // Avatar del usuario
   const userAvatar = (
     <Avatar
       sx={{ bgcolor: "#4E169D", marginBottom: "3px", width: 30, height: 30 }}
@@ -149,19 +158,42 @@ const InteractiveChatbot: React.FC = () => {
   );
 
   return (
-    <div
-      style={{
-        marginLeft: -14,
+    <Box
+      sx={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        height: "500px",
-        width: "111%",
-        overflow: "auto",
-        border: "1px solid #ccc",
+        width: "100%",
+        height: "460px",
         padding: "16px",
+        position: "relative",
       }}
     >
+      {/* Ícono de cierre */}
+      <ExitToAppIcon
+        onClick={onClose}
+        sx={{
+          position: "absolute",
+          top: -10,
+          left: -12,
+          cursor: "pointer",
+          transform: "rotate(180deg)",
+          color: "#4E169D",
+          fontSize: "30px",
+          zIndex: 1500,
+        }}
+      />
+      <Typography
+        sx={{
+          position: "absolute",
+          color: "#4E169D",
+          fontWeight: 900,
+          ml: "60px",
+          mt: -3,
+        }}
+      >
+        ChatBot
+      </Typography>
+
       <TextField
         variant="outlined"
         placeholder="Ingresá Preguntas"
@@ -169,14 +201,15 @@ const InteractiveChatbot: React.FC = () => {
         fullWidth
         value={inputValue}
         onChange={handleInputChange}
-        style={{
+        sx={{
           backgroundColor: "#eaeaea",
           borderRadius: "50px",
           height: "40px",
-          marginBottom: "16px",
+          mb: "16px",
+          mt: "16px",
         }}
         InputProps={{
-          style: {
+          sx: {
             height: "40px",
             padding: "2px 20px",
             borderRadius: "50px",
@@ -191,11 +224,11 @@ const InteractiveChatbot: React.FC = () => {
       />
 
       {inputValue && filteredQuestions.length > 0 && (
-        <List style={{ width: "100%" }}>
+        <List sx={{ width: "100%", maxHeight: "150px", overflowY: "auto" }}>
           {filteredQuestions.map((q, index) => (
             <ListItem key={index} disablePadding>
               <ListItemButton
-                style={{ width: "100%" }}
+                sx={{ width: "100%" }}
                 onClick={() => handleQuestionClick(q)}
               >
                 <ListItemText primary={q.text} />
@@ -210,7 +243,7 @@ const InteractiveChatbot: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           width: "100%",
-          height: "100%",
+          height: "calc(100% - 56px)",
           overflowY: "auto",
         }}
       >
@@ -241,9 +274,9 @@ const InteractiveChatbot: React.FC = () => {
             </Box>
           </Box>
         ))}
-        <div ref={messagesEndRef} /> {/* Referencia al final de los mensajes */}
+        <div ref={messagesEndRef} />
       </Box>
-    </div>
+    </Box>
   );
 };
 

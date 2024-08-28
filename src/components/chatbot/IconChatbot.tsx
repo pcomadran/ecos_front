@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   IconButton,
   Popover,
   Typography,
   Dialog,
-  DialogTitle,
   DialogContent,
   Slide,
 } from "@mui/material";
@@ -14,7 +13,18 @@ import InteractiveChatbot from "./InteractiveChatbot";
 const IconChatbot: React.FC = () => {
   const [openChat, setOpenChat] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [showIcon, setShowIcon] = useState(true);
+  const [showIcon, setShowIcon] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Aquí buscamos los datos del usuario en localStorage
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user && user.role === "ADMIN") {
+      setIsAdmin(true);
+    } else {
+      setShowIcon(true);
+    }
+  }, []);
 
   const handleOpenChat = () => {
     setOpenChat(true);
@@ -36,7 +46,8 @@ const IconChatbot: React.FC = () => {
   const openPopover = Boolean(anchorEl);
   const id = openPopover ? "simple-popover" : undefined;
 
-  React.useEffect(() => {
+  // Controlar la visibilidad del icono cuando se abre o cierra el chat
+  useEffect(() => {
     if (openChat) {
       setShowIcon(false);
     } else {
@@ -44,21 +55,25 @@ const IconChatbot: React.FC = () => {
     }
   }, [openChat]);
 
+  if (isAdmin) {
+    return null;
+  }
+
   return (
     <>
-      {/* Icono con efecto Slide desde abajo hacia arriba */}
+      {/* Icono con efecto Slide */}
       <Slide
         direction="up"
         in={showIcon}
-        timeout={950}
         mountOnEnter
         unmountOnExit
+        timeout={1000}
       >
         <div
           style={{
             position: "fixed",
             zIndex: 1000,
-            top: 180,
+            top: 160,
             right: -5,
           }}
         >
@@ -76,6 +91,8 @@ const IconChatbot: React.FC = () => {
           </IconButton>
         </div>
       </Slide>
+
+      {/* Popover para confirmación */}
       <Popover
         id={id}
         open={openPopover}
@@ -107,10 +124,15 @@ const IconChatbot: React.FC = () => {
       </Popover>
 
       {/* Diálogo del Chatbot */}
-      <Dialog open={openChat} onClose={handleCloseChat} fullWidth maxWidth="md">
-        <DialogTitle>Chatbot</DialogTitle>
+      <Dialog
+        open={openChat}
+        onClose={handleCloseChat}
+        fullWidth
+        maxWidth="lg"
+        sx={{ mt: 7 }}
+      >
         <DialogContent>
-          <InteractiveChatbot />
+          <InteractiveChatbot onClose={handleCloseChat} />
         </DialogContent>
       </Dialog>
     </>

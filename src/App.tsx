@@ -1,5 +1,3 @@
-// src/App.tsx
-
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -15,6 +13,7 @@ import ProfilePage from "./pages/profilePage";
 import CreateProductPage from "./pages/createProductPage";
 import { AuthProvider, Role } from "./context/authContext";
 import ProtectedRoute from "./context/ProtectedRoute";
+import ProtectedChatbot from "./components/chatbot/ChatbotProtectedRoutes";
 import IconChatbot from "./components/chatbot/IconChatbot";
 import SupAdminPage from "./pages/supAdminPage";
 import DashboardPage from "./pages/dashboardPage";
@@ -56,14 +55,19 @@ function App() {
                 <Route path="/suppliersadmin" element={<SupAdminPage />} />
                 <Route
                   path="/publications/menu"
-                  element={<PublicationsMenuPage/>}
+                  element={<PublicationsMenuPage />}
                 />
-                <Route path="/publications/new" element={<PublicationForm/>} />
-                <Route path="/publications/edit/:id" element={<PublicationForm />} />
+                <Route path="/publications/new" element={<PublicationForm />} />
+                <Route
+                  path="/publications/edit/:id"
+                  element={<PublicationForm />}
+                />
                 <Route path="/dashboard" element={<DashboardPage />} />
               </Route>
             </Routes>
-            <IconChatbot />
+            <ProtectedChatbot roles={[Role.SUPPLIER || !Role.ADMIN]}>
+              <IconChatbot />
+            </ProtectedChatbot>
           </div>
         </AuthProvider>
       </Router>
