@@ -7,7 +7,7 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import Zoom from '@mui/material/Zoom';
+import Zoom from "@mui/material/Zoom";
 
 interface LocationDialogProps {
   open: boolean;
@@ -32,7 +32,7 @@ const LocationDialog: React.FC<LocationDialogProps> = ({
         "& .MuiDialog-paper": {
           width: "220px",
           maxWidth: "90%",
-          marginTop: "-35vh",
+          marginTop: "-15vh",
           backgroundColor: "#eaeaea",
           boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.9)",
           borderRadius: "8px",
@@ -43,7 +43,7 @@ const LocationDialog: React.FC<LocationDialogProps> = ({
         },
       }}
     >
-      <Zoom in={open} style={{ transitionDelay: open ? '300ms' : '0ms' }}>
+      <Zoom in={open} timeout={1000} style={{ transitionDelay: open ? "300ms" : "0ms" }}>
         <div>
           <DialogTitle
             id="location-dialog-title"
@@ -56,7 +56,8 @@ const LocationDialog: React.FC<LocationDialogProps> = ({
               id="location-dialog-description"
               sx={{ fontWeight: "bold", fontSize: "12px" }}
             >
-              ¿Deseas compartir tu ubicación para ver los productos más cercanos a ti?
+              ¿Deseas compartir tu ubicación para ver los productos más cercanos
+              a ti?
             </DialogContentText>
           </DialogContent>
           <DialogActions

@@ -47,7 +47,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const navigate = useNavigate();
 
   const login = () => {
-    // window.location.href = "http://localhost:8080/oauth2/authorization/google";
     window.location.href = "http://localhost:8080/api/auth/login";
   };
 
@@ -84,6 +83,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       });
       localStorage.removeItem("authToken");
       localStorage.removeItem("user");
+      localStorage.removeItem("location"); // Remove location coordinates
       setAuthToken(null);
       setUser(null);
       navigate("/login");
